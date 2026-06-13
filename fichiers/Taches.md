@@ -14,39 +14,44 @@ Un sous groupe qui est responsable de la partie **Professeur**.
 - types_fichiers, supports_cours
 
 ## Back:
+### Coralie:
 - [ok] Creations de base:
     - [ok] Creer un *model* pour chaque *table utile*
     - [ok] Creer un *repository* pour chaque *model*
     - [ok] Creer un *service* pour  chaque *model*
 
 ## Front: *pages/Professeur/*
+### Bryan:
 - [] profil.html
-    - [ok] fonction (ProfesseurService): ProfilProfesseur(): recuperer les informations du professeur connecte
+    - [] fonction (ProfesseurService): ProfilProfesseur(): recuperer les informations du professeur connecte
     de la table *profils_professeurs*
     - [] afficher les informations du professeur connecter
 
+### Coralie:
 - [] notes.html
-    - [ok] fonction (AffectationEnseignementService): findByProfesseurId(): recuperer toutes les affectations
+    - [] fonction (AffectationEnseignementService): findByProfesseurId(): recuperer toutes les affectations
     du professeur connecter (obtenir *classe* et *matiere*)
     - [] fonction (ProfilEtudiantService): findByClasseId(): recuperer tous les etudiants d'une classe, a partir
     du classe_id dans la table *inscription*
-    - [ok] fonction (NoteService): findByEtudiantId(): recuperer tous les notes d'un etudiant
-    - [ok] fonction (NoteService): findByEtudiantIdByMatiereId(): recuperer tous les notes d'un etudiant dans une matiere
+    - [] fonction (NoteService): findByEtudiantId(): recuperer tous les notes d'un etudiant
+    - [] fonction (NoteService): findByEtudiantIdByMatiereId(): recuperer tous les notes d'un etudiant dans une matiere
     - [] afficher dans une *section* le liste des classes auxquels le professeur connecter est assigne
     - [] cliquer sur une classe -> affichage de ses etudiants
     - [] afficher dans une *section* sous forme de tableau: la liste des etudiants + notes
     - [] bouton *Saisir note* ->redirect()->to('saisir_notes.html')
 
+### Coralie:
 - saisir_notes.html
     - [] champ pour saisir: type_evaluation, periode, sur, commentaire
     - [] afficher sous forme de tableau: liste des etudiant + une colonne pour saisir la note
     - [] bouton 'Enregistrer les notes' -> appel fonction: save()
-    - [ok] fonction (NoteService): save(): permet d'enregistrer tous les notes saisi par le professeur connecte
+    - [] fonction (NoteService): save(): permet d'enregistrer tous les notes saisi par le professeur connecte
 
+### Itiela:
 - [] devoirs.html
     - [] afficher dans une *section* la liste des classes auxquels le professeur connecter est assigne
     - [] cliquer sur une classe -> affichage des cours deja publier par le professeur connecte
-    - [ok] fonction (AffectationEnseignementService): findByAffectationId(): 
+    - [] fonction (AffectationEnseignementService): findByAffectationId(): 
         - recuperer tous les cours publier par le professeur connecter selon la classe choisi
     - [] afficher dans une *section* la liste des cours deja publier par le professeur connecte pour 
     la classe choisi
@@ -54,8 +59,9 @@ Un sous groupe qui est responsable de la partie **Professeur**.
     - [] fonction js: formCours(): assure l'affichage d'un formulaire pour inserer un nouveau cours ou devoir
         - [] les champs requises: type_fichier, titre, upload file, type_contenu, date_limite, accepte_retard
     - [] bouton *Publier Cours* -> appel fonction save()
-    - [ok] fonction (SupportCourtService): save(): permet d'enregistrer le cours publier dans la table *supports_cours*
+    - [] fonction (SupportCourtService): save(): permet d'enregistrer le cours publier dans la table *supports_cours*
 
+### Mbola miandry:
 - [] bulletin.html
     - [] fonction: getClasseTitulaireProfesseur(): resuperer la classe auquelle le professeur conncte est 
     titulaire
