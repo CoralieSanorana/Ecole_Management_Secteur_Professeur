@@ -29,8 +29,4 @@ public class ProfilProfesseurService {
     public void deleteById(Long id) {
         profilProfesseurRepository.deleteById(id);
     }
-
-    public ProfilProfesseur findByProfilId(Long profilId) {
-        return profilProfesseurRepository.findByProfilId(profilId);
-    }
 }

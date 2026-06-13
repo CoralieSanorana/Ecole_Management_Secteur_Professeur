@@ -30,8 +30,4 @@ public class SupportCoursService {
         supportCoursRepository.deleteById(id);
     }
 
-    public List<SupportCours> findByAffectationId(Long affectationId) {
-        return supportCoursRepository.findByAffectation_id(affectationId);
-    }
-
 }
