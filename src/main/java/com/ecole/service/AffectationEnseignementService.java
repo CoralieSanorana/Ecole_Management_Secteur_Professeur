@@ -29,4 +29,8 @@ public class AffectationEnseignementService {
     public void deleteById(Long id) {
         affectationEnseignementRepository.deleteById(id);
     }
+
+    public List<AffectationEnseignement> findByProfesseurId(Long professeurId) {
+        return affectationEnseignementRepository.findByProfesseurId(professeurId);
+    }
 }

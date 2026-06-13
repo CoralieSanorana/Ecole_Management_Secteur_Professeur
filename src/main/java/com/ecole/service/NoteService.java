@@ -29,4 +29,12 @@ public class NoteService {
     public void deleteById(Long id) {
         noteRepository.deleteById(id);
     }
+
+    public List<Note> findByEtudiantId(Long etudiantId) {
+        return noteRepository.findByEtudiantId(etudiantId);
+    }
+
+    public List<Note> findByEtudiantIdByMatiereId(Long etudiantId, Long matiereId) {
+        return noteRepository.findByEtudiantIdByMatiereId(etudiantId, matiereId);
+    }
 }

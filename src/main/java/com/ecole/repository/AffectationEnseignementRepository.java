@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AffectationEnseignementRepository extends JpaRepository<AffectationEnseignement, Long> {
+    List<AffectationEnseignement> findByProfesseurId(Long professeurId);
 }
