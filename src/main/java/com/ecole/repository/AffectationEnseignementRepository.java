@@ -1,8 +1,10 @@
-package com.example.back_ecole.repository;
+package com.ecole.repository;
 
-import com.example.back_ecole.model.AffectationEnseignement;
+import com.ecole.model.AffectationEnseignement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface AffectationEnseignementRepository extends JpaRepository<AffectationEnseignement, Long> {

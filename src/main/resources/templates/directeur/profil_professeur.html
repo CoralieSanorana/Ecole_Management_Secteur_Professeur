@@ -1,5 +1,14 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+<canvas id="particle-canvas"></canvas>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" th:replace="fragments/header :: sidebar"></aside>
+  <header class="topbar" th:replace="fragments/header :: topbar"></header>
+  <main class="main-content">
     <div class="page-header">
-        <div><h2>Profil du Professeur</h2><p><span style="cursor:pointer;color:var(--g);" onclick="showPage('dir-professeurs')">← Retour à la liste</span></p></div>
+        <div><h2>Profil du Professeur</h2><p><a th:href="@{/directeur/professeurs}" style="cursor:pointer;color:var(--g);">← Retour à la liste</a></p></div>
         <button class="btn btn-secondary"><i class="fas fa-edit"></i> Modifier</button>
       </div>
       <div class="grid-2">
@@ -43,3 +52,8 @@
           </div>
         </div>
       </div>
+  </main>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

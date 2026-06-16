@@ -1,7 +1,7 @@
-package com.example.back_ecole.service;
+package service;
 
-import com.example.back_ecole.model.Notification;
-import com.example.back_ecole.repository.NotificationRepository;
+import entity.Notification;
+import repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

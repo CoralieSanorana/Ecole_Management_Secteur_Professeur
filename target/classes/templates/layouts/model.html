@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LycéePro — Système de Gestion</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="../../assets/css/style.css">
-  <script src="../../assets/js/script.js" defer></script>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <script th:src="@{/js/script.js}" defer></script>
 </head>
 <body>
 <canvas id="particle-canvas"></canvas>
@@ -208,9 +208,14 @@
   <!-- Modals -->
   <div id="modals-container"></div>
 
-  <script>
+  <script th:inline="javascript">
+    // Passer la page initiale depuis le modèle Thymeleaf
+    /*<![CDATA[*/
+    window.initialPage = /*[[${initialPage}]]*/ 'dir-dashboard';
+    /*]]>*/
+
     // Charger les modals dynamiquement
-    fetch('../../inc/modals.html')
+    fetch('/fragments/inc/modals')
       .then(response => response.text())
       .then(html => {
         document.getElementById('modals-container').innerHTML = html;

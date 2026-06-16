@@ -1,7 +1,7 @@
-package com.example.back_ecole.service;
+package com.ecole.service;
 
-import com.example.back_ecole.model.Note;
-import com.example.back_ecole.repository.NoteRepository;
+import com.ecole.model.Note;
+import com.ecole.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

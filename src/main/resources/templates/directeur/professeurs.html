@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+<canvas id="particle-canvas"></canvas>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" th:replace="fragments/header :: sidebar"></aside>
+  <header class="topbar" th:replace="fragments/header :: topbar"></header>
+  <main class="main-content">
     <div class="page-header">
         <div><h2>Corps Professoral</h2><p>24 professeurs actifs dans l'établissement</p></div>
         <button class="btn btn-primary" onclick="openModal('modal-add-prof')"><i class="fas fa-plus"></i> Nouveau professeur</button>
@@ -74,3 +83,8 @@
           <div class="salaire">200 000 <span>Ar/mois</span></div>
         </div>
       </div>
+  </main>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

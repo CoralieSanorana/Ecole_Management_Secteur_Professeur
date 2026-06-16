@@ -6,28 +6,28 @@
       name: 'M. Rakoto',
       role: 'Directeur',
       initials: 'DR',
-      defaultPage: 'dir-dashboard',
+      defaultPage: 'dashboard',
       nav: 'nav-directeur'
     },
     secretariat: {
       name: 'Mme. Rasoa',
       role: 'Secrétaire',
       initials: 'RS',
-      defaultPage: 'sec-paiements',
+      defaultPage: 'paiement',
       nav: 'nav-secretariat'
     },
     professeur: {
       name: 'Prof. Rabe',
       role: 'Professeur',
       initials: 'RB',
-      defaultPage: 'prof-emploi',
+      defaultPage: 'emploi',
       nav: 'nav-professeur'
     },
     etudiant: {
       name: 'Rakoto Jean',
       role: 'Étudiant',
       initials: 'RJ',
-      defaultPage: 'etu-emploi',
+      defaultPage: 'emploi',
       nav: 'nav-etudiant'
     }
   };
@@ -56,35 +56,8 @@
   };
 
   /* ============================================================
-     PAGE PATHS MAPPING
+     PAGE PATHS MAPPING - REMOVED (Now using standard navigation)
   ============================================================ */
-  const pagePaths = {
-    // Directeur
-    'dir-dashboard': '../Directeur/dashboard.html',
-    'dir-finances': '../Directeur/finances.html',
-    'dir-professeurs': '../Directeur/professeurs.html',
-    'dir-prof-profil': '../Directeur/profil_professeur.html',
-    'dir-ecolages': '../Directeur/ecolages.html',
-    // Secretariat
-    'sec-paiements': '../Secretaire/paiement.html',
-    'sec-bilan': '../Secretaire/bilan.html',
-    'sec-eleves': '../Secretaire/eleves.html',
-    'sec-profils': '../Secretaire/profil_eleve.html',
-    // Professeur
-    'prof-emploi': '../Professeur/calendar.html',
-    'prof-notes': '../Professeur/notes.html',
-    'prof-devoirs': '../Professeur/devoirs.html',
-    'prof-bulletins': '../Professeur/bulletin.html',
-    'prof-profil': '../Professeur/profil.html',
-    // Etudiant
-    'etu-emploi': '../Etudiant/calendar.html',
-    'etu-notes': '../Etudiant/notes.html',
-    'etu-bulletin': '../Etudiant/bulletin.html',
-    'etu-devoirs': '../Etudiant/devoirs.html',
-    // Communs
-    'actualites': '../communs/actualites.html',
-    'notifications-page': '../communs/notifications.html',
-  };
 
   /* ============================================================
      SWITCH ROLE
@@ -107,69 +80,15 @@
     });
     document.getElementById(r.nav).style.display = 'block';
 
-    // Show default page
-    showPage(r.defaultPage);
+    // Navigate to default page for the role
+    window.location.href = '/' + roleKey + '/' + r.defaultPage;
 
     showToast('🔄 Vue changée : ' + r.role);
   }
 
   /* ============================================================
-     SHOW PAGE
+     SHOW PAGE - REMOVED (Now using standard navigation)
   ============================================================ */
-  async function showPage(pageId) {
-    const mainContent = document.querySelector('.main-content');
-    const pagePath = pagePaths[pageId];
-    
-    if (!pagePath) {
-      console.error('Page path not found for:', pageId);
-      return;
-    }
-
-    // Update nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.classList.remove('active');
-    });
-    document.querySelectorAll('.nav-item').forEach(item => {
-      const onclick = item.getAttribute('onclick') || '';
-      if (onclick.includes(`'${pageId}'`)) item.classList.add('active');
-    });
-
-    // Update title
-    const title = pageTitles[pageId] || 'LycéePro';
-    document.getElementById('topbar-title').textContent = title;
-
-    try {
-      // Fetch page content
-      const response = await fetch(pagePath);
-      if (!response.ok) throw new Error('Page not found');
-      
-      const html = await response.text();
-      
-      // Fade out current content
-      mainContent.style.opacity = '0';
-      mainContent.style.transform = 'translateY(10px)';
-      mainContent.style.transition = 'all 0.2s ease';
-      
-      setTimeout(() => {
-        // Update content
-        mainContent.innerHTML = html;
-        
-        // Fade in new content
-        mainContent.style.opacity = '1';
-        mainContent.style.transform = 'translateY(0)';
-      }, 200);
-      
-    } catch (error) {
-      console.error('Error loading page:', error);
-      mainContent.innerHTML = `
-        <div style="text-align:center;padding:var(--sp-2xl);">
-          <i class="fas fa-exclamation-triangle" style="font-size:48px;color:var(--danger);margin-bottom:var(--sp-lg);"></i>
-          <h3>Erreur de chargement</h3>
-          <p style="color:var(--txt2);">Impossible de charger la page demandée.</p>
-        </div>
-      `;
-    }
-  }
 
   /* ============================================================
      MODALS
@@ -355,6 +274,28 @@
 
   /* Init */
   window.addEventListener('DOMContentLoaded', () => {
-    showPage('dir-dashboard');
+    // Set active nav item based on current URL
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const href = item.getAttribute('href');
+      if (href && currentPath.includes(href)) {
+        item.classList.add('active');
+      }
+    });
+    
+    // Set role selector based on current path (without redirecting)
+    const roleSelect = document.getElementById('roleSelect');
+    if (roleSelect) {
+      if (currentPath.includes('/directeur')) {
+        roleSelect.value = 'directeur';
+      } else if (currentPath.includes('/secretariat')) {
+        roleSelect.value = 'secretariat';
+      } else if (currentPath.includes('/professeur')) {
+        roleSelect.value = 'professeur';
+      } else if (currentPath.includes('/etudiant')) {
+        roleSelect.value = 'etudiant';
+      }
+    }
+    
     setTimeout(() => showToast('👋 Bienvenue sur LycéePro !'), 800);
   });

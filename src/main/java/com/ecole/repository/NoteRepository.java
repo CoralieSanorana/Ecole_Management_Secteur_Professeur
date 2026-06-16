@@ -1,6 +1,6 @@
-package com.example.back_ecole.repository;
+package com.ecole.repository;
 
-import com.example.back_ecole.model.Note;
+import com.ecole.model.Note;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

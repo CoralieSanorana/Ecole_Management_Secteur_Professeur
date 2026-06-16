@@ -1,7 +1,7 @@
-package com.example.back_ecole.repository;
+package repository;
 
-import com.example.back_ecole.model.UserRole;
-import com.example.back_ecole.model.UserRoleId;
+import entity.UserRole;
+import entity.UserRoleId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

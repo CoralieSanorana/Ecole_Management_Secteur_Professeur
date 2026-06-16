@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head"></head>
+<body>
+<canvas id="particle-canvas"></canvas>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" th:replace="fragments/header :: sidebar"></aside>
+  <header class="topbar" th:replace="fragments/header :: topbar"></header>
+  <main class="main-content">
     <div class="page-header">
         <div><h2>Actualités</h2><p>Nouvelles et événements de l'établissement</p></div>
         <button class="btn btn-primary" onclick="openModal('modal-news')"><i class="fas fa-plus"></i> Publier une actualité</button>
@@ -84,3 +93,8 @@
           <div style="margin-top:var(--sp-md);font-size:12px;color:var(--txt3);">47 réponses · Expire dans 3 jours</div>
         </div>
       </div>
+  </main>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

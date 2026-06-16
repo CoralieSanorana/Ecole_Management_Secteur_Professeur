@@ -8,16 +8,11 @@ public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        return "index";
+        return "redirect:/directeur/dashboard";  // Rediriger vers le dashboard directeur par défaut
     }
 
     @GetMapping("/error")
     public String error() {
-        return "error";
-    }
-
-    @GetMapping("/Directeur/dashboard.html")
-    public String dashboard() {
-        return "layout/model";
+        return "error";  // Va chercher templates/error.html
     }
 }

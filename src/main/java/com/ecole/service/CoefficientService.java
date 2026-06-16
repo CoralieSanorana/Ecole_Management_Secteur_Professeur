@@ -1,7 +1,7 @@
-package com.example.back_ecole.service;
+package service;
 
-import com.example.back_ecole.model.Coefficient;
-import com.example.back_ecole.repository.CoefficientRepository;
+import entity.Coefficient;
+import repository.CoefficientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<canvas id="particle-canvas"></canvas>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" th:replace="~{fragments/header :: sidebar}"></aside>
+  <header class="topbar" th:replace="~{fragments/header :: topbar}"></header>
+  <main class="main-content">
     <div class="page-header">
         <div>
           <h2>Bonjour, M. Rakoto 👋</h2>
@@ -137,3 +146,8 @@
           </div>
         </div>
       </div>
+  </main>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
