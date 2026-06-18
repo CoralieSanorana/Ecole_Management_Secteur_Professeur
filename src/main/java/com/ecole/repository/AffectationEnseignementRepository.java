@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface AffectationEnseignementRepository extends JpaRepository<AffectationEnseignement, Long> {
     List<AffectationEnseignement> findByProfesseurId(Long professeurId);
+    List<AffectationEnseignement> findByClasseId(Long classeId);
 }

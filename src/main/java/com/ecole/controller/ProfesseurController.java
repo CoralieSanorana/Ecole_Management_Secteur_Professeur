@@ -40,6 +40,12 @@ public class ProfesseurController {
     @Autowired
     private PeriodeService periodeService;
 
+    @Autowired
+    private TitulaireClasseService titulaireClasseService;
+
+    @Autowired
+    private AnneeScolaireService anneeScolaireService;
+
     @GetMapping("/professeur/emploi")
     public String emploi(Model model) {
         model.addAttribute("pageTitle", "Emploi du Temps");
@@ -223,7 +229,87 @@ public class ProfesseurController {
     public String bulletins(Model model) {
         model.addAttribute("pageTitle", "Bulletins");
         model.addAttribute("currentRole", "professeur");
+        
+        // TODO: Get connected professor ID from authentication
+        Long professeurId = 1L; // Temporary hardcoded value
+        
+        // Get current active school year
+        AnneeScolaire anneeScolaire = anneeScolaireService.findByEstActive(true).orElse(null);
+        Integer anneeScolaireId = (anneeScolaire != null) ? anneeScolaire.getId() : null;
+        
+        // Get the professor's titular class for the current year
+        TitulaireClasse titulaireClasse = null;
+        Classe classe = null;
+        List<Inscription> inscriptions = null;
+        Map<Long, ProfilEtudiant> etudiantProfiles = new HashMap<>();
+        
+        if (anneeScolaireId != null) {
+            titulaireClasse = titulaireClasseService.findByProfesseurIdAndAnneeScolaireId(professeurId, anneeScolaireId).orElse(null);
+            if (titulaireClasse != null) {
+                classe = classeService.findById(titulaireClasse.getClasseId()).orElse(null);
+                if (classe != null) {
+                    inscriptions = inscriptionService.findByClasseId(classe.getId());
+                    for (Inscription inscription : inscriptions) {
+                        ProfilEtudiant etudiant = profilEtudiantService.findById(inscription.getEtudiantId()).orElse(null);
+                        if (etudiant != null) {
+                            etudiantProfiles.put(inscription.getEtudiantId(), etudiant);
+                        }
+                    }
+                }
+            }
+        }
+        
+        model.addAttribute("titulaireClasse", titulaireClasse);
+        model.addAttribute("classe", classe);
+        model.addAttribute("inscriptions", inscriptions);
+        model.addAttribute("etudiantProfiles", etudiantProfiles);
+        model.addAttribute("anneeScolaire", anneeScolaire);
         return "Professeur/bulletin";
+    }
+
+    @GetMapping("/professeur/bulletin/{etudiantId}")
+    public String bulletinDetails(@PathVariable Long etudiantId, @RequestParam(required = false) Long periodeId, Model model) {
+        model.addAttribute("pageTitle", "Bulletin de l'Élève");
+        model.addAttribute("currentRole", "professeur");
+        
+        // TODO: Get connected professor ID from authentication
+        Long professeurId = 1L; // Temporary hardcoded value
+        
+        // Get current active school year
+        AnneeScolaire anneeScolaire = anneeScolaireService.findByEstActive(true).orElse(null);
+        Integer anneeScolaireId = (anneeScolaire != null) ? anneeScolaire.getId() : null;
+        
+        // Get the professor's titular class
+        TitulaireClasse titulaireClasse = null;
+        Classe classe = null;
+        if (anneeScolaireId != null) {
+            titulaireClasse = titulaireClasseService.findByProfesseurIdAndAnneeScolaireId(professeurId, anneeScolaireId).orElse(null);
+            if (titulaireClasse != null) {
+                classe = classeService.findById(titulaireClasse.getClasseId()).orElse(null);
+            }
+        }
+        
+        // Get student profile
+        ProfilEtudiant etudiant = profilEtudiantService.findById(etudiantId).orElse(null);
+        
+        // Get all periods
+        List<Periode> periodes = periodeService.findAll();
+        
+        // Get bulletin data if period is selected
+        Map<String, Object> bulletin = null;
+        if (periodeId != null && classe != null) {
+            bulletin = noteService.getBulletinEtudiant(etudiantId, periodeId, classe.getId());
+        }
+        
+        model.addAttribute("etudiant", etudiant);
+        model.addAttribute("etudiantId", etudiantId);
+        model.addAttribute("classe", classe);
+        model.addAttribute("titulaireClasse", titulaireClasse);
+        model.addAttribute("anneeScolaire", anneeScolaire);
+        model.addAttribute("periodes", periodes);
+        model.addAttribute("bulletin", bulletin);
+        model.addAttribute("selectedPeriodeId", periodeId);
+        return "Professeur/bulletin_details";
     }
 
     @GetMapping("/professeur/profil")

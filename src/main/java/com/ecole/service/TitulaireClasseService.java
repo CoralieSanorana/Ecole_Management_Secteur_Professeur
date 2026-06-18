@@ -23,7 +23,7 @@ public class TitulaireClasseService {
         return titulaireClasseRepository.findById(id);
     }
 
-    public Optional<TitulaireClasse> findByClasseIdAndAnneeScolaireId(Long classeId, Long anneeScolaireId) {
+    public Optional<TitulaireClasse> findByClasseIdAndAnneeScolaireId(Long classeId, Integer anneeScolaireId) {
         return titulaireClasseRepository.findByClasseIdAndAnneeScolaireId(classeId, anneeScolaireId);
     }
 
@@ -31,7 +31,7 @@ public class TitulaireClasseService {
         return titulaireClasseRepository.findByProfesseurId(professeurId);
     }
 
-    public Optional<TitulaireClasse> findByProfesseurIdAndAnneeScolaireId(Long professeurId, Long anneeScolaireId) {
+    public Optional<TitulaireClasse> findByProfesseurIdAndAnneeScolaireId(Long professeurId, Integer anneeScolaireId) {
         return titulaireClasseRepository.findByProfesseurIdAndAnneeScolaireId(professeurId, anneeScolaireId);
     }
 

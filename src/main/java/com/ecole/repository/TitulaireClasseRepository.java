@@ -10,11 +10,11 @@ import java.util.Optional;
 public interface TitulaireClasseRepository extends JpaRepository<TitulaireClasse, Integer> {
 
     // Récupérer le titulaire d'une classe pour une année spécifique (Unique)
-    Optional<TitulaireClasse> findByClasseIdAndAnneeScolaireId(Long classeId, Long anneeScolaireId);
+    Optional<TitulaireClasse> findByClasseIdAndAnneeScolaireId(Long classeId, Integer anneeScolaireId);
 
     // Trouver toutes les classes dont un professeur a été titulaire
     List<TitulaireClasse> findByProfesseurId(Long professeurId);
 
     // Trouver la classe dont le prof est titulaire pour une année précise
-    Optional<TitulaireClasse> findByProfesseurIdAndAnneeScolaireId(Long professeurId, Long anneeScolaireId);
+    Optional<TitulaireClasse> findByProfesseurIdAndAnneeScolaireId(Long professeurId, Integer anneeScolaireId);
 }

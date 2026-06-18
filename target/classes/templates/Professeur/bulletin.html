@@ -8,77 +8,66 @@
   <header class="topbar" th:replace="fragments/header :: topbar"></header>
   <main class="main-content">
     <div class="page-header">
-        <div><h2>Bulletins — Terminale C</h2><p>Salle dont vous êtes titulaire</p></div>
-        <div class="page-header-actions">
-          <select class="form-control" style="width:auto;padding:8px 12px;"><option>Trimestre 2</option></select>
-          <button class="btn btn-primary" onclick="showToast('📋 Bulletins publiés pour Terminale C !')"><i class="fas fa-share"></i> Publier les bulletins</button>
+        <div>
+            <h2 th:text="${classe != null ? 'Bulletins — ' + classe.nom : 'Bulletins'}">Bulletins</h2>
+            <p th:text="${classe != null ? 'Classe dont vous êtes titulaire' : 'Aucune classe assignée'}">Classe dont vous êtes titulaire</p>
         </div>
-      </div>
-      <div class="bulletin">
-        <div class="bulletin-head">
-          <div>
-            <h3>BULLETIN DE NOTES</h3>
-            <p>Lycée Privé — Année 2025–2026 · Trimestre 2 · Terminale C</p>
-            <p style="margin-top:8px;font-size:14px;opacity:.8;">Élève : <strong>Rakoto Jean</strong></p>
-          </div>
-          <div class="bulletin-rank">
-            <span>Rang</span>
-            <strong>1er</strong>
-            <span>/ 32</span>
-          </div>
+        
+        <div class="page-header-actions" th:if="${classe != null}">
+            <button class="btn btn-primary" 
+                    th:data-classe-nom="${classe.nom}"
+                    onclick="showToast('📋 Bulletins publiés pour ' + this.getAttribute('data-classe-nom') + ' !')">
+                <i class="fas fa-share"></i> Publier les bulletins
+            </button>
         </div>
-        <div class="bulletin-body">
-          <div class="bulletin-row header">
-            <div>Matière</div><div>Note /20</div><div>Coeff.</div><div>Appréciation</div>
-          </div>
-          <div class="bulletin-row">
-            <div>Mathématiques</div>
-            <div class="grade-excellent">15.5</div>
-            <div>5</div>
-            <div style="font-size:12px;color:var(--success);">Très bien</div>
-          </div>
-          <div class="bulletin-row">
-            <div>Français</div>
-            <div class="grade-good">13.0</div>
-            <div>4</div>
-            <div style="font-size:12px;color:var(--b);">Bien</div>
-          </div>
-          <div class="bulletin-row">
-            <div>Sciences Physiques</div>
-            <div class="grade-good">14.5</div>
-            <div>4</div>
-            <div style="font-size:12px;color:var(--b);">Bien</div>
-          </div>
-          <div class="bulletin-row">
-            <div>Histoire-Géographie</div>
-            <div class="grade-average">11.0</div>
-            <div>3</div>
-            <div style="font-size:12px;color:var(--g);">Assez bien</div>
-          </div>
-          <div class="bulletin-row">
-            <div>SVT</div>
-            <div class="grade-excellent">16.0</div>
-            <div>3</div>
-            <div style="font-size:12px;color:var(--success);">Très bien</div>
-          </div>
-          <div class="bulletin-row">
-            <div>Anglais</div>
-            <div class="grade-average">12.0</div>
-            <div>2</div>
-            <div style="font-size:12px;color:var(--g);">Assez bien</div>
-          </div>
+    </div>
+    
+    <div th:if="${classe == null}" class="card">
+        <div class="card-body">
+            <p style="text-align:center;color:var(--txt3);padding:40px;">
+                Vous n'êtes pas titulaire d'une classe pour l'année scolaire actuelle.
+            </p>
         </div>
-        <div class="bulletin-footer">
-          <div>
-            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);">Moyenne Générale</div>
-            <div class="moy grade-excellent">14.12 / 20</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);">Appréciation du Directeur</div>
-            <div style="font-size:13px;font-style:italic;margin-top:4px;">"Excellent élève, félicitations !"</div>
-          </div>
+    </div>
+    
+    <div th:if="${classe != null}" class="card">
+        <div class="card-header">
+            <h3>Liste des Élèves — <span th:text="${classe.nom}">Classe</span></h3>
         </div>
-      </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Matricule</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr th:if="${inscriptions == null or inscriptions.isEmpty()}">
+                        <td colspan="5" style="text-align:center;color:var(--txt3);padding:20px;">
+                            Aucun élève inscrit dans cette classe.
+                        </td>
+                    </tr>
+                    <tr th:each="inscription : ${inscriptions}" 
+                        th:onclick="|window.location.href='/professeur/bulletin/${inscription.etudiantId}'|"
+                        style="cursor:pointer;">
+                        <td th:text="${etudiantProfiles.get(inscription.etudiantId) != null ? etudiantProfiles.get(inscription.etudiantId).matricule : ''}">Matricule</td>
+                        <td th:text="${etudiantProfiles.get(inscription.etudiantId) != null ? etudiantProfiles.get(inscription.etudiantId).nom : 'Étudiant'}">Nom</td>
+                        <td th:text="${etudiantProfiles.get(inscription.etudiantId) != null ? etudiantProfiles.get(inscription.etudiantId).prenom : ''}">Prénom</td>
+                        <td>
+                            <a th:href="@{/professeur/bulletin/{etudiantId}(etudiantId=${inscription.etudiantId})}" 
+                            class="btn btn-primary btn-sm">
+                                <i class="fas fa-file-alt"></i> Voir bulletin
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
   </main>
 </div>
 <div th:replace="~{fragments/footer :: footer}"></div>

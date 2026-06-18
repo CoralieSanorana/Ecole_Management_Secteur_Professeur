@@ -33,4 +33,8 @@ public class AffectationEnseignementService {
     public List<AffectationEnseignement> findByProfesseurId(Long professeurId) {
         return affectationEnseignementRepository.findByProfesseurId(professeurId);
     }
+
+    public List<AffectationEnseignement> findByClasseId(Long classeId) {
+        return affectationEnseignementRepository.findByClasseId(classeId);
+    }
 }

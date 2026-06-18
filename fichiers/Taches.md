@@ -72,14 +72,13 @@ Un sous groupe qui est responsable de la partie **Professeur**.
     - [] bouton *Publier Cours* -> appel fonction save()
     - [] fonction (SupportCourtService): save(): permet d'enregistrer le cours publier dans la table *supports_cours*
 
-### Mbola miandry:
-- [] Table utiles en plus:
-    - [] titulaires_classes
-
-- [] creer entity, repository, service por la table *titulaires_classes*
+### Coralie:
+- [ok] Table utiles en plus:
+    - [ok] titulaires_classes
+- [ok] creer entity, repository, service por la table *titulaires_classes*
 
 - [] bulletin.html
-    - [] fonction: getClasseTitulaireProfesseur(): resuperer la classe auquelle le professeur conncte est 
+    - [ok] fonction (TitulaireClasseService): findByProfesseurId(): resuperer la classe auquelle le professeur connecte est 
     titulaire
     - [] afficher sous forme de tableau la liste des etudiants de la classe 
     - [] cliquer sur une ligne d'eleve ->redirect()->to(bulletin_details.html)
@@ -87,11 +86,13 @@ Un sous groupe qui est responsable de la partie **Professeur**.
 
 - [] bulletin_details.html
     - [] champ pour saisir la periode 
-    - [] fonction: getBulletinEtudiant(): recuperer les notes d'un etudiant dans toutes les matieres selon
-    la periode choisi
+    - [ok] fonction (NoteService): findByEtudiantIdByPeriodeId(): recuperer tous les notes d'un etudiant dans une periode
+    - [] fonction (NoteService): getBulletinEtudiant(): recuperer les notes d'un etudiant dans toutes les matieres selon
+    la periode choisi, calcul sa moyenne, selon les coefficients de chaque matiere
     - [] afficher le bulletin d'un etudiant  dans la periode choisi
     - [] bouton *Export PDF*: exporter en PDF le bulletin d'un etudiant -> appel fonction exporPDF()
 
+### Mbola miandry:
 - [] calendar.html
     - [] fonction: getCalendarProf(): recuperer les emploies du temps du professeur connecte
     - [] afficher sous forme de calendrier hebdomadaire les emploies du temps du professeur connecte

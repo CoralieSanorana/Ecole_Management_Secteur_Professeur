@@ -8,6 +8,7 @@ D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\e
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\EcoleApplication.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\Absence.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\AffectationEnseignement.java
+D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\AnneeScolaire.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\Classe.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\Coefficient.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\EmploiDuTemps.java
@@ -35,6 +36,7 @@ D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\e
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\UserRoleId.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\AbsenceRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\AffectationEnseignementRepository.java
+D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\AnneeScolaireRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\ClasseRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\CoefficientRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\EmploiDuTempsRepository.java
@@ -61,6 +63,7 @@ D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\e
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\UserRoleRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\AbsenceService.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\AffectationEnseignementService.java
+D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\AnneeScolaireService.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\ClasseService.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\CoefficientService.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\EmploiDuTempsService.java

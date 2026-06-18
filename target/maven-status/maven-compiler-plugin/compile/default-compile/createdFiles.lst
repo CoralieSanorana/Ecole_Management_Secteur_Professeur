@@ -25,6 +25,7 @@ com\ecole\repository\SupportCoursRepository.class
 com\ecole\service\ProfilEtudiantService.class
 com\ecole\controller\EtudiantController.class
 com\ecole\service\AffectationEnseignementService.class
+com\ecole\repository\AnneeScolaireRepository.class
 com\ecole\repository\AbsenceRepository.class
 com\ecole\entity\UserRole.class
 com\ecole\entity\SupportCours.class
@@ -77,6 +78,7 @@ com\ecole\repository\ProfilProfesseurRepository.class
 com\ecole\service\ProfilProfesseurService.class
 com\ecole\repository\MoyenneRepository.class
 com\ecole\entity\EmploiDuTemps.class
+com\ecole\service\AnneeScolaireService.class
 com\ecole\service\SalleService.class
 com\ecole\service\NotificationService.class
 com\ecole\entity\Classe.class
@@ -85,3 +87,4 @@ com\ecole\entity\ProfilEtudiant.class
 com\ecole\service\TitulaireClasseService.class
 com\ecole\repository\ProfilEtudiantRepository.class
 com\ecole\repository\EmploiDuTempsRepository.class
+com\ecole\entity\AnneeScolaire.class

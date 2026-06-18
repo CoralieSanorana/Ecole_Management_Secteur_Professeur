@@ -63,3 +63,60 @@ dans cette page @notes.html , le tableau qui affiche la liste des classes auxque
 
 puis, l'affichage de la liste des elves dans une classe, on affiche sous forme de tableau, avec les colonnes : eleve, puis les type_evaluation des notes qui sont deja enregistrer
 on n'affiche pas la moyenne ni le rang
+
+- [] bulletin.html @bulletin.html 
+    - [ok] fonction (TitulaireClasseService @TitulaireClasseService.java ): findByProfesseurId(): resuperer la classe auquelle le professeur connecte est 
+    titulaire
+    - [] afficher sous forme de tableau la liste des etudiants de la classe 
+    - [] cliquer sur une ligne d'eleve ->redirect()->to(bulletin_details.html)
+    - [] bouton *Export PDF*: exporter en PDF la liste des etudiants -> appel fonction exporPDF()
+
+- [] bulletin_details.html  @bulletin_details.html 
+    - [] champ pour saisir la periode 
+    - [ok] fonction (NoteService @NoteService.java ): findByEtudiantIdByPeriodeId(): recuperer tous les notes d'un etudiant dans une periode
+    - [] fonction (NoteService): getBulletinEtudiant(): recuperer les notes d'un etudiant dans toutes les matieres selon
+    la periode choisi, calcul sa moyenne, selon les coefficients de chaque matiere
+    - [] afficher le bulletin d'un etudiant  dans la periode choisi
+    - [] bouton *Export PDF*: exporter en PDF le bulletin d'un etudiant -> appel fonction exporPDF()
+
+
+lorsquej'arrive sur cette url: http://localhost:1234/professeur/bulletins
+
+ca affiche : Bulletins — Seconde A
+Classe dont vous êtes titulaire
+
+mais aussi des erreurs
+voici l'erreur:
+200
+URL : /professeur/bulletins
+
+18/06/2026 23:01:14
+
+
+<tbody>
+                    <tr th:if="${inscriptions == null or inscriptions.isEmpty()}">
+                        <td colspan="4" style="text-align:center;color:var(--txt3);padding:20px;">
+                            Aucun élève inscrit dans cette classe.
+                        </td>
+                    </tr>
+                    <tr th:each="inscription : ${inscriptions}" 
+                        th:onclick="'window.location.href=\'/professeur/bulletin/' + ${inscription.etudiantId} + '\''"
+                        style="cursor:pointer;">
+                        <td th:text="${etudiantProfiles.get(inscription.etudiantId) != null ? etudiantProfiles.get(inscription.etudiantId).matricule : ''}">Matricule</td>
+                        <td th:text="${etudiantProfiles.get(inscription.etudiantId) != null ? etudiantProfiles.get(inscription.etudiantId).nom : 'Étudiant'}">Nom</td>
+                        <td th:text="${etudiantProfiles.get(inscription.etudiantId) != null ? etudiantProfiles.get(inscription.etudiantId).prenom : ''}">Prénom</td>
+                        <td>
+                            <a th:href="@{/professeur/bulletin/{etudiantId}(etudiantId=${inscription.etudiantId})}" 
+                               class="btn btn-primary btn-sm">
+                                <i class="fas fa-file-alt"></i> Voir bulletin
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+
+
+                <div class="page-header-actions" th:if="${classe != null}">
+                    <button class="btn btn-primary" th:onclick="'showToast(\'📋 Bulletins publiés pour ' + ${classe.nom} + ' !\')'">
+                        <i class="fas fa-share"></i> Publier les bulletins
+                    </button>
+                </div>
