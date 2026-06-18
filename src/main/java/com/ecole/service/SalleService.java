@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.Salle;
-import repository.SalleRepository;
+import com.ecole.entity.Salle;
+import com.ecole.repository.SalleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

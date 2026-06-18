@@ -34,16 +34,16 @@
 
  :: Spring Boot ::                (v4.1.0)
 
-2026-06-13T11:32:34.041+03:00  INFO 535827 --- [ecole] [           main] com.ecole.EcoleApplication               : Starting EcoleApplication using Java 21.0.11 with PID 535827 (/home/tiavina-anjaranomena/PROJET-BAOVOLA/ecole/target/classes started by tiavina-anjaranomena in /home/tiavina-anjaranomena/PROJET-BAOVOLA/ecole)
-2026-06-13T11:32:34.049+03:00  INFO 535827 --- [ecole] [           main] com.ecole.EcoleApplication               : No active profile set, falling back to 1 default profile: "default"
-2026-06-13T11:32:34.050+03:00 DEBUG 535827 --- [ecole] [           main] o.s.boot.SpringApplication               : Loading source class com.ecole.EcoleApplication
+2026-06-13T11:32:34.041+03:00  INFO 535827 --- [ecole] [           main] EcoleApplication               : Starting EcoleApplication using Java 21.0.11 with PID 535827 (/home/tiavina-anjaranomena/PROJET-BAOVOLA/ecole/target/classes started by tiavina-anjaranomena in /home/tiavina-anjaranomena/PROJET-BAOVOLA/ecole)
+2026-06-13T11:32:34.049+03:00  INFO 535827 --- [ecole] [           main] EcoleApplication               : No active profile set, falling back to 1 default profile: "default"
+2026-06-13T11:32:34.050+03:00 DEBUG 535827 --- [ecole] [           main] o.s.boot.SpringApplication               : Loading source class EcoleApplication
 2026-06-13T11:32:34.132+03:00 DEBUG 535827 --- [ecole] [           main] ConfigServletWebServerApplicationContext : Refreshing org.springframework.boot.web.server.servlet.context.AnnotationConfigServletWebServerApplicationContext@d62fe5b
 2026-06-13T11:32:34.766+03:00  INFO 535827 --- [ecole] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 2026-06-13T11:32:34.788+03:00 DEBUG 535827 --- [ecole] [           main] o.s.b.a.AutoConfigurationPackages        : @EnableAutoConfiguration was declared on a class in the package 'com.ecole'. Automatic @Repository and @Entity scanning is enabled.
 2026-06-13T11:32:34.794+03:00  INFO 535827 --- [ecole] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 0 JPA repository interfaces.
 2026-06-13T11:32:35.215+03:00 DEBUG 535827 --- [ecole] [           main] o.s.b.t.s.TomcatServletWebServerFactory  : Code archive: /home/tiavina-anjaranomena/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.0/spring-boot-web-server-4.1.0.jar
 2026-06-13T11:32:35.216+03:00 DEBUG 535827 --- [ecole] [           main] o.s.b.t.s.TomcatServletWebServerFactory  : Code archive: /home/tiavina-anjaranomena/.m2/repository/org/springframework/boot/spring-boot-web-server/4.1.0/spring-boot-web-server-4.1.0.jar
-2026-06-13T11:32:35.216+03:00 DEBUG 535827 --- [ecole] [           main] o.s.b.t.s.TomcatServletWebServerFactory  : None of the document roots [src/main/webapp, public, static] point to a directory and will be ignored.
+2026-06-13T11:32:35.216+03:00 DEBUG 535827 --- [ecole] [           main] o.s.b.t.s.TomcatServletWebServerFactory  : None of the document roots [src/main/webapp, public, static] poLong to a directory and will be ignored.
 2026-06-13T11:32:35.248+03:00  INFO 535827 --- [ecole] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
 2026-06-13T11:32:35.268+03:00  INFO 535827 --- [ecole] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
 2026-06-13T11:32:35.269+03:00  INFO 535827 --- [ecole] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
@@ -73,7 +73,7 @@
 	Pool: DataSourceConnectionProvider
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-06-13T11:32:36.887+03:00  INFO 535827 --- [ecole] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-13T11:32:36.887+03:00  INFO 535827 --- [ecole] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform Longegration)
 2026-06-13T11:32:36.970+03:00  INFO 535827 --- [ecole] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
 2026-06-13T11:32:37.044+03:00  WARN 535827 --- [ecole] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2026-06-13T11:32:37.206+03:00 DEBUG 535827 --- [ecole] [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : 2 mappings in 'requestMappingHandlerMapping'
@@ -264,7 +264,7 @@ Positive matches:
       - @ConditionalOnClass found required class 'org.springframework.web.servlet.config.annotation.WebMvcConfigurer' (OnClassCondition)
       - found 'session' scope (OnWebApplicationCondition)
       - @ConditionalOnBooleanProperty (spring.jpa.open-in-view=true) matched (OnPropertyCondition)
-      - @ConditionalOnMissingBean (types: org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor,org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter; SearchStrategy: all) did not find any beans (OnBeanCondition)
+      - @ConditionalOnMissingBean (types: org.springframework.orm.jpa.support.OpenEntityManagerInViewLongerceptor,org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter; SearchStrategy: all) did not find any beans (OnBeanCondition)
 
    JpaBaseConfiguration.PersistenceManagedTypesConfiguration matched:
       - @ConditionalOnMissingBean (types: org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean,jakarta.persistence.EntityManagerFactory; SearchStrategy: all) did not find any beans (OnBeanCondition)
@@ -388,7 +388,7 @@ Positive matches:
       - @ConditionalOnMissingBean (names: viewNameTranslator; SearchStrategy: all) did not find any beans (OnBeanCondition)
 
    WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter#defaultViewResolver matched:
-      - @ConditionalOnMissingBean (types: org.springframework.web.servlet.view.InternalResourceViewResolver; SearchStrategy: all) did not find any beans (OnBeanCondition)
+      - @ConditionalOnMissingBean (types: org.springframework.web.servlet.view.LongernalResourceViewResolver; SearchStrategy: all) did not find any beans (OnBeanCondition)
 
    WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter#requestContextFilter matched:
       - @ConditionalOnMissingBean (types: org.springframework.web.context.request.RequestContextListener,org.springframework.web.filter.RequestContextFilter; SearchStrategy: all) did not find any beans (OnBeanCondition)
@@ -420,7 +420,7 @@ Negative matches:
       Did not match:
          - EmbeddedDataSource spring.datasource.url is set (DataSourceAutoConfiguration.EmbeddedDatabaseCondition)
 
-   DataSourceCheckpointRestoreConfiguration:
+   DataSourceCheckpoLongRestoreConfiguration:
       Did not match:
          - @ConditionalOnClass did not find required class 'org.crac.Resource' (OnClassCondition)
 
@@ -548,11 +548,11 @@ Negative matches:
 
    ServletManagementContextAutoConfiguration:
       Did not match:
-         - @ConditionalOnClass did not find required class 'org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties' (OnClassCondition)
+         - @ConditionalOnClass did not find required class 'org.springframework.boot.actuate.autoconfigure.endpoLong.web.WebEndpoLongProperties' (OnClassCondition)
 
    ServletMappingsAutoConfiguration:
       Did not match:
-         - @ConditionalOnClass did not find required class 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint' (OnClassCondition)
+         - @ConditionalOnClass did not find required class 'org.springframework.boot.actuate.autoconfigure.endpoLong.condition.ConditionalOnAvailableEndpoLong' (OnClassCondition)
 
    ServletWebServerConfiguration#forwardedHeaderFilter:
       Did not match:
@@ -580,7 +580,7 @@ Negative matches:
 
    TaskSchedulingAutoConfiguration#scheduledBeanLazyInitializationExcludeFilter:
       Did not match:
-         - @ConditionalOnBean (names: org.springframework.scheduling.config.internalScheduledAnnotationProcessor; SearchStrategy: all) did not find any beans named org.springframework.scheduling.config.internalScheduledAnnotationProcessor (OnBeanCondition)
+         - @ConditionalOnBean (names: org.springframework.scheduling.config.LongernalScheduledAnnotationProcessor; SearchStrategy: all) did not find any beans named org.springframework.scheduling.config.LongernalScheduledAnnotationProcessor (OnBeanCondition)
 
    TaskSchedulingConfigurations.SimpleAsyncTaskSchedulerBuilderConfiguration#simpleAsyncTaskSchedulerBuilderVirtualThreads:
       Did not match:
@@ -588,7 +588,7 @@ Negative matches:
 
    TaskSchedulingConfigurations.TaskSchedulerConfiguration:
       Did not match:
-         - @ConditionalOnBean (names: org.springframework.scheduling.config.internalScheduledAnnotationProcessor; SearchStrategy: all) did not find any beans named org.springframework.scheduling.config.internalScheduledAnnotationProcessor (OnBeanCondition)
+         - @ConditionalOnBean (names: org.springframework.scheduling.config.LongernalScheduledAnnotationProcessor; SearchStrategy: all) did not find any beans named org.springframework.scheduling.config.LongernalScheduledAnnotationProcessor (OnBeanCondition)
 
    TomcatMetricsAutoConfiguration:
       Did not match:
@@ -642,13 +642,13 @@ Negative matches:
       Did not match:
          - @ConditionalOnMissingBean (types: org.springframework.web.servlet.view.BeanNameViewResolver; SearchStrategy: all) found beans of type 'org.springframework.web.servlet.view.BeanNameViewResolver' beanNameViewResolver (OnBeanCondition)
 
-   WebMvcHealthEndpointExtensionAutoConfiguration:
+   WebMvcHealthEndpoLongExtensionAutoConfiguration:
       Did not match:
-         - @ConditionalOnClass did not find required class 'org.springframework.boot.health.actuate.endpoint.HealthEndpoint' (OnClassCondition)
+         - @ConditionalOnClass did not find required class 'org.springframework.boot.health.actuate.endpoLong.HealthEndpoLong' (OnClassCondition)
 
    WebMvcMappingsAutoConfiguration:
       Did not match:
-         - @ConditionalOnClass did not find required class 'org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint' (OnClassCondition)
+         - @ConditionalOnClass did not find required class 'org.springframework.boot.actuate.autoconfigure.endpoLong.condition.ConditionalOnAvailableEndpoLong' (OnClassCondition)
 
    WebMvcObservationAutoConfiguration:
       Did not match:
@@ -701,7 +701,7 @@ org.springframework.context.ApplicationContextException: Failed to start bean 'w
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321) ~[spring-boot-4.1.0.jar:4.1.0]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365) ~[spring-boot-4.1.0.jar:4.1.0]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-4.1.0.jar:4.1.0]
-	at com.ecole.EcoleApplication.main(EcoleApplication.java:10) ~[classes/:na]
+	at EcoleApplication.main(EcoleApplication.java:10) ~[classes/:na]
 Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat server
 	at org.springframework.boot.tomcat.TomcatWebServer.start(TomcatWebServer.java:248) ~[spring-boot-tomcat-4.1.0.jar:4.1.0]
 	at org.springframework.boot.web.server.servlet.context.WebServerStartStopLifecycle.start(WebServerStartStopLifecycle.java:44) ~[spring-boot-web-server-4.1.0.jar:4.1.0]
@@ -713,7 +713,7 @@ Caused by: java.lang.IllegalArgumentException: standardService.connector.startFa
 	at org.springframework.boot.tomcat.TomcatWebServer.start(TomcatWebServer.java:233) ~[spring-boot-tomcat-4.1.0.jar:4.1.0]
 	... 16 common frames omitted
 Caused by: org.apache.catalina.LifecycleException: Protocol handler start failed
-	at org.apache.catalina.connector.Connector.startInternal(Connector.java:1119) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
+	at org.apache.catalina.connector.Connector.startLongernal(Connector.java:1119) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
 	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
 	at org.apache.catalina.core.StandardService.addConnector(StandardService.java:217) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
 	... 18 common frames omitted
@@ -722,12 +722,12 @@ Caused by: java.net.BindException: Adresse déjà utilisée
 	at java.base/sun.nio.ch.Net.bind(Net.java:577) ~[na:na]
 	at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:344) ~[na:na]
 	at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:301) ~[na:na]
-	at org.apache.tomcat.util.net.NioEndpoint.initServerSocket(NioEndpoint.java:265) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
-	at org.apache.tomcat.util.net.NioEndpoint.bind(NioEndpoint.java:220) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
-	at org.apache.tomcat.util.net.AbstractEndpoint.bindWithCleanup(AbstractEndpoint.java:1642) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
-	at org.apache.tomcat.util.net.AbstractEndpoint.start(AbstractEndpoint.java:1725) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
+	at org.apache.tomcat.util.net.NioEndpoLong.initServerSocket(NioEndpoLong.java:265) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
+	at org.apache.tomcat.util.net.NioEndpoLong.bind(NioEndpoLong.java:220) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
+	at org.apache.tomcat.util.net.AbstractEndpoLong.bindWithCleanup(AbstractEndpoLong.java:1642) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
+	at org.apache.tomcat.util.net.AbstractEndpoLong.start(AbstractEndpoLong.java:1725) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
 	at org.apache.coyote.AbstractProtocol.start(AbstractProtocol.java:948) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
-	at org.apache.catalina.connector.Connector.startInternal(Connector.java:1116) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
+	at org.apache.catalina.connector.Connector.startLongernal(Connector.java:1116) ~[tomcat-embed-core-11.0.22.jar:11.0.22]
 	... 20 common frames omitted
 
 [[1;34mINFO[m] [1m------------------------------------------------------------------------[m

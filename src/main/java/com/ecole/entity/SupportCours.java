@@ -1,4 +1,4 @@
-package entity;
+package com.ecole.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -9,13 +9,13 @@ public class SupportCours {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "affectation_id")
-    private Long affectationId;
+    private Integer affectationId;
 
     @Column(name = "type_fichier_id")
-    private Long typeFichierId;
+    private Integer typeFichierId;
 
     @Column(nullable = false)
     private String titre;
@@ -39,7 +39,7 @@ public class SupportCours {
     private Boolean isArchived = false;
 
     @Column(name = "cree_par")
-    private Long creePar;
+    private Integer creePar;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -58,27 +58,27 @@ public class SupportCours {
         updatedAt = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getAffectationId() {
+    public Integer getAffectationId() {
         return affectationId;
     }
 
-    public void setAffectationId(Long affectationId) {
+    public void setAffectationId(Integer affectationId) {
         this.affectationId = affectationId;
     }
 
-    public Long getTypeFichierId() {
+    public Integer getTypeFichierId() {
         return typeFichierId;
     }
 
-    public void setTypeFichierId(Long typeFichierId) {
+    public void setTypeFichierId(Integer typeFichierId) {
         this.typeFichierId = typeFichierId;
     }
 
@@ -138,11 +138,11 @@ public class SupportCours {
         this.isArchived = isArchived;
     }
 
-    public Long getCreePar() {
+    public Integer getCreePar() {
         return creePar;
     }
 
-    public void setCreePar(Long creePar) {
+    public void setCreePar(Integer creePar) {
         this.creePar = creePar;
     }
 

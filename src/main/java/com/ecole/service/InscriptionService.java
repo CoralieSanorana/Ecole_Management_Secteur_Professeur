@@ -1,6 +1,6 @@
 package com.ecole.service;
 
-import com.ecole.model.Inscription;
+import com.ecole.entity.Inscription;
 import com.ecole.repository.InscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

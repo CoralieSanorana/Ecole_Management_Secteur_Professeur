@@ -1,6 +1,6 @@
-package repository;
+package com.ecole.repository;
 
-import entity.Coefficient;
+import com.ecole.entity.Coefficient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

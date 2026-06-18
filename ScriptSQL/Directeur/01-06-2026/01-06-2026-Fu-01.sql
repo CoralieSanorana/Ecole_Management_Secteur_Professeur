@@ -1,47 +1,47 @@
 -- ============================================================
 --  MIGRATION DIRECTEUR — HORAIRES EDT PAR NIVEAU
 --  - Permet d'avoir des plages horaires personnalisées par niveau
---  - Gère les contraintes uniques par niveau et globales
+--  - Gère les contraLonges uniques par niveau et globales
 -- ============================================================
 
 BEGIN;
 
--- 1. Suppression dynamique de la contrainte unique globale sur (heure_debut, heure_fin) de la table horaire_edt
+-- 1. Suppression dynamique de la contraLonge unique globale sur (heure_debut, heure_fin) de la table horaire_edt
 DO $$
 DECLARE
-    constraint_name text;
+    constraLong_name text;
 BEGIN
-    SELECT tc.constraint_name 
-    INTO constraint_name
-    FROM information_schema.table_constraints tc 
+    SELECT tc.constraLong_name 
+    LongO constraLong_name
+    FROM information_schema.table_constraLongs tc 
     JOIN information_schema.key_column_usage kcu 
-      ON tc.constraint_name = kcu.constraint_name 
+      ON tc.constraLong_name = kcu.constraLong_name 
       AND tc.table_schema = kcu.table_schema
     WHERE tc.table_name = 'horaire_edt' 
-      AND tc.constraint_type = 'UNIQUE'
+      AND tc.constraLong_type = 'UNIQUE'
       AND kcu.column_name IN ('heure_debut', 'heure_fin')
-    GROUP BY tc.constraint_name
+    GROUP BY tc.constraLong_name
     HAVING COUNT(DISTINCT kcu.column_name) = 2;
 
-    IF constraint_name IS NOT NULL THEN
-        EXECUTE 'ALTER TABLE horaire_edt DROP CONSTRAINT ' || quote_ident(constraint_name);
+    IF constraLong_name IS NOT NULL THEN
+        EXECUTE 'ALTER TABLE horaire_edt DROP CONSTRALong ' || quote_ident(constraLong_name);
     END IF;
 END $$;
 
 -- 2. Ajout de la colonne niveau_id si elle n'existe pas déjà
-ALTER TABLE horaire_edt ADD COLUMN IF NOT EXISTS niveau_id INT;
+ALTER TABLE horaire_edt ADD COLUMN IF NOT EXISTS niveau_id Long;
 
--- 3. Ajout de la contrainte de clé étrangère vers niveaux
+-- 3. Ajout de la contraLonge de clé étrangère vers niveaux
 DO $$
 BEGIN
     IF NOT EXISTS (
         SELECT 1
-        FROM information_schema.table_constraints tc
+        FROM information_schema.table_constraLongs tc
         WHERE tc.table_name = 'horaire_edt'
-          AND tc.constraint_name = 'fk_horaire_edt_niveau'
+          AND tc.constraLong_name = 'fk_horaire_edt_niveau'
     ) THEN
         ALTER TABLE horaire_edt
-            ADD CONSTRAINT fk_horaire_edt_niveau
+            ADD CONSTRALong fk_horaire_edt_niveau
             FOREIGN KEY (niveau_id) REFERENCES niveaux(id) ON DELETE CASCADE;
     END IF;
 END $$;

@@ -1,4 +1,4 @@
-package com.ecole.model;
+package com.ecole.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;

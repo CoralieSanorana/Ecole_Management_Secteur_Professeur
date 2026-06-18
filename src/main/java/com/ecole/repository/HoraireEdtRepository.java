@@ -1,6 +1,6 @@
-package repository;
+package com.ecole.repository;
 
-import entity.HoraireEdt;
+import com.ecole.entity.HoraireEdt;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

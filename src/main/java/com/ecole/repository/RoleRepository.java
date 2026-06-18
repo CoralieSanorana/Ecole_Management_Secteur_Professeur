@@ -1,6 +1,6 @@
-package repository;
+package com.ecole.repository;
 
-import entity.Role;
+import com.ecole.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

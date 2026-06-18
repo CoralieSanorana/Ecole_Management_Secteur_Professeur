@@ -1,6 +1,6 @@
 package com.ecole.service;
 
-import com.ecole.model.ProfilEtudiant;
+import com.ecole.entity.ProfilEtudiant;
 import com.ecole.repository.ProfilEtudiantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.TypeFichier;
-import repository.TypeFichierRepository;
+import com.ecole.entity.TypeFichier;
+import com.ecole.repository.TypeFichierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

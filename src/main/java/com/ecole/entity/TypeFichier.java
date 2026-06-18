@@ -1,4 +1,4 @@
-package entity;
+package com.ecole.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ public class TypeFichier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(unique = true, nullable = false)
     private String libelle;
@@ -22,11 +22,11 @@ public class TypeFichier {
         createdAt = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

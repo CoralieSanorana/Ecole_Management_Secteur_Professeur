@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.NotificationType;
-import repository.NotificationTypeRepository;
+import com.ecole.entity.NotificationType;
+import com.ecole.repository.NotificationTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

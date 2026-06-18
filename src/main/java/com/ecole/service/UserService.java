@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.User;
-import repository.UserRepository;
+import com.ecole.entity.User;
+import com.ecole.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

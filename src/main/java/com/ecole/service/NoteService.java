@@ -1,6 +1,6 @@
 package com.ecole.service;
 
-import com.ecole.model.Note;
+import com.ecole.entity.Note;
 import com.ecole.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,4 +37,13 @@ public class NoteService {
     public List<Note> findByEtudiantIdByMatiereId(Long etudiantId, Long matiereId) {
         return noteRepository.findByEtudiantIdByMatiereId(etudiantId, matiereId);
     }
+
+    public List<Note> findByEtudiantIdByMatiereIdByPeriodeId(Long etudiantId, Long matiereId, Long periodeId) {
+        return noteRepository.findByEtudiantIdByMatiereIdByPeriodeId(etudiantId, matiereId, periodeId);
+    }
+
+    public List<Note> findByEtudiantIdByPeriodeId(Long etudiantId, Long periodeId) {
+        return noteRepository.findByEtudiantIdByPeriodeId(etudiantId, periodeId);
+    }
 }
+

@@ -25,9 +25,9 @@
             </h1>
 
             <!-- Message selon le code -->
-            <h4 th:if="${status == 404}">Page introuvable</h4>
+            <h4 th:if="${status == 404}">Page Longrouvable</h4>
             <h4 th:if="${status == 403}">Accès refusé</h4>
-            <h4 th:if="${status == 500}">Erreur interne du serveur</h4>
+            <h4 th:if="${status == 500}">Erreur Longerne du serveur</h4>
 
             <!-- Message technique -->
             <p class="text-muted mt-2" th:text="${message}"></p>

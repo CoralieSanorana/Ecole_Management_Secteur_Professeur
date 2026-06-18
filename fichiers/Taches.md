@@ -29,15 +29,26 @@ Un sous groupe qui est responsable de la partie **Professeur**.
 
 ### Coralie:
 - [] notes.html
-    - [] fonction (AffectationEnseignementService): findByProfesseurId(): recuperer toutes les affectations
+    - [ok] fonction (AffectationEnseignementService): findByProfesseurId(): recuperer toutes les affectations
     du professeur connecter (obtenir *classe* et *matiere*)
-    - [] fonction (ProfilEtudiantService): findByClasseId(): recuperer tous les etudiants d'une classe, a partir
+
+    - [ok] fonction (InscriptionService): findByClasseId(): recuperer tous les etudiants d'une classe, a partir
     du classe_id dans la table *inscription*
-    - [] fonction (NoteService): findByEtudiantId(): recuperer tous les notes d'un etudiant
-    - [] fonction (NoteService): findByEtudiantIdByMatiereId(): recuperer tous les notes d'un etudiant dans une matiere
+
+    - [ok] fonction (NoteService): findByEtudiantId(): recuperer tous les notes d'un etudiant
+
+    - [ok] fonction (NoteService): findByEtudiantIdByMatiereId(): recuperer tous les notes d'un etudiant dans une matiere
+
+    - [ok] fonction (NoteService): findByEtudiantIdByMatiereIdByPeriodeId(): recuperer tous les notes d'un etudiant dans une matiere et une periode
+
+    - [ok] fonction (NoteService): findByEtudiantIdByPeriodeId(): recuperer tous les notes d'un etudiant dans une periode
+
     - [] afficher dans une *section* le liste des classes auxquels le professeur connecter est assigne
+
     - [] cliquer sur une classe -> affichage de ses etudiants
+    
     - [] afficher dans une *section* sous forme de tableau: la liste des etudiants + notes
+
     - [] bouton *Saisir note* ->redirect()->to('saisir_notes.html')
 
 ### Coralie:

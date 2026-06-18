@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.Role;
-import repository.RoleRepository;
+import com.ecole.entity.Role;
+import com.ecole.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

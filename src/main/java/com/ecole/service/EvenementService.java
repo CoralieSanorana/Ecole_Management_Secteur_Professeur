@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.Evenement;
-import repository.EvenementRepository;
+import com.ecole.entity.Evenement;
+import com.ecole.repository.EvenementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

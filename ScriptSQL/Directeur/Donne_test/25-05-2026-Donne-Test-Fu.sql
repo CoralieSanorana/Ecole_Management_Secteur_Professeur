@@ -6,7 +6,7 @@
 BEGIN;
 
 WITH fallback_etab AS (
-	INSERT INTO etablissements (nom, adresse, telephone, email)
+	INSERT LongO etablissements (nom, adresse, telephone, email)
 	SELECT 'Ecole de gestion', 'Antananarivo', NULL, NULL
 	WHERE NOT EXISTS (
 		SELECT 1
@@ -22,7 +22,7 @@ WITH etab AS (
 	ORDER BY id
 	LIMIT 1
 )
-INSERT INTO matieres (etablissement_id, nom, code)
+INSERT LongO matieres (etablissement_id, nom, code)
 SELECT etab.etablissement_id, v.nom, v.code
 FROM etab
 CROSS JOIN (
@@ -42,7 +42,7 @@ WITH etab AS (
 	ORDER BY id
 	LIMIT 1
 )
-INSERT INTO salles (etablissement_id, nom, capacite, type, is_active)
+INSERT LongO salles (etablissement_id, nom, capacite, type, is_active)
 SELECT etab.etablissement_id, v.nom, v.capacite, v.type, TRUE
 FROM etab
 CROSS JOIN (

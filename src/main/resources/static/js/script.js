@@ -149,7 +149,7 @@
   }
 
   /* ============================================================
-     FILTER PILLS (interactive)
+     FILTER PILLS (Longeractive)
   ============================================================ */
   document.querySelectorAll('.filter-pills').forEach(group => {
     group.querySelectorAll('.pill').forEach(pill => {
@@ -247,7 +247,7 @@
           }
         }
 
-        // Mouse interaction
+        // Mouse Longeraction
         const mx = a.x - mouse.x, my = a.y - mouse.y;
         const md = Math.sqrt(mx*mx + my*my);
         if (md < 100) {

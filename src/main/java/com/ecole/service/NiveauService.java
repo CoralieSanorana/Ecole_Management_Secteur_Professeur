@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.Niveau;
-import repository.NiveauRepository;
+import com.ecole.entity.Niveau;
+import com.ecole.repository.NiveauRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

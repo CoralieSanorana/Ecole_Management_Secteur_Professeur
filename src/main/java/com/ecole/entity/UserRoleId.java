@@ -1,4 +1,4 @@
-package entity;
+package com.ecole.entity;
 
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
@@ -7,29 +7,29 @@ import java.util.Objects;
 @Embeddable
 public class UserRoleId implements Serializable {
 
-    private Long userId;
-    private Long roleId;
+    private Integer userId;
+    private Integer roleId;
 
     public UserRoleId() {}
 
-    public UserRoleId(Long userId, Long roleId) {
+    public UserRoleId(Integer userId, Integer roleId) {
         this.userId = userId;
         this.roleId = roleId;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public Long getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 

@@ -1,6 +1,6 @@
-package repository;
+package com.ecole.repository;
 
-import entity.Salle;
+import com.ecole.entity.Salle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.Coefficient;
-import repository.CoefficientRepository;
+import com.ecole.entity.Coefficient;
+import com.ecole.repository.CoefficientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

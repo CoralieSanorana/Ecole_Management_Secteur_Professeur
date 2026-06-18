@@ -1,4 +1,4 @@
-package entity;
+package com.ecole.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -9,10 +9,10 @@ public class Salle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "etablissement_id")
-    private Long etablissementId;
+    private Integer etablissementId;
 
     @Column(nullable = false)
     private String nom;
@@ -32,19 +32,19 @@ public class Salle {
         createdAt = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getEtablissementId() {
+    public Integer getEtablissementId() {
         return etablissementId;
     }
 
-    public void setEtablissementId(Long etablissementId) {
+    public void setEtablissementId(Integer etablissementId) {
         this.etablissementId = etablissementId;
     }
 

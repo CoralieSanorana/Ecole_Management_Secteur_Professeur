@@ -1,6 +1,6 @@
 package com.ecole.repository;
 
-import com.ecole.model.ProfilEtudiant;
+import com.ecole.entity.ProfilEtudiant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

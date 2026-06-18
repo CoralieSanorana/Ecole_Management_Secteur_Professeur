@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.HoraireEdt;
-import repository.HoraireEdtRepository;
+import com.ecole.entity.HoraireEdt;
+import com.ecole.repository.HoraireEdtRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

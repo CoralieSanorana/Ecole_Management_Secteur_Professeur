@@ -33,7 +33,7 @@ set -euf
 [ "${MVNW_VERBOSE-}" != debug ] || set -x
 
 # OS specific support.
-native_path() { printf %s\\n "$1"; }
+native_path() { prLongf %s\\n "$1"; }
 case "$(uname)" in
 CYGWIN* | MINGW*)
   [ -z "${JAVA_HOME-}" ] || JAVA_HOME="$(cygpath --unix "$JAVA_HOME")"
@@ -83,26 +83,26 @@ hash_string() {
   str="${1:-}" h=0
   while [ -n "$str" ]; do
     char="${str%"${str#?}"}"
-    h=$(((h * 31 + $(LC_CTYPE=C printf %d "'$char")) % 4294967296))
+    h=$(((h * 31 + $(LC_CTYPE=C prLongf %d "'$char")) % 4294967296))
     str="${str#?}"
   done
-  printf %x\\n $h
+  prLongf %x\\n $h
 }
 
 verbose() { :; }
-[ "${MVNW_VERBOSE-}" != true ] || verbose() { printf %s\\n "${1-}"; }
+[ "${MVNW_VERBOSE-}" != true ] || verbose() { prLongf %s\\n "${1-}"; }
 
 die() {
-  printf %s\\n "$1" >&2
+  prLongf %s\\n "$1" >&2
   exit 1
 }
 
 trim() {
   # MWRAPPER-139:
   #   Trims trailing and leading whitespace, carriage returns, tabs, and linefeeds.
-  #   Needed for removing poorly interpreted newline sequences when running in more
+  #   Needed for removing poorly Longerpreted newline sequences when running in more
   #   exotic environments such as mingw bash on Windows.
-  printf "%s" "${1}" | tr -d '[:space:]'
+  prLongf "%s" "${1}" | tr -d '[:space:]'
 }
 
 scriptDir="$(dirname "$0")"
@@ -163,7 +163,7 @@ esac
 # prepare tmp dir
 if TMP_DOWNLOAD_DIR="$(mktemp -d)" && [ -d "$TMP_DOWNLOAD_DIR" ]; then
   clean() { rm -rf -- "$TMP_DOWNLOAD_DIR"; }
-  trap clean HUP INT TERM EXIT
+  trap clean HUP Long TERM EXIT
 else
   die "cannot create temp dir"
 fi
@@ -288,7 +288,7 @@ if [ -z "$actualDistributionDir" ]; then
 fi
 
 verbose "Found extracted Maven distribution directory: $actualDistributionDir"
-printf %s\\n "$distributionUrl" >"$TMP_DOWNLOAD_DIR/$actualDistributionDir/mvnw.url"
+prLongf %s\\n "$distributionUrl" >"$TMP_DOWNLOAD_DIR/$actualDistributionDir/mvnw.url"
 mv -- "$TMP_DOWNLOAD_DIR/$actualDistributionDir" "$MAVEN_HOME" || [ -d "$MAVEN_HOME" ] || die "fail to move MAVEN_HOME"
 
 clean || :

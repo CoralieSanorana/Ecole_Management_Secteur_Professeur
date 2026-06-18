@@ -1,4 +1,4 @@
-package entity;
+package com.ecole.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -12,19 +12,19 @@ public class Moyenne {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "etudiant_id")
-    private Long etudiantId;
+    private Integer etudiantId;
 
     @Column(name = "inscription_id")
-    private Long inscriptionId;
+    private Integer inscriptionId;
 
     @Column(name = "periode_id")
-    private Long periodeId;
+    private Integer periodeId;
 
     @Column(name = "matiere_id")
-    private Long matiereId;
+    private Integer matiereId;
 
     @Column(precision = 5, scale = 2)
     private BigDecimal valeur;
@@ -42,43 +42,43 @@ public class Moyenne {
         calculatedAt = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getEtudiantId() {
+    public Integer getEtudiantId() {
         return etudiantId;
     }
 
-    public void setEtudiantId(Long etudiantId) {
+    public void setEtudiantId(Integer etudiantId) {
         this.etudiantId = etudiantId;
     }
 
-    public Long getInscriptionId() {
+    public Integer getInscriptionId() {
         return inscriptionId;
     }
 
-    public void setInscriptionId(Long inscriptionId) {
+    public void setInscriptionId(Integer inscriptionId) {
         this.inscriptionId = inscriptionId;
     }
 
-    public Long getPeriodeId() {
+    public Integer getPeriodeId() {
         return periodeId;
     }
 
-    public void setPeriodeId(Long periodeId) {
+    public void setPeriodeId(Integer periodeId) {
         this.periodeId = periodeId;
     }
 
-    public Long getMatiereId() {
+    public Integer getMatiereId() {
         return matiereId;
     }
 
-    public void setMatiereId(Long matiereId) {
+    public void setMatiereId(Integer matiereId) {
         this.matiereId = matiereId;
     }
 

@@ -1,6 +1,6 @@
-package repository;
+package com.ecole.repository;
 
-import entity.NotificationType;
+import com.ecole.entity.NotificationType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
-package repository;
+package com.ecole.repository;
 
-import entity.UserRole;
-import entity.UserRoleId;
+import com.ecole.entity.UserRole;
+import com.ecole.entity.UserRoleId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

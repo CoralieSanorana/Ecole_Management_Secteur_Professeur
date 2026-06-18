@@ -24,7 +24,36 @@ voici comment la base de donnees s'organise ScriptSQL , ca commence par schema_e
 voici les tables utiles pour le secteur professeur Taches.md 4-14
 
 
-je veux corriger ces pages dans @templates  , je veux que on include le header et footer dans chaque page au lieu d'avoir un model (layout @layouts ) fixe avec le contenue qui change selon l'url taper, le header est dans @model.html  , il faut include le header dasn toutes les pages dans @templates   et aussi apporter les modifications pour qu'on puisse naviger fluidement dans les pages au depart il ne faut pas aussi oublier de modifier le script js dans @js 
+je veux corriger ces pages dans @templates  , je veux que on include le header et footer dans chaque page au lieu d'avoir un model (layout @layouts ) fixe avec le contenue qui change selon l'url taper, le header est dans @entity.html  , il faut include le header dasn toutes les pages dans @templates   et aussi apporter les modifications pour qu'on puisse naviger fluidement dans les pages au depart il ne faut pas aussi oublier de modifier le script js dans @js 
 
 
 creer des controller pour chaque role afin  de bien naviger dans les pages @controller 
+
+- [] notes.html @notes.html 
+    - [ok] fonction (AffectationEnseignementService @AffectationEnseignementService.java ): findByProfesseurId(): recuperer toutes les affectations
+    du professeur connecter (obtenir *classe* et *matiere*)
+
+    - [ok] fonction (InscriptionService @InscriptionService.java ): findByClasseId(): recuperer tous les etudiants d'une classe, a partir
+    du classe_id dans la table *inscription*
+
+    - [ok] fonction (NoteService @NoteService.java ): findByEtudiantId(): recuperer tous les notes d'un etudiant
+
+    - [ok] fonction (NoteService @NoteService.java ): findByEtudiantIdByMatiereId(): recuperer tous les notes d'un etudiant dans une matiere
+
+    - [ok] fonction (NoteService @NoteService.java ): findByEtudiantIdByMatiereIdByPeriodeId(): recuperer tous les notes d'un etudiant dans une matiere et une periode
+
+    - [ok] fonction (NoteService @NoteService.java ): findByEtudiantIdByPeriodeId(): recuperer tous les notes d'un etudiant dans une periode
+
+    - [] afficher dans une *section* le liste des classes auxquels le professeur connecter est assigner
+
+    - [] cliquer sur une classe -> affichage de ses etudiants
+    
+    - [] afficher dans une *section* sous forme de tableau: la liste des etudiants + notes
+
+    - [] bouton *Saisir note* ->redirect()->to('saisir_notes.html' @saisir_notes.html )
+
+- saisir_notes.html
+    - [] champ pour saisir: type_evaluation, periode, sur, commentaire
+    - [] afficher sous forme de tableau: liste des etudiant + une colonne pour saisir la note
+    - [] bouton 'Enregistrer les notes' -> appel fonction: save()
+    - [] fonction (NoteService): save(): permet d'enregistrer tous les notes saisi par le professeur connecte

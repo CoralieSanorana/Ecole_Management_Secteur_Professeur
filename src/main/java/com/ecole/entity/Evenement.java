@@ -1,4 +1,4 @@
-package entity;
+package com.ecole.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalTime;
@@ -36,7 +36,7 @@ public class Evenement {
     private Integer moisRecurrence;
 
     @Column(name = "duree_jours")
-    private Integer dureeJours = 1;
+    private Integer dureeJours;
 
     @Column(name = "heure_debut_defaut")
     private LocalTime heureDebutDefaut;

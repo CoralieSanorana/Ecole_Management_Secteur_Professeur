@@ -1,4 +1,4 @@
-package entity;
+package com.ecole.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -9,13 +9,13 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "user_id")
-    private Long userId;
+    private Integer userId;
 
     @Column(name = "type_id")
-    private Long typeId;
+    private Integer typeId;
 
     @Column(nullable = false)
     private String titre;
@@ -36,7 +36,7 @@ public class Notification {
     private String entiteType;
 
     @Column(name = "entite_id")
-    private Long entiteId;
+    private Integer entiteId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -46,27 +46,27 @@ public class Notification {
         createdAt = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public Long getTypeId() {
+    public Integer getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(Long typeId) {
+    public void setTypeId(Integer typeId) {
         this.typeId = typeId;
     }
 
@@ -118,11 +118,11 @@ public class Notification {
         this.entiteType = entiteType;
     }
 
-    public Long getEntiteId() {
+    public Integer getEntiteId() {
         return entiteId;
     }
 
-    public void setEntiteId(Long entiteId) {
+    public void setEntiteId(Integer entiteId) {
         this.entiteId = entiteId;
     }
 

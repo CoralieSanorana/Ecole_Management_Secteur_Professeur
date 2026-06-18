@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.Moyenne;
-import repository.MoyenneRepository;
+import com.ecole.entity.Moyenne;
+import com.ecole.repository.MoyenneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

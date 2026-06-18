@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.Absence;
-import repository.AbsenceRepository;
+import com.ecole.entity.Absence;
+import com.ecole.repository.AbsenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

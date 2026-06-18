@@ -1,6 +1,6 @@
 package com.ecole.service;
 
-import com.ecole.model.AffectationEnseignement;
+import com.ecole.entity.AffectationEnseignement;
 import com.ecole.repository.AffectationEnseignementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

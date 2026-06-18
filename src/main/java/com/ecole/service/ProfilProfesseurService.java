@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.ProfilProfesseur;
-import repository.ProfilProfesseurRepository;
+import com.ecole.entity.ProfilProfesseur;
+import com.ecole.repository.ProfilProfesseurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

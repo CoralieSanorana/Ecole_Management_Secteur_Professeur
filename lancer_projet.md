@@ -56,11 +56,11 @@
    python -m http.server 8080
    ```
 
-   Le frontend sera accessible sur `http://localhost:8080/pages/layouts/model.html`
+   Le frontend sera accessible sur `http://localhost:8080/pages/layouts/entity.html`
 
 ## Accéder à l'Application
 
-- **Frontend** : http://localhost:8080/pages/layouts/model.html
+- **Frontend** : http://localhost:8080/pages/layouts/entity.html
 - **Backend API** : http://localhost:8080 (Spring Boot)
 
 ## Structure des Contrôleurs

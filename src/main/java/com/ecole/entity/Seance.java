@@ -1,4 +1,4 @@
-package entity;
+package com.ecole.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -11,10 +11,10 @@ public class Seance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "emploi_du_temps_id")
-    private Long emploiDuTempsId;
+    private Integer emploiDuTempsId;
 
     @Column(name = "date_seance", nullable = false)
     private LocalDate dateSeance;
@@ -36,19 +36,19 @@ public class Seance {
         createdAt = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getEmploiDuTempsId() {
+    public Integer getEmploiDuTempsId() {
         return emploiDuTempsId;
     }
 
-    public void setEmploiDuTempsId(Long emploiDuTempsId) {
+    public void setEmploiDuTempsId(Integer emploiDuTempsId) {
         this.emploiDuTempsId = emploiDuTempsId;
     }
 

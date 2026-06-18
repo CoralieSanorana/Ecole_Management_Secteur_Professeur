@@ -1,8 +1,9 @@
-package entity;
+package com.ecole.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "profils_professeurs")
@@ -10,10 +11,10 @@ public class ProfilProfesseur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "user_id", unique = true)
-    private Long userId;
+    private Integer userId;
 
     @Column(unique = true, nullable = false)
     private String matricule;
@@ -27,7 +28,7 @@ public class ProfilProfesseur {
     @Column(name = "date_naissance")
     private LocalDate dateNaissance;
 
-    private String sexe;
+    private Character sexe;
 
     @Column(name = "photo_url")
     private String photoUrl;
@@ -68,19 +69,19 @@ public class ProfilProfesseur {
         updatedAt = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -116,11 +117,11 @@ public class ProfilProfesseur {
         this.dateNaissance = dateNaissance;
     }
 
-    public String getSexe() {
+    public Character getSexe() {
         return sexe;
     }
 
-    public void setSexe(String sexe) {
+    public void setSexe(Character sexe) {
         this.sexe = sexe;
     }
 

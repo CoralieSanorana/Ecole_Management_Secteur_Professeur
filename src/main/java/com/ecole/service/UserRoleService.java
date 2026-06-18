@@ -1,8 +1,8 @@
-package service;
+package com.ecole.service;
 
-import entity.UserRole;
-import entity.UserRoleId;
-import repository.UserRoleRepository;
+import com.ecole.entity.UserRole;
+import com.ecole.entity.UserRoleId;
+import com.ecole.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

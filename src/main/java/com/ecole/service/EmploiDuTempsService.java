@@ -1,7 +1,7 @@
-package service;
+package com.ecole.service;
 
-import entity.EmploiDuTemps;
-import repository.EmploiDuTempsRepository;
+import com.ecole.entity.EmploiDuTemps;
+import com.ecole.repository.EmploiDuTempsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
