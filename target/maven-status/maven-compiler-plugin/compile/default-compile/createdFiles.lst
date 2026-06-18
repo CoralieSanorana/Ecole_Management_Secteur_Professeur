@@ -13,6 +13,7 @@ com\ecole\controller\DirecteurController.class
 com\ecole\repository\NiveauRepository.class
 com\ecole\entity\Absence.class
 com\ecole\service\HoraireEdtService.class
+com\ecole\repository\TitulaireClasseRepository.class
 com\ecole\entity\Coefficient.class
 com\ecole\entity\Evenement.class
 com\ecole\service\MoyenneService.class
@@ -45,6 +46,7 @@ com\ecole\repository\EvenementRepository.class
 com\ecole\service\MatiereService.class
 com\ecole\entity\Notification.class
 com\ecole\repository\NotificationTypeRepository.class
+com\ecole\entity\TitulaireClasse.class
 com\ecole\entity\AffectationEnseignement.class
 com\ecole\entity\Salle.class
 com\ecole\repository\NoteRepository.class
@@ -80,5 +82,6 @@ com\ecole\service\NotificationService.class
 com\ecole\entity\Classe.class
 com\ecole\service\CoefficientService.class
 com\ecole\entity\ProfilEtudiant.class
+com\ecole\service\TitulaireClasseService.class
 com\ecole\repository\ProfilEtudiantRepository.class
 com\ecole\repository\EmploiDuTempsRepository.class

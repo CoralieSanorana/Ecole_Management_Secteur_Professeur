@@ -77,6 +77,7 @@ Un sous groupe qui est responsable de la partie **Professeur**.
     - [] titulaires_classes
 
 - [] creer entity, repository, service por la table *titulaires_classes*
+
 - [] bulletin.html
     - [] fonction: getClasseTitulaireProfesseur(): resuperer la classe auquelle le professeur conncte est 
     titulaire

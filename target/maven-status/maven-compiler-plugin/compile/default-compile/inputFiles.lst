@@ -28,6 +28,7 @@ D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\e
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\Salle.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\Seance.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\SupportCours.java
+D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\TitulaireClasse.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\TypeFichier.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\User.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\entity\UserRole.java
@@ -54,6 +55,7 @@ D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\e
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\SalleRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\SeanceRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\SupportCoursRepository.java
+D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\TitulaireClasseRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\TypeFichierRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\UserRepository.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\repository\UserRoleRepository.java
@@ -79,6 +81,7 @@ D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\e
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\SalleService.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\SeanceService.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\SupportCoursService.java
+D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\TitulaireClasseService.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\TypeFichierService.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\UserRoleService.java
 D:\ITU\S4\Projet_Baovola\Ecole_Management_Secteur_Professeur\src\main\java\com\ecole\service\UserService.java
