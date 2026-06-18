@@ -14,21 +14,21 @@
 -- ============================================================
 
 -- Établissement
-INSERT LongO etablissements (nom, adresse, telephone, email) VALUES
+INSERT INTO etablissements (nom, adresse, telephone, email) VALUES
     ('Lycée Technique de Tananarive', 'Antananarivo, Madagascar', '+261 34 00 000 01', 'contact@lycee-tana.mg');
 
 -- Année scolaire
-INSERT LongO annees_scolaires (etablissement_id, libelle, date_debut, date_fin, est_active) VALUES
+INSERT INTO annees_scolaires (etablissement_id, libelle, date_debut, date_fin, est_active) VALUES
     (1, '2025-2026', '2025-09-01', '2026-07-31', TRUE);
 
 -- Niveaux
-INSERT LongO niveaux (etablissement_id, libelle, ordre) VALUES
+INSERT INTO niveaux (etablissement_id, libelle, ordre) VALUES
     (1, 'Seconde', 1),
     (1, 'Première', 2),
     (1, 'Terminale', 3);
 
 -- Classes
-INSERT LongO classes (niveau_id, annee_scolaire_id, nom, capacite_max) VALUES
+INSERT INTO classes (niveau_id, annee_scolaire_id, nom, capacite_max) VALUES
     (1, 1, 'Seconde A', 40),
     (1, 1, 'Seconde B', 40),
     (2, 1, 'Première S', 35),
@@ -37,7 +37,7 @@ INSERT LongO classes (niveau_id, annee_scolaire_id, nom, capacite_max) VALUES
     (3, 1, 'Terminale C', 30);
 
 -- Salles
-INSERT LongO salles (etablissement_id, nom, capacite, type) VALUES
+INSERT INTO salles (etablissement_id, nom, capacite, type) VALUES
     (1, 'Salle 101', 40, 'cours'),
     (1, 'Salle 102', 40, 'cours'),
     (1, 'Salle 201', 35, 'cours'),
@@ -47,7 +47,7 @@ INSERT LongO salles (etablissement_id, nom, capacite, type) VALUES
     (1, 'Salle Informatique', 25, 'laboratoire');
 
 -- Matières
-INSERT LongO matieres (etablissement_id, nom, code) VALUES
+INSERT INTO matieres (etablissement_id, nom, code) VALUES
     (1, 'Mathématiques', 'MATH'),
     (1, 'Physique-Chimie', 'PC'),
     (1, 'Sciences de la Vie et de la Terre', 'SVT'),
@@ -58,7 +58,7 @@ INSERT LongO matieres (etablissement_id, nom, code) VALUES
     (1, 'Éducation Physique et Sportive', 'EPS');
 
 -- Coefficients par niveau
-INSERT LongO coefficients (matiere_id, niveau_id, valeur) VALUES
+INSERT INTO coefficients (matiere_id, niveau_id, valeur) VALUES
     -- Seconde
     (1, 1, 4.00), (2, 1, 4.00), (3, 1, 3.00), (4, 1, 3.00), (5, 1, 3.00), (6, 1, 2.00), (8, 1, 2.00),
     -- Première
@@ -67,7 +67,7 @@ INSERT LongO coefficients (matiere_id, niveau_id, valeur) VALUES
     (1, 3, 6.00), (2, 3, 6.00), (3, 3, 5.00), (4, 3, 3.00), (5, 3, 3.00), (7, 3, 4.00), (8, 3, 2.00);
 
 -- Périodes d'évaluation
-INSERT LongO periodes (annee_scolaire_id, libelle, type, ordre, date_debut, date_fin, date_publication_notes) VALUES
+INSERT INTO periodes (annee_scolaire_id, libelle, type, ordre, date_debut, date_fin, date_publication_notes) VALUES
     (1, '1er Trimestre', 'trimestre', 1, '2025-09-01', '2025-11-30', '2025-12-15'),
     (1, '2ème Trimestre', 'trimestre', 2, '2025-12-01', '2026-03-31', '2026-04-15'),
     (1, '3ème Trimestre', 'trimestre', 3, '2026-04-01', '2026-07-31', '2026-08-15');
@@ -77,14 +77,14 @@ INSERT LongO periodes (annee_scolaire_id, libelle, type, ordre, date_debut, date
 -- ============================================================
 
 -- Utilisateurs - Professeurs
-INSERT LongO users (email, password, is_active) VALUES
+INSERT INTO users (email, password, is_active) VALUES
     ('prof.rakoto@ecole.mg', '$2y$10$hashed_password_1', TRUE),
     ('prof.rasoa@ecole.mg', '$2y$10$hashed_password_2', TRUE),
     ('prof.andriamanitra@ecole.mg', '$2y$10$hashed_password_3', TRUE),
     ('prof.nirina@ecole.mg', '$2y$10$hashed_password_4', TRUE);
 
 -- Utilisateurs - Étudiants
-INSERT LongO users (email, password, is_active) VALUES
+INSERT INTO users (email, password, is_active) VALUES
     ('etudiant1@ecole.mg', '$2y$10$hashed_password_5', TRUE),
     ('etudiant2@ecole.mg', '$2y$10$hashed_password_6', TRUE),
     ('etudiant3@ecole.mg', '$2y$10$hashed_password_7', TRUE),
@@ -95,14 +95,14 @@ INSERT LongO users (email, password, is_active) VALUES
     ('etudiant8@ecole.mg', '$2y$10$hashed_password_12', TRUE);
 
 -- Rôles utilisateurs - Professeurs
-INSERT LongO user_roles (user_id, role_id) VALUES
+INSERT INTO user_roles (user_id, role_id) VALUES
     (1, 5), -- prof.rakoto -> professeur
     (2, 5), -- prof.rasoa -> professeur
     (3, 5), -- prof.andriamanitra -> professeur
     (4, 5); -- prof.nirina -> professeur
 
 -- Rôles utilisateurs - Étudiants
-INSERT LongO user_roles (user_id, role_id) VALUES
+INSERT INTO user_roles (user_id, role_id) VALUES
     (5, 6), -- etudiant1 -> etudiant
     (6, 6), -- etudiant2 -> etudiant
     (7, 6), -- etudiant3 -> etudiant
@@ -113,14 +113,14 @@ INSERT LongO user_roles (user_id, role_id) VALUES
     (12, 6); -- etudiant8 -> etudiant
 
 -- Profils professeurs
-INSERT LongO profils_professeurs (user_id, matricule, nom, prenom, date_naissance, sexe, telephone, adresse, specialite, type_contrat, date_debut_contrat) VALUES
+INSERT INTO profils_professeurs (user_id, matricule, nom, prenom, date_naissance, sexe, telephone, adresse, specialite, type_contrat, date_debut_contrat) VALUES
     (1, 'PROF001', 'Rakoto', 'Jean', '1980-05-15', 'M', '+261 34 00 001 01', 'Antananarivo', 'Mathématiques', 'permanent', '2015-09-01'),
     (2, 'PROF002', 'Rasoa', 'Marie', '1985-08-20', 'F', '+261 34 00 002 02', 'Antananarivo', 'Physique-Chimie', 'permanent', '2018-09-01'),
     (3, 'PROF003', 'Andriamanitra', 'Paul', '1978-03-10', 'M', '+261 34 00 003 03', 'Antananarivo', 'SVT', 'contractuel', '2020-09-01'),
     (4, 'PROF004', 'Nirina', 'Lucie', '1990-12-25', 'F', '+261 34 00 004 04', 'Antananarivo', 'Français', 'vacataire', '2023-09-01');
 
 -- Profils étudiants
-INSERT LongO profils_etudiants (user_id, matricule, nom, prenom, date_naissance, lieu_naissance, sexe, adresse, commune, region, nationalite, telephone) VALUES
+INSERT INTO profils_etudiants (user_id, matricule, nom, prenom, date_naissance, lieu_naissance, sexe, adresse, commune, region, nationalite, telephone) VALUES
     (5, 'ETU001', 'Rasoarimanana', 'Mirana', '2008-02-14', 'Antananarivo', 'F', 'Lot IV 123', 'Antananarivo', 'Analamanga', 'Malgache', '+261 34 00 010 01'),
     (6, 'ETU002', 'Randrianarivony', 'Tiana', '2008-06-22', 'Fianarantsoa', 'M', 'Lot V 456', 'Antananarivo', 'Analamanga', 'Malgache', '+261 34 00 020 02'),
     (7, 'ETU003', 'Rakotobe', 'Niry', '2008-09-30', 'Toamasina', 'F', 'Lot VI 789', 'Antananarivo', 'Analamanga', 'Malgache', '+261 34 00 030 03'),
@@ -135,7 +135,7 @@ INSERT LongO profils_etudiants (user_id, matricule, nom, prenom, date_naissance,
 -- ============================================================
 
 -- Inscriptions des étudiants
-INSERT LongO inscriptions (etudiant_id, classe_id, annee_scolaire_id, type_inscription, date_inscription, statut) VALUES
+INSERT INTO inscriptions (etudiant_id, classe_id, annee_scolaire_id, type_inscription, date_inscription, statut) VALUES
     (1, 1, 1, 'nouvelle', '2025-08-15', 'active'),
     (2, 1, 1, 'nouvelle', '2025-08-15', 'active'),
     (3, 1, 1, 'nouvelle', '2025-08-16', 'active'),
@@ -150,7 +150,7 @@ INSERT LongO inscriptions (etudiant_id, classe_id, annee_scolaire_id, type_inscr
 -- ============================================================
 
 -- Affectations des professeurs aux classes et matières
-INSERT LongO affectations_enseignement (professeur_id, matiere_id, classe_id, annee_scolaire_id, heures_hebdo) VALUES
+INSERT INTO affectations_enseignement (professeur_id, matiere_id, classe_id, annee_scolaire_id, heures_hebdo) VALUES
     -- Prof Rakoto (Maths)
     (1, 1, 1, 1, 6.0),  -- Seconde A
     (1, 1, 3, 1, 6.0),  -- Première S
@@ -172,7 +172,7 @@ INSERT LongO affectations_enseignement (professeur_id, matiere_id, classe_id, an
 -- ============================================================
 
 -- Emploi du temps - Prof Rakoto (Maths)
-INSERT LongO emploi_du_temps (affectation_id, salle_id, jour_semaine, heure_debut, heure_fin) VALUES
+INSERT INTO emploi_du_temps (affectation_id, salle_id, jour_semaine, heure_debut, heure_fin) VALUES
     (1, 1, 1, '08:00:00', '10:00:00'),  -- Lundi 8h-10h Seconde A Salle 101
     (1, 1, 3, '10:00:00', '12:00:00'),  -- Mercredi 10h-12h Seconde A Salle 101
     (2, 3, 2, '08:00:00', '10:00:00'),  -- Mardi 8h-10h Première S Salle 201
@@ -182,7 +182,7 @@ INSERT LongO emploi_du_temps (affectation_id, salle_id, jour_semaine, heure_debu
     (3, 3, 5, '14:00:00', '16:00:00');  -- Vendredi 14h-16h Terminale C Salle 201
 
 -- Emploi du temps - Prof Rasoa (Physique-Chimie)
-INSERT LongO emploi_du_temps (affectation_id, salle_id, jour_semaine, heure_debut, heure_fin) VALUES
+INSERT INTO emploi_du_temps (affectation_id, salle_id, jour_semaine, heure_debut, heure_fin) VALUES
     (4, 5, 2, '10:00:00', '12:00:00'),  -- Mardi 10h-12h Seconde A Labo Physique
     (4, 5, 4, '08:00:00', '10:00:00'),  -- Jeudi 8h-10h Seconde A Labo Physique
     (5, 5, 1, '14:00:00', '16:00:00'),  -- Lundi 14h-16h Première S Labo Physique
@@ -195,7 +195,7 @@ INSERT LongO emploi_du_temps (affectation_id, salle_id, jour_semaine, heure_debu
 -- ============================================================
 
 -- Séances pour la semaine du 13 au 17 janvier 2026
-INSERT LongO seances (emploi_du_temps_id, date_seance, heure_debut, heure_fin, a_eu_lieu) VALUES
+INSERT INTO seances (emploi_du_temps_id, date_seance, heure_debut, heure_fin, a_eu_lieu) VALUES
     -- Lundi 13 janvier
     (1, '2026-01-13', '08:00:00', '10:00:00', TRUE),
     (7, '2026-01-13', '10:00:00', '12:00:00', TRUE),
@@ -220,7 +220,7 @@ INSERT LongO seances (emploi_du_temps_id, date_seance, heure_debut, heure_fin, a
 -- ============================================================
 
 -- Absences des étudiants
-INSERT LongO absences (seance_id, etudiant_id, type, motif, saisi_par) VALUES
+INSERT INTO absences (seance_id, etudiant_id, type, motif, saisi_par) VALUES
     (1, 1, 'non_justifiee', NULL, 1),  -- Mirana absente cours Maths Lundi
     (2, 2, 'justifiee', 'Maladie', 1),  -- Tiana absente cours Maths Mercredi (justifiée)
     (4, 3, 'retard', 'Transport en panne', 2),  -- Niry en retard cours Physique Mardi
@@ -233,7 +233,7 @@ INSERT LongO absences (seance_id, etudiant_id, type, motif, saisi_par) VALUES
 -- ============================================================
 
 -- Notes des étudiants - 1er Trimestre
-INSERT LongO notes (etudiant_id, affectation_id, periode_id, type_evaluation, valeur, sur, commentaire, saisi_par) VALUES
+INSERT INTO notes (etudiant_id, affectation_id, periode_id, type_evaluation, valeur, sur, commentaire, saisi_par) VALUES
     -- Maths Seconde A (Prof Rakoto)
     (1, 1, 1, 'devoir_1', 15.50, 20.00, 'Bon travail', 1),
     (1, 1, 1, 'devoir_2', 14.00, 20.00, 'À améliorer', 1),
@@ -277,7 +277,7 @@ INSERT LongO notes (etudiant_id, affectation_id, periode_id, type_evaluation, va
 -- ============================================================
 
 -- Moyennes par matière et période
-INSERT LongO moyennes (etudiant_id, inscription_id, periode_id, matiere_id, valeur, rang, effectif_classe) VALUES
+INSERT INTO moyennes (etudiant_id, inscription_id, periode_id, matiere_id, valeur, rang, effectif_classe) VALUES
     -- Seconde A - 1er Trimestre
     (1, 1, 1, 1, 15.17, 2, 4),  -- Mirana - Maths
     (1, 1, 1, 2, 15.00, 2, 4),  -- Mirana - Physique
@@ -292,7 +292,7 @@ INSERT LongO moyennes (etudiant_id, inscription_id, periode_id, matiere_id, vale
     (6, 6, 1, 1, 14.83, 2, 2);  -- Rado - Maths
 
 -- Moyennes générales
-INSERT LongO moyennes (etudiant_id, inscription_id, periode_id, matiere_id, valeur, rang, effectif_classe) VALUES
+INSERT INTO moyennes (etudiant_id, inscription_id, periode_id, matiere_id, valeur, rang, effectif_classe) VALUES
     (1, 1, 1, NULL, 14.78, 2, 4),  -- Mirana - Moyenne générale
     (2, 2, 1, NULL, 14.11, 3, 4),  -- Tiana - Moyenne générale
     (3, 3, 1, NULL, 18.17, 1, 4),  -- Niry - Moyenne générale
@@ -305,14 +305,14 @@ INSERT LongO moyennes (etudiant_id, inscription_id, periode_id, matiere_id, vale
 -- ============================================================
 
 -- Événements
-INSERT LongO evenements (etablissement_id, titre, description, type, est_recurrente, type_recurrence, jour_recurrence, mois_recurrence, duree_jours, heure_debut_defaut, heure_fin_defaut, annule_cours, concerne_toute_ecole) VALUES
+INSERT INTO evenements (etablissement_id, titre, description, type, est_recurrente, type_recurrence, jour_recurrence, mois_recurrence, duree_jours, heure_debut_defaut, heure_fin_defaut, annule_cours, concerne_toute_ecole) VALUES
     (1, 'Journée de la Rentrée', 'Cérémonie de rentrée scolaire', 'fete', FALSE, NULL, NULL, NULL, 1, '08:00:00', '12:00:00', TRUE, TRUE),
     (1, 'Composition du 1er Trimestre', 'Examen de fin de 1er trimestre', 'examen', FALSE, NULL, NULL, NULL, 3, '08:00:00', '17:00:00', TRUE, TRUE),
     (1, 'Fête de l''Indépendance', 'Célébration de l''indépendance nationale', 'fete', TRUE, 'annuelle', 26, 6, 1, NULL, NULL, TRUE, TRUE),
     (1, 'Conseil de classe - Seconde A', 'Réunion parents-professeurs', 'conseil_classe', FALSE, NULL, NULL, NULL, 1, '17:00:00', '19:00:00', FALSE, FALSE);
 
 -- Instances d'événements
-INSERT LongO evenements_instances (evenement_id, annee_scolaire_id, classe_id, date_debut, date_fin, heure_debut, heure_fin, statut, notes) VALUES
+INSERT INTO evenements_instances (evenement_id, annee_scolaire_id, classe_id, date_debut, date_fin, heure_debut, heure_fin, statut, notes) VALUES
     (1, 1, NULL, '2025-09-01', NULL, '08:00:00', '12:00:00', 'realise', 'Cérémonie réussie'),
     (2, 1, NULL, '2025-11-25', '2025-11-27', '08:00:00', '17:00:00', 'realise', 'Composition terminée'),
     (3, 1, NULL, '2026-06-26', NULL, NULL, NULL, 'planifie', 'À venir'),
@@ -323,14 +323,14 @@ INSERT LongO evenements_instances (evenement_id, annee_scolaire_id, classe_id, d
 -- ============================================================
 
 -- Notifications pour les professeurs
-INSERT LongO notifications (user_id, type_id, titre, message, lien_action, est_lu, entite_type, entite_id) VALUES
+INSERT INTO notifications (user_id, type_id, titre, message, lien_action, est_lu, entite_type, entite_id) VALUES
     (1, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maLongenant disponibles.', '/professeur/notes', FALSE, 'periode', 1),
     (2, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maLongenant disponibles.', '/professeur/notes', FALSE, 'periode', 1),
     (1, 5, 'Emploi du temps modifié', 'Le cours de Mathématiques du 2026-01-20 a été modifié : Salle changée.', '/professeur/calendar', FALSE, 'edt', 1),
     (2, 6, 'Nouvel événement au calendrier', 'L''événement "Composition du 1er Trimestre" est prévu le 2025-11-25.', '/professeur/calendar', TRUE, 'evenement', 2);
 
 -- Notifications pour les étudiants
-INSERT LongO notifications (user_id, type_id, titre, message, lien_action, est_lu, entite_type, entite_id) VALUES
+INSERT INTO notifications (user_id, type_id, titre, message, lien_action, est_lu, entite_type, entite_id) VALUES
     (5, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maLongenant disponibles.', '/etudiant/notes', FALSE, 'periode', 1),
     (6, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maLongenant disponibles.', '/etudiant/notes', FALSE, 'periode', 1),
     (5, 2, 'Alerte baisse de notes', 'Votre moyenne en Mathématiques a baissé significativement.', '/etudiant/notes', FALSE, 'note', 15),
@@ -341,7 +341,7 @@ INSERT LongO notifications (user_id, type_id, titre, message, lien_action, est_l
 -- ============================================================
 
 -- Supports de cours publiés par les professeurs
-INSERT LongO supports_cours (affectation_id, type_fichier_id, titre, description, fichier_url, type_contenu, date_limite, accepte_retard, cree_par) VALUES
+INSERT INTO supports_cours (affectation_id, type_fichier_id, titre, description, fichier_url, type_contenu, date_limite, accepte_retard, cree_par) VALUES
     -- Prof Rakoto - Maths Seconde A
     (1, 1, 'Chapitre 1 : Les nombres réels', 'Longroduction aux nombres réels et opérations', '/uploads/maths/seconde/chap1_nombres_reels.pdf', 'lecon', NULL, FALSE, 1),
     (1, 2, 'Exercices sur les équations', 'Série d''exercices sur les équations du premier degré', '/uploads/maths/seconde/exercices_equations.docx', 'exercice', NULL, FALSE, 1),

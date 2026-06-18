@@ -28,7 +28,7 @@ Un sous groupe qui est responsable de la partie **Professeur**.
     - [] afficher les informations du professeur connecter
 
 ### Coralie:
-- [] notes.html
+- [ok] notes.html
     - [ok] fonction (AffectationEnseignementService): findByProfesseurId(): recuperer toutes les affectations
     du professeur connecter (obtenir *classe* et *matiere*)
 
@@ -43,20 +43,20 @@ Un sous groupe qui est responsable de la partie **Professeur**.
 
     - [ok] fonction (NoteService): findByEtudiantIdByPeriodeId(): recuperer tous les notes d'un etudiant dans une periode
 
-    - [] afficher dans une *section* le liste des classes auxquels le professeur connecter est assigne
+    - [ok] afficher dans une *section* le liste des classes auxquels le professeur connecter est assigne
 
-    - [] cliquer sur une classe -> affichage de ses etudiants
+    - [ok] cliquer sur une classe -> affichage de ses etudiants
     
-    - [] afficher dans une *section* sous forme de tableau: la liste des etudiants + notes
+    - [ok] afficher dans une *section* sous forme de tableau: la liste des etudiants + notes
 
-    - [] bouton *Saisir note* ->redirect()->to('saisir_notes.html')
+    - [ok] bouton *Saisir note* ->redirect()->to('saisir_notes.html')
 
 ### Coralie:
-- saisir_notes.html
-    - [] champ pour saisir: type_evaluation, periode, sur, commentaire
-    - [] afficher sous forme de tableau: liste des etudiant + une colonne pour saisir la note
-    - [] bouton 'Enregistrer les notes' -> appel fonction: save()
-    - [] fonction (NoteService): save(): permet d'enregistrer tous les notes saisi par le professeur connecte
+- [ok] saisir_notes.html
+    - [ok] champ pour saisir: type_evaluation, periode, sur, commentaire
+    - [ok] afficher sous forme de tableau: liste des etudiant + une colonne pour saisir la note
+    - [ok] bouton 'Enregistrer les notes' -> appel fonction: save()
+    - [ok] fonction (NoteService): save(): permet d'enregistrer tous les notes saisi par le professeur connecte
 
 ### Itiela:
 - [] devoirs.html
@@ -73,6 +73,10 @@ Un sous groupe qui est responsable de la partie **Professeur**.
     - [] fonction (SupportCourtService): save(): permet d'enregistrer le cours publier dans la table *supports_cours*
 
 ### Mbola miandry:
+- [] Table utiles en plus:
+    - [] titulaires_classes
+
+- [] creer entity, repository, service por la table *titulaires_classes*
 - [] bulletin.html
     - [] fonction: getClasseTitulaireProfesseur(): resuperer la classe auquelle le professeur conncte est 
     titulaire

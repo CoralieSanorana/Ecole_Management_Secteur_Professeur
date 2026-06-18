@@ -57,3 +57,9 @@ creer des controller pour chaque role afin  de bien naviger dans les pages @cont
     - [] afficher sous forme de tableau: liste des etudiant + une colonne pour saisir la note
     - [] bouton 'Enregistrer les notes' -> appel fonction: save()
     - [] fonction (NoteService): save(): permet d'enregistrer tous les notes saisi par le professeur connecte
+
+
+dans cette page @notes.html , le tableau qui affiche la liste des classes auxquelle le proffesseur , il faut l'afficher sous forme de tableau
+
+puis, l'affichage de la liste des elves dans une classe, on affiche sous forme de tableau, avec les colonnes : eleve, puis les type_evaluation des notes qui sont deja enregistrer
+on n'affiche pas la moyenne ni le rang

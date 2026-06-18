@@ -15,23 +15,23 @@ public class PeriodeService {
         this.periodeRepository = periodeRepository;
     }
 
-    public List<Periode> getAllPeriodes() {
+    public List<Periode> findAll() {
         return periodeRepository.findAll();
     }
 
-    public Optional<Periode> getPeriodeById(Integer id) {
+    public Optional<Periode> findById(Integer id) {
         return periodeRepository.findById(id);
     }
 
-    public List<Periode> getPeriodesByAnneeScolaire(Long anneeScolaireId) {
+    public List<Periode> findByAnneeScolaireId(Long anneeScolaireId) {
         return periodeRepository.findByAnneeScolaireId(anneeScolaireId);
     }
 
-    public Periode savePeriode(Periode periode) {
+    public Periode save(Periode periode) {
         return periodeRepository.save(periode);
     }
 
-    public void deletePeriode(Integer id) {
+    public void delete(Integer id) {
         periodeRepository.deleteById(id);
     }
 }
