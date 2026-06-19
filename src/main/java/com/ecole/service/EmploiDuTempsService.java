@@ -1,7 +1,7 @@
-package com.example.back_ecole.service;
+package com.ecole.service;
 
-import com.example.back_ecole.model.EmploiDuTemps;
-import com.example.back_ecole.repository.EmploiDuTempsRepository;
+import com.ecole.model.EmploiDuTemps;
+import com.ecole.repository.EmploiDuTempsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package com.example.back_ecole.service;
+package com.ecole.service;
 
-import com.example.back_ecole.model.User;
-import com.example.back_ecole.repository.UserRepository;
+import com.ecole.model.User;
+import com.ecole.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

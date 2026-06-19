@@ -1,33 +1,28 @@
-package com.example.back_ecole.service;
+package com.ecole.service;
 
-import com.example.back_ecole.model.SupportCours;
-import com.example.back_ecole.repository.SupportCoursRepository;
+import com.ecole.model.SupportCours;
+import com.ecole.repository.SupportCoursRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.*;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SupportCoursService {
+    @Autowired private SupportCoursRepository repository;
 
-    @Autowired
-    private SupportCoursRepository supportCoursRepository;
-
-    public List<SupportCours> findAll() {
-        return supportCoursRepository.findAll();
+    public List<SupportCours> findByAffectationId(Long affectationId) {
+        return repository.findByAffectationIdOrderByCreatedAtDesc(affectationId);
     }
 
-    public Optional<SupportCours> findById(Long id) {
-        return supportCoursRepository.findById(id);
+    public void save(SupportCours support, MultipartFile file) throws Exception {
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        Path path = Paths.get("uploads/supports/" + fileName);
+        Files.createDirectories(path.getParent());
+        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        
+        support.setUrlFichier("/uploads/supports/" + fileName);
+        repository.save(support);
     }
-
-    public SupportCours save(SupportCours supportCours) {
-        return supportCoursRepository.save(supportCours);
-    }
-
-    public void deleteById(Long id) {
-        supportCoursRepository.deleteById(id);
-    }
-
 }

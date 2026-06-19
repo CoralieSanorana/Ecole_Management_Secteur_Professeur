@@ -2,7 +2,7 @@
 
 ## Prérequis
 
-- **Java** (JDK 11 ou supérieur)
+- **Java** (JDK 21)
 - **Maven** (pour le build Spring Boot)
 - **PostgreSQL** (port 5432)
 - **Python** (pour le serveur HTTP de développement du frontend)
@@ -17,7 +17,7 @@
 
 2. **Exécuter le script SQL :**
    ```bash
-   psql -d ecole -f BASE-SQL/schema_ecole_v2.sql
+   psql -d ecole -f ScriptSQL/schema_ecole_v2.sql
    ```
 
 3. **Vérifier la connexion :**
@@ -27,40 +27,30 @@
 
 ## Lancer le Backend (Spring Boot)
 
-1. **Naviguer vers le dossier backend :**
+1. **Compiler le projet avec Maven :**
    ```bash
-   cd Back-ecole
+   ./mvnw clean install
    ```
 
-2. **Compiler le projet avec Maven :**
+2. **Lancer l'application Spring Boot :**
    ```bash
-   mvn clean install
-   ```
-
-3. **Lancer l'application Spring Boot :**
-   ```bash
-   mvn spring-boot:run
+   ./mvnw spring-boot:run
    ```
 
    L'application sera accessible sur `http://localhost:8080`
 
 ## Lancer le Frontend
 
-1. **Naviguer vers le dossier frontend :**
+1. **Lancer le serveur HTTP de développement (pour les prototypes statiques) :**
    ```bash
-   cd Front-ecole
+   python -m http.server 8081
    ```
 
-2. **Lancer le serveur HTTP de développement :**
-   ```bash
-   python -m http.server 8080
-   ```
-
-   Le frontend sera accessible sur `http://localhost:8080/pages/layouts/model.html`
+   Le frontend sera accessible sur `http://localhost:8081/pages/layouts/model.html`
 
 ## Accéder à l'Application
 
-- **Frontend** : http://localhost:8080/pages/layouts/model.html
+- **Frontend (Statique)** : http://localhost:8081/pages/layouts/model.html
 - **Backend API** : http://localhost:8080 (Spring Boot)
 
 ## Structure des Contrôleurs
@@ -97,13 +87,14 @@ Les contrôleurs Spring MVC sont configurés pour la navigation :
 
 ### Erreur de connexion PostgreSQL
 - Vérifier que PostgreSQL est en cours d'exécution
-- Vérifier les identifiants dans `applicationContext.xml`
+- Vérifier les identifiants dans `src/main/resources/application.properties`
 - Assurer que la base `ecole` existe
 
 ### Port déjà utilisé
 - Si le port 8080 est occupé, utiliser un autre port :
   ```bash
   python -m http.server 8081
+  
   ```
 
 ### Problèmes de dépendances Maven
@@ -111,3 +102,8 @@ Les contrôleurs Spring MVC sont configurés pour la navigation :
   ```bash
   mvn clean install -U
   ```
+
+  Import du base
+docker exec -i postgis psql -U postgres -d ecole < /home/itiela/Documents/Bao/Ecole_Management_Secteur_Professeur/ScriptSQL/schema_ecole_v2.sql
+  Import des donnees test
+docker exec -i postgis psql -U postgres -d ecole < "/home/itiela/Documents/Bao/Ecole_Management_Secteur_Professeur/ScriptSQL/Directeur/Donne_test/25-05-2026-Donne-Test-Fu.sql"

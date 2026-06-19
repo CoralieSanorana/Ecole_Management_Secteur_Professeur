@@ -1,7 +1,7 @@
-package com.example.back_ecole.service;
+package com.ecole.service;
 
-import com.example.back_ecole.model.EvenementInstance;
-import com.example.back_ecole.repository.EvenementInstanceRepository;
+import com.ecole.model.EvenementInstance;
+import com.ecole.repository.EvenementInstanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -21,11 +21,11 @@ Un sous groupe qui est responsable de la partie **Professeur**.
     - [ok] Creer un *service* pour  chaque *model*
 
 ## Front: *pages/Professeur/*
-### Bryan:
-- [] profil.html
-    - [] fonction (ProfesseurService): ProfilProfesseur(): recuperer les informations du professeur connecte
+### Itiela:
+- [x] profil.html
+    - [x] fonction (ProfilProfesseurService): findById(): recuperer les informations du professeur connecte
     de la table *profils_professeurs*
-    - [] afficher les informations du professeur connecter
+    - [x] afficher les informations du professeur connecter
 
 ### Coralie:
 - [] notes.html
@@ -48,18 +48,18 @@ Un sous groupe qui est responsable de la partie **Professeur**.
     - [] fonction (NoteService): save(): permet d'enregistrer tous les notes saisi par le professeur connecte
 
 ### Itiela:
-- [] devoirs.html
-    - [] afficher dans une *section* la liste des classes auxquels le professeur connecter est assigne
-    - [] cliquer sur une classe -> affichage des cours deja publier par le professeur connecte
-    - [] fonction (AffectationEnseignementService): findByAffectationId(): 
+- [x] devoirs.html
+    - [x] afficher dans une *section* la liste des classes auxquels le professeur connecter est assigne
+    - [x] cliquer sur une classe -> affichage des cours deja publier par le professeur connecte
+    - [x] fonction (AffectationEnseignementService): findByAffectationId(): 
         - recuperer tous les cours publier par le professeur connecter selon la classe choisi
-    - [] afficher dans une *section* la liste des cours deja publier par le professeur connecte pour 
+    - [x] afficher dans une *section* la liste des cours deja publier par le professeur connecte pour 
     la classe choisi
-    - [] bouton *Nouveau Cours* -> appel fonction js formCours()
-    - [] fonction js: formCours(): assure l'affichage d'un formulaire pour inserer un nouveau cours ou devoir
-        - [] les champs requises: type_fichier, titre, upload file, type_contenu, date_limite, accepte_retard
-    - [] bouton *Publier Cours* -> appel fonction save()
-    - [] fonction (SupportCourtService): save(): permet d'enregistrer le cours publier dans la table *supports_cours*
+    - [x] bouton *Nouveau Cours* -> appel fonction js formCours()
+    - [x] fonction js: formCours(): assure l'affichage d'un formulaire pour inserer un nouveau cours ou devoir
+        - [x] les champs requises: type_fichier, titre, upload file, type_contenu, date_limite, accepte_retard
+    - [x] bouton *Publier Cours* -> appel fonction save()
+    - [x] fonction (SupportCourtService): save(): permet d'enregistrer le cours publier dans la table *supports_cours*
 
 ### Mbola miandry:
 - [] bulletin.html
@@ -87,4 +87,6 @@ Un sous groupe qui est responsable de la partie **Professeur**.
     - [] checker la colonne 'absent'-> marquer etudiant absent
     - [] bouton *Enregistrer les absences* -> appel fonction saveAbsences()
     - [] fonction: saveAbsences(): permet d'enregistrer tous les absences saisi par le professeur connecte dans la table *absences*
-    - [] afficher une message de confirmation: "Les absences ont ete enregistrer avec success"
+    - [] afficher une message de confirmation: "Les absences ont ete enregistrer avec success" 
+
+

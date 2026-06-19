@@ -1,6 +1,6 @@
-package com.example.back_ecole.repository;
+package com.ecole.repository;
 
-import com.example.back_ecole.model.Absence;
+import com.ecole.model.Absence;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

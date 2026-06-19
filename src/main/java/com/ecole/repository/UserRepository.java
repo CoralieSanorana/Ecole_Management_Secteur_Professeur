@@ -1,6 +1,6 @@
-package com.example.back_ecole.repository;
+package com.ecole.repository;
 
-import com.example.back_ecole.model.User;
+import com.ecole.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

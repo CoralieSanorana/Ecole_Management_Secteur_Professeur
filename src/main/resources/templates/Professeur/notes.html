@@ -26,11 +26,11 @@
             </thead>
             <tbody>
               <tr th:each="affectation : ${affectations}">
-                <td th:text="${affectation.classeId}">Classe ID</td>
-                <td th:text="${affectation.matiereId}">Matière ID</td>
+                <td th:text="${affectation.classe.nom}">Classe</td>
+                <td th:text="${affectation.matiere.nom}">Matière</td>
                 <td th:text="${affectation.heuresHebdo}">Heures</td>
                 <td>
-                  <a th:href="@{/professeur/notes/{classeId}/{matiereId}(classeId=${affectation.classeId}, matiereId=${affectation.matiereId})}" 
+                  <a th:href="@{/professeur/notes/{classeId}/{matiereId}(classeId=${affectation.classe.id}, matiereId=${affectation.matiere.id})}" 
                      class="btn btn-sm btn-primary">
                     Voir les élèves
                   </a>

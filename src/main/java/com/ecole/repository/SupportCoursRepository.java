@@ -1,9 +1,11 @@
-package com.example.back_ecole.repository;
+package com.ecole.repository;
 
-import com.example.back_ecole.model.SupportCours;
+import com.ecole.model.SupportCours;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface SupportCoursRepository extends JpaRepository<SupportCours, Long> {
+    List<SupportCours> findByAffectationIdOrderByCreatedAtDesc(Long affectationId);
 }

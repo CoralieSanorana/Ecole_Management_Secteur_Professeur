@@ -1,4 +1,4 @@
-package com.example.back_ecole.model;
+package com.ecole.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -6,28 +6,26 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "supports_cours")
 public class SupportCours {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "affectation_id")
-    private Long affectationId;
+    @ManyToOne
+    @JoinColumn(name = "affectation_id")
+    private AffectationEnseignement affectation;
 
-    @Column(name = "type_fichier_id")
-    private Long typeFichierId;
+    @ManyToOne
+    @JoinColumn(name = "type_fichier_id")
+    private TypeFichier typeFichier;
 
     @Column(nullable = false)
     private String titre;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Column(name = "fichier_url")
-    private String fichierUrl;
+    @Column(name = "url_fichier", length = 500, nullable = false)
+    private String urlFichier;
 
     @Column(name = "type_contenu")
-    private String typeContenu = "lecon";
+    private String typeContenu; // 'cours' or 'devoir'
 
     @Column(name = "date_limite")
     private LocalDateTime dateLimite;
@@ -35,28 +33,10 @@ public class SupportCours {
     @Column(name = "accepte_retard")
     private Boolean accepteRetard = false;
 
-    @Column(name = "is_archived")
-    private Boolean isArchived = false;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "cree_par")
-    private Long creePar;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+    public SupportCours() {}
 
     public Long getId() {
         return id;
@@ -66,20 +46,20 @@ public class SupportCours {
         this.id = id;
     }
 
-    public Long getAffectationId() {
-        return affectationId;
+    public AffectationEnseignement getAffectation() {
+        return affectation;
     }
 
-    public void setAffectationId(Long affectationId) {
-        this.affectationId = affectationId;
+    public void setAffectation(AffectationEnseignement affectation) {
+        this.affectation = affectation;
     }
 
-    public Long getTypeFichierId() {
-        return typeFichierId;
+    public TypeFichier getTypeFichier() {
+        return typeFichier;
     }
 
-    public void setTypeFichierId(Long typeFichierId) {
-        this.typeFichierId = typeFichierId;
+    public void setTypeFichier(TypeFichier typeFichier) {
+        this.typeFichier = typeFichier;
     }
 
     public String getTitre() {
@@ -90,20 +70,12 @@ public class SupportCours {
         this.titre = titre;
     }
 
-    public String getDescription() {
-        return description;
+    public String getUrlFichier() {
+        return urlFichier;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getFichierUrl() {
-        return fichierUrl;
-    }
-
-    public void setFichierUrl(String fichierUrl) {
-        this.fichierUrl = fichierUrl;
+    public void setUrlFichier(String urlFichier) {
+        this.urlFichier = urlFichier;
     }
 
     public String getTypeContenu() {
@@ -130,35 +102,11 @@ public class SupportCours {
         this.accepteRetard = accepteRetard;
     }
 
-    public Boolean getIsArchived() {
-        return isArchived;
-    }
-
-    public void setIsArchived(Boolean isArchived) {
-        this.isArchived = isArchived;
-    }
-
-    public Long getCreePar() {
-        return creePar;
-    }
-
-    public void setCreePar(Long creePar) {
-        this.creePar = creePar;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

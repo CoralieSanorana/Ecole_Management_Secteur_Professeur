@@ -1,46 +1,82 @@
     <div class="page-header">
         <div><h2>Notes des Élèves</h2><p>Saisie et gestion des notes</p></div>
         <div class="page-header-actions">
-          <select class="form-control" style="width:auto;padding:8px 12px;">
-            <option>Terminale C</option><option>1ère C</option>
-          </select>
-          <select class="form-control" style="width:auto;padding:8px 12px;">
-            <option>Trimestre 2</option><option>Trimestre 1</option>
-          </select>
-          <button class="btn btn-primary" onclick="showToast('📊 Notes enregistrées !')"><i class="fas fa-save"></i> Enregistrer</button>
+          <a th:href="@{/professeur/saisir_notes/{classeId}/{matiereId}(classeId=${classeId}, matiereId=${matiereId})}" 
+             class="btn btn-primary" 
+             th:if="${classeId != null}">
+            <i class="fas fa-plus"></i> Saisir des notes
+          </a>
         </div>
       </div>
-      <div class="card">
+
+      <!-- Section: Liste des classes du professeur -->
+      <div class="card" th:if="${classeId == null}">
+        <div class="card-header">
+          <h3>Mes Classes</h3>
+        </div>
         <div class="table-wrapper">
           <table>
-            <thead><tr><th>Élève</th><th>Devoir 1</th><th>Devoir 2</th><th>Interrogation</th><th>Examen</th><th>Moyenne</th><th>Rang</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Classe</th>
+                <th>Matière</th>
+                <th>Heures hebdo</th>
+                <th>Action</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr>
-                <td>Rakoto Jean</td>
-                <td><input type="number" class="form-control" value="16" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td><input type="number" class="form-control" value="14" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td><input type="number" class="form-control" value="17" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td><input type="number" class="form-control" value="15" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td class="grade-excellent">15.5</td>
-                <td><strong style="color:var(--g);">1er</strong></td>
+              <tr th:each="affectation : ${affectations}">
+                <td th:text="${affectation.classe.nom}">Classe</td>
+                <td th:text="${affectation.matiere.nom}">Matière</td>
+                <td th:text="${affectation.heuresHebdo}">Heures</td>
+                <td>
+                  <a th:href="@{/professeur/notes/{classeId}/{matiereId}(classeId=${affectation.classe.id}, matiereId=${affectation.matiere.id})}" 
+                     class="btn btn-sm btn-primary">
+                    Voir les élèves
+                  </a>
+                </td>
               </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section: Liste des étudiants et leurs notes (quand une classe est sélectionnée) -->
+      <div class="card" th:if="${classeId != null}">
+        <div class="card-header">
+          <h3>Élèves de la classe <span th:text="${classeId}"></span></h3>
+          <a th:href="@{/professeur/notes}" class="btn btn-sm btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour aux classes
+          </a>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
               <tr>
-                <td>Andria Miora</td>
-                <td><input type="number" class="form-control" value="13" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td><input type="number" class="form-control" value="12" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td><input type="number" class="form-control" value="14" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td><input type="number" class="form-control" value="13" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td class="grade-good">13.0</td>
-                <td><strong style="color:var(--txt2);">2ème</strong></td>
+                <th>Élève</th>
+                <th>Matricule</th>
+                <th>Notes</th>
+                <th>Moyenne</th>
               </tr>
-              <tr>
-                <td>Hery Njaka</td>
-                <td><input type="number" class="form-control" value="9" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td><input type="number" class="form-control" value="8" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td><input type="number" class="form-control" value="10" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td><input type="number" class="form-control" value="7" min="0" max="20" style="width:70px;padding:6px;text-align:center;"/></td>
-                <td class="grade-fail">8.5</td>
-                <td><strong style="color:var(--txt2);">3ème</strong></td>
+            </thead>
+            <tbody>
+              <tr th:each="inscription : ${inscriptions}">
+                <td th:text="${etudiantsMap.get(inscription.etudiantId)?.nom + ' ' + etudiantsMap.get(inscription.etudiantId)?.prenom}">Nom Prénom</td>
+                <td th:text="${etudiantsMap.get(inscription.etudiantId)?.matricule}">Matricule</td>
+                <td>
+                  <span th:each="note : ${notesMap.get(inscription.etudiantId)}" 
+                        th:text="${note.typeEvaluation + ': ' + note.valeur + '/' + note.sur + ' '}">
+                    Note
+                  </span>
+                  <span th:if="${notesMap.get(inscription.etudiantId) == null or notesMap.get(inscription.etudiantId).isEmpty()}" 
+                        class="text-muted">
+                    Aucune note
+                  </span>
+                </td>
+                <td>
+                  <!-- Calcul de la moyenne (à implémenter) -->
+                  <span class="text-muted">--</span>
+                </td>
               </tr>
             </tbody>
           </table>

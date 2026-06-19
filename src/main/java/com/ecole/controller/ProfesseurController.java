@@ -1,25 +1,36 @@
 package com.ecole.controller;
 
-import com.example.back_ecole.model.AffectationEnseignement;
-import com.example.back_ecole.model.Inscription;
-import com.example.back_ecole.model.Note;
-import com.example.back_ecole.model.ProfilEtudiant;
-import com.example.back_ecole.service.AffectationEnseignementService;
-import com.example.back_ecole.service.InscriptionService;
-import com.example.back_ecole.service.NoteService;
-import com.example.back_ecole.service.ProfilEtudiantService;
+import com.ecole.model.AffectationEnseignement;
+import com.ecole.model.Inscription;
+import com.ecole.model.Note;
+import com.ecole.model.ProfilEtudiant;
+import com.ecole.model.SupportCours;
+import com.ecole.model.TypeFichier;
+import com.ecole.service.AffectationEnseignementService;
+import com.ecole.service.InscriptionService;
+import com.ecole.service.NoteService;
+import com.ecole.service.ProfilProfesseurService;
+import com.ecole.service.ProfilEtudiantService;
+import com.ecole.service.SupportCoursService;
+import com.ecole.service.TypeFichierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class ProfesseurController {
@@ -35,6 +46,15 @@ public class ProfesseurController {
 
     @Autowired
     private ProfilEtudiantService profilEtudiantService;
+
+    @Autowired
+    private SupportCoursService supportCoursService;
+
+    @Autowired
+    private TypeFichierService typeFichierService;
+
+    @Autowired
+    private ProfilProfesseurService profilProfesseurService; // Nouvelle injection
 
     // Page notes - affiche les classes du professeur
     @GetMapping("/professeur/notes")
@@ -114,32 +134,96 @@ public class ProfesseurController {
     @PostMapping("/professeur/saisir_notes/{classeId}/{matiereId}")
     public String saveNotes(@PathVariable Long classeId,
                            @PathVariable Long matiereId,
-                           @RequestParam String typeEvaluation,
-                           @RequestParam String periode,
-                           @RequestParam String sur,
-                           @RequestParam(required = false) List<String> notes,
-                           Model model) {
-        // TODO: Récupérer l'ID du professeur connecté depuis la session
-        Long professeurId = 1L; // Valeur temporaire pour tester
+                           @RequestParam("typeEvaluation") String typeEvaluation,
+                           @RequestParam("periode") Long periodeId,
+                           @RequestParam("sur") Double sur,
+                           @RequestParam("etudiantIds") List<Long> etudiantIds,
+                           @RequestParam("valeurs") List<Double> valeurs,
+                           @RequestParam(value = "commentaires", required = false) List<String> commentaires,
+                           RedirectAttributes redirectAttributes) {
         
-        // TODO: Implémenter la logique de sauvegarde des notes
-        // Pour l'instant, rediriger vers la page notes
+        Long professeurId = 1L; // TODO: SecurityContextHolder...
+
+        for (int i = 0; i < etudiantIds.size(); i++) {
+            Note note = new Note();
+            note.setEtudiantId(etudiantIds.get(i));
+            note.setValeur(BigDecimal.valueOf(valeurs.get(i)));
+            note.setCommentaire(commentaires != null && i < commentaires.size() ? commentaires.get(i) : "");
+            note.setTypeEvaluation(typeEvaluation);
+            note.setPeriodeId(periodeId);
+            note.setSur(BigDecimal.valueOf(sur));
+            note.setSaisiPar(professeurId);
+            // Note: Il faudrait aussi l'affectation_id ici selon votre schéma SQL
+            noteService.save(note);
+        }
+
+        redirectAttributes.addFlashAttribute("success", "Les notes ont été enregistrées.");
         return "redirect:/professeur/notes/" + classeId + "/" + matiereId;
     }
 
     // Page profil professeur
     @GetMapping("/professeur/profil")
     public String profil(Model model) {
-        // TODO: Récupérer l'ID du professeur connecté depuis la session
-        Long professeurId = 1L; // Valeur temporaire pour tester
-        // TODO: Récupérer et afficher les informations du professeur
+        Long professeurId = 1L; // TODO: Remplacer par l'ID du professeur connecté (via Spring Security)
+
+        profilProfesseurService.findById(professeurId).ifPresent(professeur -> {
+            model.addAttribute("professeur", professeur);
+        });
+        // Si le professeur n'est pas trouvé, l'attribut "professeur" ne sera pas dans le modèle,
+        // et la vue devra gérer ce cas (ex: afficher un message d'erreur).
         return "Professeur/profil";
     }
 
     // Page devoirs
     @GetMapping("/professeur/devoirs")
-    public String devoirs(Model model) {
+    public String devoirs(@RequestParam(required = false) Long affectationId, Model model) {
+        // TODO: Récupérer l'ID du professeur connecté depuis la session
+        Long professeurId = 1L; // Valeur temporaire pour tester
+
+        List<AffectationEnseignement> affectations = affectationEnseignementService.findByProfesseurId(professeurId);
+        model.addAttribute("affectations", affectations);
+        
+        // Récupérer les types de fichiers pour le select du formulaire
+        model.addAttribute("typesFichiers", typeFichierService.findAll());
+
+        if (affectationId != null) {
+            affectationEnseignementService.findById(affectationId).ifPresent(aff -> {
+                model.addAttribute("selectedClasse", aff); 
+                model.addAttribute("supports", supportCoursService.findByAffectationId(affectationId));
+            });
+        }
+
         return "Professeur/devoirs";
+    }
+
+    // POST - Publier un nouveau support (Cours ou Devoir)
+    @PostMapping("/professeur/devoirs/save")
+    public String saveSupport(@ModelAttribute SupportCours support, 
+                             @RequestParam("file") MultipartFile file,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            if (!file.isEmpty()) {
+                // Créer le dossier uploads s'il n'existe pas
+                Path uploadPath = Paths.get("uploads");
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                // Nettoyer le nom du fichier et le sauvegarder
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                
+                support.setUrlFichier("/uploads/" + fileName);
+            }
+            
+            supportCoursService.save(support, file);
+            redirectAttributes.addFlashAttribute("success", "Le support a été publié avec succès.");
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("error", "Erreur lors de l'envoi du fichier.");
+        }
+
+        return "redirect:/professeur/devoirs?affectationId=" + support.getAffectation().getId();
     }
 
     // Page bulletin

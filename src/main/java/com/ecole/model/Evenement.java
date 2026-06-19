@@ -1,4 +1,4 @@
-package com.example.back_ecole.model;
+package com.ecole.model;
 
 import jakarta.persistence.*;
 import java.time.LocalTime;

@@ -1019,6 +1019,34 @@ INSERT INTO categories_depenses (parent_id, nom, type_charge) VALUES
     (NULL, 'Événements',          'variable');
 
 -- ============================================================
+-- SECTION 18 — SUPPORTS DE COURS & DEVOIRS (ITiela)
+-- ============================================================
+
+CREATE TABLE types_fichiers (
+    id         SERIAL PRIMARY KEY,
+    nom        VARCHAR(50) NOT NULL, -- PDF, Word, Excel, Image, etc.
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE supports_cours (
+    id               SERIAL PRIMARY KEY,
+    affectation_id   INT REFERENCES affectations_enseignement(id) ON DELETE CASCADE,
+    type_fichier_id  INT REFERENCES types_fichiers(id) ON DELETE SET NULL,
+    titre            VARCHAR(255) NOT NULL,
+    url_fichier      VARCHAR(500) NOT NULL,
+    type_contenu     VARCHAR(50) NOT NULL, -- 'cours' | 'devoir'
+    date_limite      TIMESTAMP,
+    accepte_retard   BOOLEAN DEFAULT FALSE,
+    created_at       TIMESTAMP DEFAULT NOW()
+);
+
+-- Index de performance pour les recherches par classe et par type
+CREATE INDEX idx_supports_cours_affectation ON supports_cours(affectation_id);
+CREATE INDEX idx_supports_cours_type        ON supports_cours(type_fichier_id);
+
+INSERT INTO types_fichiers (nom) VALUES ('PDF'), ('Word'), ('Excel'), ('Image'), ('Archive (ZIP/RAR)');
+
+-- ============================================================
 -- FIN DU SCHÉMA
--- Tables : 36  |  Index : 33  |  Sections : 17
+-- Sections : 18
 -- ============================================================
