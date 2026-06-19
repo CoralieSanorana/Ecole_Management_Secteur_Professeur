@@ -48,7 +48,7 @@
         <div class="bulletin-head">
             <div>
                 <h3>BULLETIN DE NOTES</h3>
-                <p th:text="${anneeScolaire != null ? 'Année ' + anneeScolaire.libelle : 'Année scolaire'} + ' · ' + ${periodes.?[id == selectedPeriodeId].![libelle].![0] != null ? periodes.?[id == selectedPeriodeId].![libelle].![0] : 'Période'} + ' · ' + ${classe != null ? classe.nom : 'Classe'}">Année scolaire · Période · Classe</p>
+                <p th:text="${anneeScolaire != null ? 'Année ' + anneeScolaire.libelle : 'Année scolaire'} + ' · ' + ${periodes.?[id == #root.selectedPeriodeId].![libelle].![0] != null ? periodes.?[id == #root.selectedPeriodeId].![libelle].![0] : 'Période'} + ' · ' + ${classe != null ? classe.nom : 'Classe'}">Année scolaire · Période · Classe</p>
                 <p style="margin-top:8px;font-size:14px;opacity:.8;">
                     Élève : <strong th:text="${etudiant != null ? etudiant.nom + ' ' + etudiant.prenom : 'Étudiant'}">Nom Prénom</strong>
                 </p>
