@@ -120,3 +120,10 @@ URL : /professeur/bulletins
                         <i class="fas fa-share"></i> Publier les bulletins
                     </button>
                 </div>
+
+
+
+
+
+
+poursuivons avec @profil.html , ajuster cette page pour qu'elle puisserecevoir le header, prendre exemple de design avec @profil.html 

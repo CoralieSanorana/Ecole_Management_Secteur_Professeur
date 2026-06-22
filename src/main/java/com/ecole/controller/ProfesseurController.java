@@ -9,6 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,10 +47,19 @@ public class ProfesseurController {
     private ProfilEtudiantService profilEtudiantService;
 
     @Autowired
+    private SupportCoursService supportCoursService;
+
+    @Autowired
+    private ProfilProfesseurService profilProfesseurService;
+
+    @Autowired
     private PeriodeService periodeService;
 
     @Autowired
     private TitulaireClasseService titulaireClasseService;
+
+    @Autowired
+    private TypeFichierService typeFichierService;
 
     @Autowired
     private AnneeScolaireService anneeScolaireService;
@@ -218,12 +236,107 @@ public class ProfesseurController {
         return "redirect:/professeur/notes";
     }
 
+    // Page profil professeur
+    @GetMapping("/professeur/profil")
+    public String profil(Model model) {
+        Long professeurId = 1L; // TODO: Remplacer par l'ID du professeur connecté (via Spring Security)
+
+        profilProfesseurService.findById(professeurId).ifPresent(professeur -> {
+            model.addAttribute("professeur", professeur);
+        });
+        // Si le professeur n'est pas trouvé, l'attribut "professeur" ne sera pas dans le modèle,
+        // et la vue devra gérer ce cas (ex: afficher un message d'erreur).
+        return "Professeur/profil";
+    }
+
+    // Page devoirs
     @GetMapping("/professeur/devoirs")
     public String devoirs(Model model) {
-        model.addAttribute("pageTitle", "Devoirs & Leçons");
+        model.addAttribute("pageTitle", "Supports de Cours & Devoirs");
         model.addAttribute("currentRole", "professeur");
+        
+        // TODO: Récupérer l'ID du professeur connecté depuis la session
+        Long professeurId = 1L; // Valeur temporaire pour tester
+
+        List<AffectationEnseignement> affectations = affectationEnseignementService.findByProfesseurId(professeurId);
+        model.addAttribute("affectations", affectations);
+        
+        // Fetch related entities for display
+        Map<Long, String> classeNames = new HashMap<>();
+        Map<Long, String> matiereNames = new HashMap<>();
+        for (AffectationEnseignement affectation : affectations) {
+            Classe classe = classeService.findById(affectation.getClasseId()).orElse(null);
+            Matiere matiere = matiereService.findById(affectation.getMatiereId()).orElse(null);
+            if (classe != null) {
+                classeNames.put(affectation.getClasseId(), classe.getNom());
+            }
+            if (matiere != null) {
+                matiereNames.put(affectation.getMatiereId(), matiere.getNom());
+            }
+        }
+        
+        model.addAttribute("classeNames", classeNames);
+        model.addAttribute("matiereNames", matiereNames);
+
         return "Professeur/devoirs";
     }
+
+    // Page devoirs détails
+    @GetMapping("/professeur/devoirs/details")
+    public String devoirsDetails(@RequestParam Long affectationId, Model model) {
+        model.addAttribute("pageTitle", "Supports de Cours & Devoirs");
+        model.addAttribute("currentRole", "professeur");
+        
+        // TODO: Récupérer l'ID du professeur connecté depuis la session
+        Long professeurId = 1L; // Valeur temporaire pour tester
+
+        List<AffectationEnseignement> affectations = affectationEnseignementService.findByProfesseurId(professeurId);
+        model.addAttribute("affectations", affectations);
+        
+        // Fetch related entities for display
+        Map<Long, String> classeNames = new HashMap<>();
+        Map<Long, String> matiereNames = new HashMap<>();
+        for (AffectationEnseignement affectation : affectations) {
+            Classe classe = classeService.findById(affectation.getClasseId()).orElse(null);
+            Matiere matiere = matiereService.findById(affectation.getMatiereId()).orElse(null);
+            if (classe != null) {
+                classeNames.put(affectation.getClasseId(), classe.getNom());
+            }
+            if (matiere != null) {
+                matiereNames.put(affectation.getMatiereId(), matiere.getNom());
+            }
+        }
+        
+        model.addAttribute("classeNames", classeNames);
+        model.addAttribute("matiereNames", matiereNames);
+        
+        // Récupérer les types de fichiers pour le select du formulaire
+        model.addAttribute("typesFichiers", typeFichierService.findAll());
+
+        // Récupérer l'affectation sélectionnée et ses supports
+        affectationEnseignementService.findById(affectationId).ifPresent(aff -> {
+            model.addAttribute("selectedClasse", aff); 
+            model.addAttribute("supports", supportCoursService.findByAffectationId(affectationId));
+        });
+
+        return "Professeur/devoirs_details";
+    }
+
+    // POST - Publier un nouveau support (Cours ou Devoir)
+    @PostMapping("/professeur/devoirs/save")
+    public String saveSupport(@ModelAttribute SupportCours support,
+                             @RequestParam("file") MultipartFile file,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            supportCoursService.save(support, file);
+            redirectAttributes.addFlashAttribute("success", "Le support a été publié avec succès.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Erreur lors de l'envoi du fichier: " + e.getMessage());
+        }
+
+        return "redirect:/professeur/devoirs/details?affectationId=" + support.getAffectationId();
+    }
+
 
     @GetMapping("/professeur/bulletins")
     public String bulletins(Model model) {
@@ -312,10 +425,4 @@ public class ProfesseurController {
         return "Professeur/bulletin_details";
     }
 
-    @GetMapping("/professeur/profil")
-    public String profil(Model model) {
-        model.addAttribute("pageTitle", "Mon Profil");
-        model.addAttribute("currentRole", "professeur");
-        return "Professeur/profil";
-    }
 }
