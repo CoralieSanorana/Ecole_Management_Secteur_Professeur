@@ -17,8 +17,8 @@ CREATE TABLE types_fichiers (
 -- Table centrale pour les leçons et les énoncés d'exercices
 CREATE TABLE supports_cours (
     id                SERIAL PRIMARY KEY,
-    affectation_id    Long REFERENCES affectations_enseignement(id) ON DELETE CASCADE,
-    type_fichier_id   Long REFERENCES types_fichiers(id) ON DELETE SET NULL,
+    affectation_id    INT REFERENCES affectations_enseignement(id) ON DELETE CASCADE,
+    type_fichier_id   INT REFERENCES types_fichiers(id) ON DELETE SET NULL,
     titre             VARCHAR(255) NOT NULL,
     description       TEXT,
     fichier_url       VARCHAR(500),          -- Chemin d'accès ou lien cloud du document
@@ -32,7 +32,7 @@ CREATE TABLE supports_cours (
     
     -- Statut et Traçabilité
     is_archived       BOOLEAN DEFAULT FALSE,          -- Soft delete préféré selon vos conventions
-    cree_par          Long REFERENCES users(id) ON DELETE SET NULL, -- Le prof qui publie
+    cree_par          INT REFERENCES users(id) ON DELETE SET NULL, -- Le prof qui publie
     created_at        TIMESTAMP DEFAULT NOW(),
     updated_at        TIMESTAMP DEFAULT NOW()
 );
@@ -50,7 +50,7 @@ CREATE INDEX idx_supports_date_limite    ON supports_cours(date_limite) WHERE da
 -- SEED DE DÉPART (DONNÉES INITIALES)
 -- ============================================================
 
-INSERT LongO types_fichiers (libelle) VALUES
+INSERT INTO types_fichiers (libelle) VALUES
     ('Document PDF'),
     ('Document Word (Docx)'),
     ('Feuille de calcul Excel'),

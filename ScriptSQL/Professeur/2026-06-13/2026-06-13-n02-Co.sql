@@ -324,15 +324,15 @@ INSERT INTO evenements_instances (evenement_id, annee_scolaire_id, classe_id, da
 
 -- Notifications pour les professeurs
 INSERT INTO notifications (user_id, type_id, titre, message, lien_action, est_lu, entite_type, entite_id) VALUES
-    (1, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maLongenant disponibles.', '/professeur/notes', FALSE, 'periode', 1),
-    (2, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maLongenant disponibles.', '/professeur/notes', FALSE, 'periode', 1),
+    (1, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maINTenant disponibles.', '/professeur/notes', FALSE, 'periode', 1),
+    (2, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maINTenant disponibles.', '/professeur/notes', FALSE, 'periode', 1),
     (1, 5, 'Emploi du temps modifié', 'Le cours de Mathématiques du 2026-01-20 a été modifié : Salle changée.', '/professeur/calendar', FALSE, 'edt', 1),
     (2, 6, 'Nouvel événement au calendrier', 'L''événement "Composition du 1er Trimestre" est prévu le 2025-11-25.', '/professeur/calendar', TRUE, 'evenement', 2);
 
 -- Notifications pour les étudiants
 INSERT INTO notifications (user_id, type_id, titre, message, lien_action, est_lu, entite_type, entite_id) VALUES
-    (5, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maLongenant disponibles.', '/etudiant/notes', FALSE, 'periode', 1),
-    (6, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maLongenant disponibles.', '/etudiant/notes', FALSE, 'periode', 1),
+    (5, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maINTenant disponibles.', '/etudiant/notes', FALSE, 'periode', 1),
+    (6, 1, 'Notes publiées', 'Vos notes du 1er Trimestre sont maINTenant disponibles.', '/etudiant/notes', FALSE, 'periode', 1),
     (5, 2, 'Alerte baisse de notes', 'Votre moyenne en Mathématiques a baissé significativement.', '/etudiant/notes', FALSE, 'note', 15),
     (7, 3, 'Absences fréquentes', 'Votre taux d''absence dépasse 10%. Veuillez régulariser.', '/etudiant/absences', TRUE, 'absence', 1);
 
@@ -343,7 +343,7 @@ INSERT INTO notifications (user_id, type_id, titre, message, lien_action, est_lu
 -- Supports de cours publiés par les professeurs
 INSERT INTO supports_cours (affectation_id, type_fichier_id, titre, description, fichier_url, type_contenu, date_limite, accepte_retard, cree_par) VALUES
     -- Prof Rakoto - Maths Seconde A
-    (1, 1, 'Chapitre 1 : Les nombres réels', 'Longroduction aux nombres réels et opérations', '/uploads/maths/seconde/chap1_nombres_reels.pdf', 'lecon', NULL, FALSE, 1),
+    (1, 1, 'Chapitre 1 : Les nombres réels', 'INTroduction aux nombres réels et opérations', '/uploads/maths/seconde/chap1_nombres_reels.pdf', 'lecon', NULL, FALSE, 1),
     (1, 2, 'Exercices sur les équations', 'Série d''exercices sur les équations du premier degré', '/uploads/maths/seconde/exercices_equations.docx', 'exercice', NULL, FALSE, 1),
     (1, 1, 'Devoir maison n°1', 'Devoir à rendre pour le 20 janvier', '/uploads/maths/seconde/dm1.pdf', 'devoir_maison', '2026-01-20 23:59:59', TRUE, 1),
     -- Prof Rasoa - Physique Seconde A

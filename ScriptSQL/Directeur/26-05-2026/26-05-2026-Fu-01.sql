@@ -1,5 +1,5 @@
 -- ============================================================
---  MIGRATION DIRECTEUR — HORAIRES EDT + GRILLE LongERACTIVE
+--  MIGRATION DIRECTEUR — HORAIRES EDT + GRILLE INTERACTIVE
 --  - crée la table horaire_edt si elle n'existe pas
 --  - rattache emploi_du_temps à un horaire de référence
 --  - seed les plages horaires standards de l'école
@@ -12,28 +12,28 @@ CREATE TABLE IF NOT EXISTS horaire_edt (
     libelle      VARCHAR(100) NOT NULL,
     heure_debut  TIME NOT NULL,
     heure_fin    TIME NOT NULL,
-    ordre        Long NOT NULL,
+    ordre        INT NOT NULL,
     is_active    BOOLEAN DEFAULT TRUE,
     created_at   TIMESTAMP DEFAULT NOW(),
     UNIQUE (heure_debut, heure_fin)
 );
 
 ALTER TABLE IF EXISTS emploi_du_temps
-    ADD COLUMN IF NOT EXISTS horaire_edt_id Long;
+    ADD COLUMN IF NOT EXISTS horaire_edt_id INT;
 
 ALTER TABLE IF EXISTS classes
-    ADD COLUMN IF NOT EXISTS salle_id Long;
+    ADD COLUMN IF NOT EXISTS salle_id INT;
 
 DO $$
 BEGIN
     IF NOT EXISTS (
         SELECT 1
-        FROM information_schema.table_constraLongs tc
+        FROM information_schema.table_constraints tc
         WHERE tc.table_name = 'emploi_du_temps'
-          AND tc.constraLong_name = 'fk_emploi_du_temps_horaire_edt'
+          AND tc.constraint_name = 'fk_emploi_du_temps_horaire_edt'
     ) THEN
         ALTER TABLE emploi_du_temps
-            ADD CONSTRALong fk_emploi_du_temps_horaire_edt
+            ADD CONSTRAINT fk_emploi_du_temps_horaire_edt
             FOREIGN KEY (horaire_edt_id) REFERENCES horaire_edt(id) ON DELETE SET NULL;
     END IF;
 END $$;
@@ -42,17 +42,17 @@ DO $$
 BEGIN
     IF NOT EXISTS (
         SELECT 1
-        FROM information_schema.table_constraLongs tc
+        FROM information_schema.table_constraints tc
         WHERE tc.table_name = 'classes'
-          AND tc.constraLong_name = 'fk_classes_salle'
+          AND tc.constraint_name = 'fk_classes_salle'
     ) THEN
         ALTER TABLE classes
-            ADD CONSTRALong fk_classes_salle
+            ADD CONSTRAINT fk_classes_salle
             FOREIGN KEY (salle_id) REFERENCES salles(id) ON DELETE SET NULL;
     END IF;
 END $$;
 
-INSERT LongO horaire_edt (libelle, heure_debut, heure_fin, ordre)
+INSERT INTO horaire_edt (libelle, heure_debut, heure_fin, ordre)
 VALUES
     ('07h00 - 08h00', '07:00', '08:00', 1),
     ('08h00 - 09h00', '08:00', '09:00', 2),
