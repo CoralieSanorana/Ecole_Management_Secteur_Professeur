@@ -101,14 +101,27 @@ public class ProfesseurController {
     }
 
     @GetMapping("/professeur/notes/classe/{classeId}")
-    public String notesClasse(@PathVariable Long classeId, Model model) {
+    public String notesClasse(
+        @PathVariable Long classeId,
+        @RequestParam(defaultValue = "") String search,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size,
+        Model model) {
+        
         model.addAttribute("pageTitle", "Notes des Élèves");
         model.addAttribute("currentRole", "professeur");
         
         // TODO: Get connected professor ID from authentication
         Long professeurId = 1L; // Temporary hardcoded value
         List<AffectationEnseignement> affectations = affectationEnseignementService.findByProfesseurId(professeurId);
-        List<Inscription> inscriptions = inscriptionService.findByClasseId(classeId);
+        
+        // --- BLOC MODIFIÉ POUR LA PAGINATION ET LA RECHERCHE ---
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page - 1, size);
+        org.springframework.data.domain.Page<Inscription> inscriptionPage = 
+                inscriptionService.findByClasseIdAndStudentName(classeId, search, pageable);
+        
+        List<Inscription> inscriptions = inscriptionPage.getContent();
+        // --------------------------------------------------------
         
         // Fetch student profiles and notes
         Map<Long, ProfilEtudiant> etudiantProfiles = new HashMap<>();
@@ -166,6 +179,14 @@ public class ProfesseurController {
         model.addAttribute("classeId", classeId);
         model.addAttribute("matiereNames", matiereNames);
         model.addAttribute("periodes", periodeService.findAll());
+        
+        // --- BLOC ENVOI DES INFOS DE PAGINATION ET RECHERCHE À THYMELEAF ---
+        model.addAttribute("search", search);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", inscriptionPage.getTotalPages());
+        model.addAttribute("totalRows", inscriptionPage.getTotalElements());
+        // -------------------------------------------------------------------
+        
         return "Professeur/notes";
     }
 
