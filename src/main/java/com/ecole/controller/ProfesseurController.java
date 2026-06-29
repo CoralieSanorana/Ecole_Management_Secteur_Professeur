@@ -101,12 +101,7 @@ public class ProfesseurController {
     }
 
     @GetMapping("/professeur/notes/classe/{classeId}")
-    public String notesClasse(
-        @PathVariable Long classeId,
-        @RequestParam(defaultValue = "") String search,
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "10") int size,
-        Model model) {
+    public String notesClasse(@PathVariable Long classeId, Model model) {
         
         model.addAttribute("pageTitle", "Notes des Élèves");
         model.addAttribute("currentRole", "professeur");
@@ -115,13 +110,10 @@ public class ProfesseurController {
         Long professeurId = 1L; // Temporary hardcoded value
         List<AffectationEnseignement> affectations = affectationEnseignementService.findByProfesseurId(professeurId);
         
-        // --- BLOC MODIFIÉ POUR LA PAGINATION ET LA RECHERCHE ---
-        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page - 1, size);
-        org.springframework.data.domain.Page<Inscription> inscriptionPage = 
-                inscriptionService.findByClasseIdAndStudentName(classeId, search, pageable);
-        
-        List<Inscription> inscriptions = inscriptionPage.getContent();
-        // --------------------------------------------------------
+        // --- ERADICATION DE LA PAGINATION BACKEND ---
+        // On récupère TOUS les élèves de la classe d'un seul coup
+        List<Inscription> inscriptions = inscriptionService.findByClasseId(classeId);
+        // ---------------------------------------------
         
         // Fetch student profiles and notes
         Map<Long, ProfilEtudiant> etudiantProfiles = new HashMap<>();
@@ -169,8 +161,9 @@ public class ProfesseurController {
             }
         }
         
+        // --- ENVOI DES DONNÉES ÉPURÉES À THYMELEAF ---
         model.addAttribute("affectations", affectations);
-        model.addAttribute("inscriptions", inscriptions);
+        model.addAttribute("inscriptions", inscriptions); // Contient la liste complète pour le JS
         model.addAttribute("etudiantProfiles", etudiantProfiles);
         model.addAttribute("etudiantNotes", etudiantNotes);
         model.addAttribute("etudiantNotesByType", etudiantNotesByType);
@@ -179,13 +172,6 @@ public class ProfesseurController {
         model.addAttribute("classeId", classeId);
         model.addAttribute("matiereNames", matiereNames);
         model.addAttribute("periodes", periodeService.findAll());
-        
-        // --- BLOC ENVOI DES INFOS DE PAGINATION ET RECHERCHE À THYMELEAF ---
-        model.addAttribute("search", search);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", inscriptionPage.getTotalPages());
-        model.addAttribute("totalRows", inscriptionPage.getTotalElements());
-        // -------------------------------------------------------------------
         
         return "Professeur/notes";
     }
