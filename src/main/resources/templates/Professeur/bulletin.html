@@ -59,17 +59,30 @@
         </table>
       </div>
 
-      <div class="card-footer" th:if="${totalPages > 1}" style="display: flex; justify-content: center; padding: 15px; border-top: 1px solid var(--border-color, #eef2f5);">
-        <ul class="pagination" style="display: flex; list-style: none; gap: 5px; padding: 0; margin: 0;">
+      <div class="card-footer" th:if="${totalPages > 1}" style="display: flex; justify-content: center; padding: 15px; border-top: 1px solid var(--border-color, #eef2f5); flex-direction: column; align-items: center; gap: 10px;">
+        <ul class="pagination" style="display: flex; list-style: none; gap: 5px; padding: 0; margin: 0; align-items: center;">
+          
           <li th:class="${currentPage <= 1} ? 'disabled' : ''">
             <a th:href="@{/professeur/bulletins(page=${currentPage - 1}, search=${search})}" class="btn btn-secondary btn-sm" th:style="${currentPage <= 1} ? 'pointer-events: none; opacity: 0.5;' : ''">Précédent</a>
           </li>
-          <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:class="${i == currentPage} ? 'active' : ''">
+        
+          <li th:if="${startPage > 1}">
+            <a th:href="@{/professeur/bulletins(page=1, search=${search})}" class="btn btn-sm" style="background-color: transparent; border: 1px solid #ccc;">1</a>
+          </li>
+          <li th:if="${startPage > 2}"><span style="padding: 0 5px; color: var(--txt3);">...</span></li>
+        
+          <li th:each="i : ${#numbers.sequence(startPage, endPage)}" th:class="${i == currentPage} ? 'active' : ''">
             <a th:href="@{/professeur/bulletins(page=${i}, search=${search})}" 
                th:text="${i}" 
                class="btn btn-sm" 
                th:style="${i == currentPage} ? 'background-color: var(--primary); color: white;' : 'background-color: transparent; border: 1px solid #ccc;'">1</a>
           </li>
+        
+          <li th:if="${endPage < totalPages - 1}"><span style="padding: 0 5px; color: var(--txt3);">...</span></li>
+          <li th:if="${endPage < totalPages}">
+            <a th:href="@{/professeur/bulletins(page=${totalPages}, search=${search})}" th:text="${totalPages}" class="btn btn-sm" style="background-color: transparent; border: 1px solid #ccc;">100</a>
+          </li>
+        
           <li th:class="${currentPage >= totalPages} ? 'disabled' : ''">
             <a th:href="@{/professeur/bulletins(page=${currentPage + 1}, search=${search})}" class="btn btn-secondary btn-sm" th:style="${currentPage >= totalPages} ? 'pointer-events: none; opacity: 0.5;' : ''">Suivant</a>
           </li>

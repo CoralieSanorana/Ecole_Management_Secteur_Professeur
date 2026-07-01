@@ -18,6 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -312,19 +315,19 @@ public class ProfesseurController {
         model.addAttribute("pageTitle", "Notes des Élèves");
         model.addAttribute("currentRole", "professeur");
         
-        // TODO: Get connected professor ID from authentication
-        Long professeurId = 1L; // Temporary hardcoded value
+        // TODO: Récupérer l'ID du professeur connecté via l'authentification
+        Long professeurId = 1L; // Valeur temporaire
         List<AffectationEnseignement> affectations = affectationEnseignementService.findByProfesseurId(professeurId);
         
         // --- PAGINATION ET RECHERCHE BACKEND ---
-        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page - 1, size);
-        org.springframework.data.domain.Page<Inscription> inscriptionPage = 
-                inscriptionService.findByClasseIdAndStudentName(classeId, search, pageable);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Inscription> inscriptionPage = inscriptionService.findByClasseIdAndStudentName(classeId, search, pageable);
         
         List<Inscription> inscriptions = inscriptionPage.getContent();
+        int totalPages = inscriptionPage.getTotalPages();
         // ---------------------------------------
         
-        // Fetch student profiles and notes
+        // Récupération des profils étudiants et de leurs notes
         Map<Long, ProfilEtudiant> etudiantProfiles = new HashMap<>();
         Map<Long, List<Note>> etudiantNotes = new HashMap<>();
         for (Inscription inscription : inscriptions) {
@@ -336,7 +339,7 @@ public class ProfesseurController {
             etudiantNotes.put(inscription.getEtudiantId(), notes);
         }
         
-        // Get unique evaluation types across all students
+        // Extraction des types d'évaluation uniques pour les en-têtes du tableau
         java.util.Set<String> evaluationTypes = new java.util.TreeSet<>();
         for (List<Note> notes : etudiantNotes.values()) {
             for (Note note : notes) {
@@ -346,7 +349,7 @@ public class ProfesseurController {
             }
         }
         
-        // Organize notes by student and evaluation type
+        // Organisation des notes par étudiant et par type d'évaluation
         Map<Long, Map<String, Note>> etudiantNotesByType = new HashMap<>();
         for (Map.Entry<Long, List<Note>> entry : etudiantNotes.entrySet()) {
             Map<String, Note> notesByType = new HashMap<>();
@@ -358,7 +361,7 @@ public class ProfesseurController {
             etudiantNotesByType.put(entry.getKey(), notesByType);
         }
         
-        // Fetch class and subject names
+        // Récupération des informations de la classe et des matières
         Classe classe = classeService.findById(classeId).orElse(null);
         Map<Long, String> matiereNames = new HashMap<>();
         for (AffectationEnseignement affectation : affectations) {
@@ -370,6 +373,17 @@ public class ProfesseurController {
             }
         }
         
+        // --- LOGIQUE DE PAGINATION SLIDING (Fenêtre de 5 pages max) ---
+        int maxVisiblePages = 5;
+        int startPage = Math.max(1, page - maxVisiblePages / 2);
+        int endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+        // ---------------------------------------------------------------
+        
+        // Envoi de toutes les données au modèle Thymeleaf
         model.addAttribute("affectations", affectations);
         model.addAttribute("inscriptions", inscriptions);
         model.addAttribute("etudiantProfiles", etudiantProfiles);
@@ -381,11 +395,13 @@ public class ProfesseurController {
         model.addAttribute("matiereNames", matiereNames);
         model.addAttribute("periodes", periodeService.findAll());
         
-        // --- INFOS DE PAGINATION ET RECHERCHE ENVOYÉES À THYMELEAF ---
+        // Attributs de recherche, pagination brute et sliding
         model.addAttribute("search", search);
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", inscriptionPage.getTotalPages());
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalRows", inscriptionPage.getTotalElements());
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         
         return "Professeur/notes";
     }
@@ -558,7 +574,6 @@ public class ProfesseurController {
         return "redirect:/professeur/devoirs/details?affectationId=" + support.getAffectationId();
     }
 
-
     @GetMapping("/professeur/bulletins")
     public String bulletins(
         @RequestParam(defaultValue = "") String search,
@@ -569,7 +584,8 @@ public class ProfesseurController {
         model.addAttribute("pageTitle", "Bulletins");
         model.addAttribute("currentRole", "professeur");
         
-        Long professeurId = 1L; // Temporary hardcoded value
+        // ID Professeur et récupération de l'année scolaire active
+        Long professeurId = 1L; 
         AnneeScolaire anneeScolaire = anneeScolaireService.findByEstActive(true).orElse(null);
         Integer anneeScolaireId = (anneeScolaire != null) ? anneeScolaire.getId() : null;
         
@@ -578,94 +594,64 @@ public class ProfesseurController {
         List<Inscription> inscriptions = null;
         Map<Long, ProfilEtudiant> etudiantProfiles = new HashMap<>();
         
-        // Variables de pagination par défaut
         int totalPages = 0;
         long totalRows = 0;
+        int startPage = 0;
+        int endPage = 0;
         
         if (anneeScolaireId != null) {
+            // Recherche de la classe dont le professeur est titulaire
             titulaireClasse = titulaireClasseService.findByProfesseurIdAndAnneeScolaireId(professeurId, anneeScolaireId).orElse(null);
             if (titulaireClasse != null) {
                 classe = classeService.findById(titulaireClasse.getClasseId()).orElse(null);
                 if (classe != null) {
                     
-                    // --- RECHERCHE ET PAGINATION SERVEUR APPLIQUÉES AUX BULLETINS ---
-                    org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page - 1, size);
-                    org.springframework.data.domain.Page<Inscription> inscriptionPage = 
-                            inscriptionService.findByClasseIdAndStudentName(classe.getId(), search, pageable);
+                    // --- RECHERCHE ET PAGINATION SERVEUR ---
+                    Pageable pageable = PageRequest.of(page - 1, size);
+                    Page<Inscription> inscriptionPage = inscriptionService.findByClasseIdAndStudentName(classe.getId(), search, pageable);
                     
                     inscriptions = inscriptionPage.getContent();
                     totalPages = inscriptionPage.getTotalPages();
                     totalRows = inscriptionPage.getTotalElements();
-                    // -----------------------------------------------------------------
+                    // ---------------------------------------
                     
+                    // Chargement des profils des élèves de la page courante
                     for (Inscription inscription : inscriptions) {
                         ProfilEtudiant etudiant = profilEtudiantService.findById(inscription.getEtudiantId()).orElse(null);
                         if (etudiant != null) {
                             etudiantProfiles.put(inscription.getEtudiantId(), etudiant);
                         }
                     }
+                    
+                    // --- LOGIQUE DE PAGINATION SLIDING (Fenêtre de 5 pages max) ---
+                    int maxVisiblePages = 5;
+                    startPage = Math.max(1, page - maxVisiblePages / 2);
+                    endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                    
+                    if (endPage - startPage + 1 < maxVisiblePages) {
+                        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                    }
+                    // ---------------------------------------------------------------
                 }
             }
         }
         
+        // Envoi des entités principales
         model.addAttribute("titulaireClasse", titulaireClasse);
         model.addAttribute("classe", classe);
         model.addAttribute("inscriptions", inscriptions);
         model.addAttribute("etudiantProfiles", etudiantProfiles);
         model.addAttribute("anneeScolaire", anneeScolaire);
         
-        // Envoi des attributs à Thymeleaf pour le fragment pagination
+        // Envoi des variables de contrôle pour la recherche et la pagination sliding
         model.addAttribute("search", search);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalRows", totalRows);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         
         return "Professeur/bulletin";
-    }
-
-    @GetMapping("/professeur/bulletin/{etudiantId}")
-    public String bulletinDetails(@PathVariable Long etudiantId, @RequestParam(required = false) Long periodeId, Model model) {
-        model.addAttribute("pageTitle", "Bulletin de l'Élève");
-        model.addAttribute("currentRole", "professeur");
-        
-        // TODO: Get connected professor ID from authentication
-        Long professeurId = 1L; // Temporary hardcoded value
-        
-        // Get current active school year
-        AnneeScolaire anneeScolaire = anneeScolaireService.findByEstActive(true).orElse(null);
-        Integer anneeScolaireId = (anneeScolaire != null) ? anneeScolaire.getId() : null;
-        
-        // Get the professor's titular class
-        TitulaireClasse titulaireClasse = null;
-        Classe classe = null;
-        if (anneeScolaireId != null) {
-            titulaireClasse = titulaireClasseService.findByProfesseurIdAndAnneeScolaireId(professeurId, anneeScolaireId).orElse(null);
-            if (titulaireClasse != null) {
-                classe = classeService.findById(titulaireClasse.getClasseId()).orElse(null);
-            }
-        }
-        
-        // Get student profile
-        ProfilEtudiant etudiant = profilEtudiantService.findById(etudiantId).orElse(null);
-        
-        // Get all periods
-        List<Periode> periodes = periodeService.findAll();
-        
-        // Get bulletin data if period is selected
-        Map<String, Object> bulletin = null;
-        if (periodeId != null && classe != null) {
-            bulletin = noteService.getBulletinEtudiant(etudiantId, periodeId, classe.getId());
-        }
-        
-        model.addAttribute("etudiant", etudiant);
-        model.addAttribute("etudiantId", etudiantId);
-        model.addAttribute("classe", classe);
-        model.addAttribute("titulaireClasse", titulaireClasse);
-        model.addAttribute("anneeScolaire", anneeScolaire);
-        model.addAttribute("periodes", periodes);
-        model.addAttribute("bulletin", bulletin);
-        model.addAttribute("selectedPeriodeId", periodeId);
-        return "Professeur/bulletin_details";
     }
 
 }
