@@ -22,6 +22,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.math.BigDecimal;
 
@@ -64,11 +65,211 @@ public class ProfesseurController {
     @Autowired
     private AnneeScolaireService anneeScolaireService;
 
+    @Autowired
+    private EmploiDuTempsService emploiDuTempsService;
+
+    @Autowired
+    private SalleService salleService;
+
+    @Autowired
+    private AbsenceService absenceService;
+
+    /*
     @GetMapping("/professeur/emploi")
     public String emploi(Model model) {
         model.addAttribute("pageTitle", "Emploi du Temps");
         model.addAttribute("currentRole", "professeur");
+        
+        // TODO: Get connected professor ID from authentication
+        Long professeurId = 1L; // Temporary hardcoded value
+        
+        // TEMPORARY: Get all emploi du temps to test data display
+        List<EmploiDuTemps> emploiDuTemps = emploiDuTempsService.findAll();
+        
+        System.out.println("DEBUG: Professeur ID: " + professeurId);
+        System.out.println("DEBUG: All Emploi du temps retrieved: " + emploiDuTemps.size());
+        
+        // Enrich schedule data with subject, class, and room information
+        List<Map<String, Object>> enrichedSchedule = new ArrayList<>();
+        for (EmploiDuTemps edt : emploiDuTemps) {
+            Map<String, Object> scheduleItem = new HashMap<>();
+            scheduleItem.put("id", edt.getId());
+            scheduleItem.put("jourSemaine", edt.getJourSemaine());
+            scheduleItem.put("heureDebut", edt.getHeureDebut());
+            scheduleItem.put("heureFin", edt.getHeureFin());
+            
+            System.out.println("DEBUG: EDT - ID: " + edt.getId() + ", Jour: " + edt.getJourSemaine() + ", Heure: " + edt.getHeureDebut() + "-" + edt.getHeureFin());
+            
+            // Get affectation details
+            AffectationEnseignement affectation = affectationEnseignementService.findById(edt.getAffectationId()).orElse(null);
+            if (affectation != null) {
+                System.out.println("DEBUG: Affectation found - Prof ID: " + affectation.getProfesseurId());
+                Matiere matiere = matiereService.findById(affectation.getMatiereId()).orElse(null);
+                Classe classe = classeService.findById(affectation.getClasseId()).orElse(null);
+                
+                scheduleItem.put("matiere", matiere != null ? matiere.getNom() : "Matière inconnue");
+                scheduleItem.put("classe", classe != null ? classe.getNom() : "Classe inconnue");
+                scheduleItem.put("affectationId", affectation.getId());
+                scheduleItem.put("classeId", classe != null ? classe.getId() : null);
+            } else {
+                System.out.println("DEBUG: Affectation not found for ID: " + edt.getAffectationId());
+            }
+            
+            // Get room details
+            Salle salle = salleService.findById(edt.getSalleId()).orElse(null);
+            scheduleItem.put("salle", salle != null ? salle.getNom() : "Salle inconnue");
+            
+            enrichedSchedule.add(scheduleItem);
+        }
+        
+        System.out.println("DEBUG: Enriched schedule size: " + enrichedSchedule.size());
+        model.addAttribute("emploiDuTemps", enrichedSchedule);
         return "Professeur/calendar";
+    }
+    */
+    @GetMapping("/professeur/emploi")
+    public String emploi(Model model) {
+        model.addAttribute("pageTitle", "Emploi du Temps");
+        model.addAttribute("currentRole", "professeur");
+        
+        // Simuler le professeur connecté (ID: 1) pour le test
+        Long professeurId = 1L;
+        
+        // Récupérer la liste des emplois du temps
+        List<EmploiDuTemps> edtList = emploiDuTempsService.getCalendarProf(professeurId);
+        
+        // Tableau pour faire la correspondance entre le numéro (Integer) et le texte attendu par le JS
+        String[] joursTexte = {"", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"};
+        
+        List<Map<String, Object>> formattedSchedule = new ArrayList<>();
+        
+        for (EmploiDuTemps edt : edtList) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("id", edt.getId());
+            
+            // Sécurité pour le jour qui est un Integer en BDD (ex: 1 -> "lundi")
+            String jourStr = "lundi";
+            if (edt.getJourSemaine() != null && edt.getJourSemaine() >= 1 && edt.getJourSemaine() <= 7) {
+                jourStr = joursTexte[edt.getJourSemaine()];
+            }
+            item.put("jourSemaine", jourStr);
+            
+            // Formatage des heures (ex: "08:00")
+            item.put("heureDebut", edt.getHeureDebut() != null ? edt.getHeureDebut().toString().substring(0, 5) : "08:00");
+            item.put("heureFin", edt.getHeureFin() != null ? edt.getHeureFin().toString().substring(0, 5) : "10:00");
+            
+            // Récupération des IDs d'après tes colonnes de base de données
+            Long affectationId = edt.getAffectationId();
+            Long classeId = affectationEnseignementService.findById(affectationId).map(AffectationEnseignement::getClasseId).orElse(null);
+            Long matiereId = affectationEnseignementService.findById(affectationId).map(AffectationEnseignement::getMatiereId).orElse(null);
+            
+            item.put("classeId", affectationId);
+            
+            // Récupérer dynamiquement les noms depuis les services associés
+            String classeNom = (classeId != null) ? classeService.findById(classeId).map(Classe::getNom).orElse("Classe") : "Classe";
+            String matiereNom = (matiereId != null) ? matiereService.findById(matiereId).map(Matiere::getNom).orElse("Matière") : "Matière";
+            
+            // Pour la salle, on affiche son ID ou son nom si tu as un salleService, sinon "Salle " + id
+            String salleNom = (edt.getSalleId() != null) ? "Salle " + edt.getSalleId() : "N/A";
+            
+            item.put("classe", classeNom);
+            item.put("matiere", matiereNom);
+            item.put("salle", salleNom);
+            
+            formattedSchedule.add(item);
+        }
+        
+        model.addAttribute("scheduleData", formattedSchedule);
+        return "Professeur/calendar";
+    }
+
+    @GetMapping("/professeur/absences")
+    public String absences(@RequestParam(required = false) Long emploiDuTempsId,
+                          @RequestParam(required = false) String matiere,
+                          @RequestParam(required = false) String classe,
+                          @RequestParam(required = false) String salle,
+                          @RequestParam(required = false) String heureDebut,
+                          @RequestParam(required = false) String heureFin,
+                          @RequestParam(required = false) Long classeId,
+                          Model model) {
+        model.addAttribute("pageTitle", "Gestion des Absences");
+        model.addAttribute("currentRole", "professeur");
+        
+        model.addAttribute("emploiDuTempsId", emploiDuTempsId);
+        model.addAttribute("matiere", matiere);
+        model.addAttribute("classe", classe);
+        model.addAttribute("salle", salle);
+        model.addAttribute("heureDebut", heureDebut);
+        model.addAttribute("heureFin", heureFin);
+        model.addAttribute("classeId", classeId);
+        
+        // Get students for the class
+        List<Inscription> inscriptions = null;
+        Map<Long, ProfilEtudiant> etudiantProfiles = new HashMap<>();
+        
+        if (classeId != null) {
+            inscriptions = inscriptionService.findByClasseId(classeId);
+            for (Inscription inscription : inscriptions) {
+                ProfilEtudiant etudiant = profilEtudiantService.findById(inscription.getEtudiantId()).orElse(null);
+                if (etudiant != null) {
+                    etudiantProfiles.put(inscription.getEtudiantId(), etudiant);
+                }
+            }
+        }
+        
+        model.addAttribute("inscriptions", inscriptions);
+        model.addAttribute("etudiantProfiles", etudiantProfiles);
+        
+        return "Professeur/absences";
+    }
+
+    @PostMapping("/professeur/absences/save")
+    public String saveAbsences(@RequestParam Long emploiDuTempsId,
+                               @RequestParam String matiere,
+                               @RequestParam String classe,
+                               @RequestParam String salle,
+                               @RequestParam String heureDebut,
+                               @RequestParam String heureFin,
+                               @RequestParam Long classeId,
+                               @RequestParam(required = false) List<Long> absents,
+                               RedirectAttributes redirectAttributes) {
+        // TODO: Get connected professor ID from authentication
+        Long professeurId = 1L; // Temporary hardcoded value
+        
+        // Get or create seance for this emploiDuTemps
+        EmploiDuTemps emploiDuTemps = emploiDuTempsService.findById(emploiDuTempsId).orElse(null);
+        if (emploiDuTemps == null) {
+            redirectAttributes.addFlashAttribute("error", "Emploi du temps non trouvé");
+            return "redirect:/professeur/absences";
+        }
+        
+        // For now, we'll use the emploiDuTempsId as seanceId
+        // In a real implementation, you would create a Seance entity
+        Long seanceId = emploiDuTempsId;
+        
+        // Get all students in the class
+        List<Inscription> inscriptions = inscriptionService.findByClasseId(classeId);
+        
+        // Process absences
+        for (Inscription inscription : inscriptions) {
+            Long etudiantId = inscription.getEtudiantId();
+            boolean isAbsent = absents != null && absents.contains(etudiantId);
+            
+            if (isAbsent) {
+                // Create absence record
+                Absence absence = new Absence();
+                absence.setSeanceId(seanceId);
+                absence.setEtudiantId(etudiantId);
+                absence.setType("non_justifiee");
+                absence.setSaisiPar(professeurId);
+                
+                // Save absence
+                absenceService.save(absence);
+            }
+        }
+        
+        redirectAttributes.addAttribute("success", "true");
+        return "redirect:/professeur/absences";
     }
 
     @GetMapping("/professeur/notes")

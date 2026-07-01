@@ -59,44 +59,45 @@ Un sous groupe qui est responsable de la partie **Professeur**.
     - [ok] fonction (NoteService): save(): permet d'enregistrer tous les notes saisi par le professeur connecte
 
 ### Itiela:
-- [] devoirs.html
-    - [] afficher dans une *section* la liste des classes auxquels le professeur connecter est assigne
-    - [] cliquer sur une classe -> affichage des cours deja publier par le professeur connecte
-    - [] fonction (AffectationEnseignementService): findByAffectationId(): 
+- [ok] devoirs.html
+    - [ok] afficher dans une *section* la liste des classes auxquels le professeur connecter est assigne
+    - [ok] cliquer sur une classe -> affichage des cours deja publier par le professeur connecte
+    - [ok] fonction (AffectationEnseignementService): findByAffectationId(): 
         - recuperer tous les cours publier par le professeur connecter selon la classe choisi
-    - [] afficher dans une *section* la liste des cours deja publier par le professeur connecte pour 
+    - [ok] afficher dans une *section* la liste des cours deja publier par le professeur connecte pour 
     la classe choisi
-    - [] bouton *Nouveau Cours* -> appel fonction js formCours()
-    - [] fonction js: formCours(): assure l'affichage d'un formulaire pour inserer un nouveau cours ou devoir
-        - [] les champs requises: type_fichier, titre, upload file, type_contenu, date_limite, accepte_retard
-    - [] bouton *Publier Cours* -> appel fonction save()
-    - [] fonction (SupportCourtService): save(): permet d'enregistrer le cours publier dans la table *supports_cours*
+    - [ok] bouton *Nouveau Cours* -> appel fonction js formCours()
+    - [ok] fonction js: formCours(): assure l'affichage d'un formulaire pour inserer un nouveau cours ou devoir
+        - [ok] les champs requises: type_fichier, titre, upload file, type_contenu, date_limite, accepte_retard
+    - [ok] bouton *Publier Cours* -> appel fonction save()
+    - [ok] fonction (SupportCourtService): save(): permet d'enregistrer le cours publier dans la table *supports_cours*
 
 ### Coralie:
 - [ok] Table utiles en plus:
     - [ok] titulaires_classes
 - [ok] creer entity, repository, service por la table *titulaires_classes*
 
-- [] bulletin.html
+- [ok] bulletin.html
     - [ok] fonction (TitulaireClasseService): findByProfesseurId(): resuperer la classe auquelle le professeur connecte est 
     titulaire
-    - [] afficher sous forme de tableau la liste des etudiants de la classe 
-    - [] cliquer sur une ligne d'eleve ->redirect()->to(bulletin_details.html)
-    - [] bouton *Export PDF*: exporter en PDF la liste des etudiants -> appel fonction exporPDF()
+    - [ok] afficher sous forme de tableau la liste des etudiants de la classe 
+    - [ok] cliquer sur une ligne d'eleve ->redirect()->to(bulletin_details.html)
+    - [ok] bouton *Export PDF*: exporter en PDF la liste des etudiants -> appel fonction exporPDF()
 
-- [] bulletin_details.html
-    - [] champ pour saisir la periode 
+- [ok] bulletin_details.html
+    - [ok] champ pour saisir la periode 
     - [ok] fonction (NoteService): findByEtudiantIdByPeriodeId(): recuperer tous les notes d'un etudiant dans une periode
-    - [] fonction (NoteService): getBulletinEtudiant(): recuperer les notes d'un etudiant dans toutes les matieres selon
+    - [ok] fonction (NoteService): getBulletinEtudiant(): recuperer les notes d'un etudiant dans toutes les matieres selon
     la periode choisi, calcul sa moyenne, selon les coefficients de chaque matiere
-    - [] afficher le bulletin d'un etudiant  dans la periode choisi
-    - [] bouton *Export PDF*: exporter en PDF le bulletin d'un etudiant -> appel fonction exporPDF()
+    - [ok] afficher le bulletin d'un etudiant  dans la periode choisi
+    - [ok] bouton *Export PDF*: exporter en PDF le bulletin d'un etudiant -> appel fonction exporPDF()
 
 ### Mbola miandry:
 - [] calendar.html
     - [] fonction: getCalendarProf(): recuperer les emploies du temps du professeur connecte
     - [] afficher sous forme de calendrier hebdomadaire les emploies du temps du professeur connecte
-    - [] cliquer sur une ligne de calendrier -> redirect()->to('absences.html')
+    avec nom de la matiere, la classe, la salle
+    - [] cliquer sur une partie du calendrier, avec les informations de la periode (date, heure, matiere, classe, salle) -> redirect()->to('absences.html')
     - [] bouton *Export PDF*: exporter en PDF l'empoi du temps du professeur -> appel fonction exporPDF()
 
 - [] absences.html

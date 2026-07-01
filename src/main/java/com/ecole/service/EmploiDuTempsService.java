@@ -4,6 +4,7 @@ import com.ecole.entity.EmploiDuTemps;
 import com.ecole.repository.EmploiDuTempsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.ecole.entity.AffectationEnseignement;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,9 @@ public class EmploiDuTempsService {
 
     @Autowired
     private EmploiDuTempsRepository emploiDuTempsRepository;
+
+    @Autowired
+    private AffectationEnseignementService affectationEnseignementService;
 
     public List<EmploiDuTemps> findAll() {
         return emploiDuTempsRepository.findAll();
@@ -28,5 +32,18 @@ public class EmploiDuTempsService {
 
     public void deleteById(Long id) {
         emploiDuTempsRepository.deleteById(id);
+    }
+
+    public List<EmploiDuTemps> findByAffectationId(Long affectationId) {
+        return emploiDuTempsRepository.findByAffectationId(affectationId);
+    }
+
+    public List<EmploiDuTemps> getCalendarProf(Long professeurId) {
+        List<AffectationEnseignement> affectations = affectationEnseignementService.findByProfesseurId(professeurId);
+        List<EmploiDuTemps> emploiDuTempsList = new java.util.ArrayList<>();
+        for (AffectationEnseignement affectation : affectations) {
+            emploiDuTempsList.addAll(findByAffectationId(affectation.getId()));
+        }
+        return emploiDuTempsList;
     }
 }
