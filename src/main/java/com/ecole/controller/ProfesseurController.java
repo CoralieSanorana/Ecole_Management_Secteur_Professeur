@@ -303,13 +303,18 @@ public class ProfesseurController {
 
     @GetMapping("/professeur/notes/classe/{classeId}")
     public String notesClasse(@PathVariable Long classeId, Model model) {
+        
         model.addAttribute("pageTitle", "Notes des Élèves");
         model.addAttribute("currentRole", "professeur");
         
         // TODO: Get connected professor ID from authentication
         Long professeurId = 1L; // Temporary hardcoded value
         List<AffectationEnseignement> affectations = affectationEnseignementService.findByProfesseurId(professeurId);
+        
+        // --- ERADICATION DE LA PAGINATION BACKEND ---
+        // On récupère TOUS les élèves de la classe d'un seul coup
         List<Inscription> inscriptions = inscriptionService.findByClasseId(classeId);
+        // ---------------------------------------------
         
         // Fetch student profiles and notes
         Map<Long, ProfilEtudiant> etudiantProfiles = new HashMap<>();
@@ -357,8 +362,9 @@ public class ProfesseurController {
             }
         }
         
+        // --- ENVOI DES DONNÉES ÉPURÉES À THYMELEAF ---
         model.addAttribute("affectations", affectations);
-        model.addAttribute("inscriptions", inscriptions);
+        model.addAttribute("inscriptions", inscriptions); // Contient la liste complète pour le JS
         model.addAttribute("etudiantProfiles", etudiantProfiles);
         model.addAttribute("etudiantNotes", etudiantNotes);
         model.addAttribute("etudiantNotesByType", etudiantNotesByType);
@@ -367,6 +373,7 @@ public class ProfesseurController {
         model.addAttribute("classeId", classeId);
         model.addAttribute("matiereNames", matiereNames);
         model.addAttribute("periodes", periodeService.findAll());
+        
         return "Professeur/notes";
     }
 

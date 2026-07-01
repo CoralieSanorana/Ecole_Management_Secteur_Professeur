@@ -61,8 +61,8 @@ CREATE TABLE roles (
 -- Liaison utilisateurs ↔ rôles (many-to-many)
 -- Un utilisateur peut cumuler plusieurs rôles (ex : prof + parent)
 CREATE TABLE user_roles (
-    user_id Long REFERENCES users(id) ON DELETE CASCADE,
-    role_id Long REFERENCES roles(id) ON DELETE CASCADE,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    role_id INT REFERENCES roles(id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, role_id)
 );
 
@@ -76,8 +76,8 @@ CREATE TABLE permissions (
 );
 
 CREATE TABLE role_permissions (
-    role_id       Long REFERENCES roles(id)       ON DELETE CASCADE,
-    permission_id Long REFERENCES permissions(id) ON DELETE CASCADE,
+    role_id       INT REFERENCES roles(id)       ON DELETE CASCADE,
+    permission_id INT REFERENCES permissions(id) ON DELETE CASCADE,
     PRIMARY KEY (role_id, permission_id)
 );
 
@@ -105,7 +105,7 @@ CREATE TABLE etablissements (
 -- Une seule peut être marquée "active" à la fois, contrôlé applicativement
 CREATE TABLE annees_scolaires (
     id               SERIAL PRIMARY KEY,
-    etablissement_id Long REFERENCES etablissements(id),
+    etablissement_id INT REFERENCES etablissements(id),
     libelle          VARCHAR(50) NOT NULL,          -- ex : '2024-2025'
     date_debut       DATE NOT NULL,
     date_fin         DATE NOT NULL,
@@ -117,9 +117,9 @@ CREATE TABLE annees_scolaires (
 -- Le champ "ordre" permet d'afficher les niveaux du plus bas au plus haut
 CREATE TABLE niveaux (
     id               SERIAL PRIMARY KEY,
-    etablissement_id Long REFERENCES etablissements(id),
+    etablissement_id INT REFERENCES etablissements(id),
     libelle          VARCHAR(100) NOT NULL,
-    ordre            Long NOT NULL,                   -- tri croissant : 1=Seconde, 2=Première…
+    ordre            INT NOT NULL,                   -- tri croissant : 1=Seconde, 2=Première…
     created_at       TIMESTAMP DEFAULT NOW()
 );
 
@@ -127,19 +127,19 @@ CREATE TABLE niveaux (
 -- Une classe est l'instance d'un niveau pour une année donnée
 CREATE TABLE classes (
     id                SERIAL PRIMARY KEY,
-    niveau_id         Long REFERENCES niveaux(id),
-    annee_scolaire_id Long REFERENCES annees_scolaires(id),
+    niveau_id         INT REFERENCES niveaux(id),
+    annee_scolaire_id INT REFERENCES annees_scolaires(id),
     nom               VARCHAR(100) NOT NULL,         -- ex : 'Terminale A', '1ère S'
-    capacite_max      Long DEFAULT 40,
+    capacite_max      INT DEFAULT 40,
     created_at        TIMESTAMP DEFAULT NOW()
 );
 
 -- Salles de cours disponibles dans l'établissement
 CREATE TABLE salles (
     id               SERIAL PRIMARY KEY,
-    etablissement_id Long REFERENCES etablissements(id),
+    etablissement_id INT REFERENCES etablissements(id),
     nom              VARCHAR(100) NOT NULL,           -- ex : 'Salle 12', 'Labo Chimie'
-    capacite         Long,
+    capacite         INT,
     type             VARCHAR(50) DEFAULT 'cours',     -- 'cours', 'laboratoire', 'amphi', 'sport'
     is_active        BOOLEAN     DEFAULT TRUE,
     created_at       TIMESTAMP   DEFAULT NOW()
@@ -148,7 +148,7 @@ CREATE TABLE salles (
 -- Matières enseignées dans l'établissement
 CREATE TABLE matieres (
     id               SERIAL PRIMARY KEY,
-    etablissement_id Long REFERENCES etablissements(id),
+    etablissement_id INT REFERENCES etablissements(id),
     nom              VARCHAR(150) NOT NULL,           -- ex : 'Mathématiques', 'Français'
     code             VARCHAR(20),                     -- ex : 'MATH', 'FRAN', 'SVT'
     created_at       TIMESTAMP DEFAULT NOW()
@@ -159,8 +159,8 @@ CREATE TABLE matieres (
 -- Indispensable pour le calcul correct des moyennes pondérées
 CREATE TABLE coefficients (
     id         SERIAL PRIMARY KEY,
-    matiere_id Long REFERENCES matieres(id) ON DELETE CASCADE,
-    niveau_id  Long REFERENCES niveaux(id)  ON DELETE CASCADE,
+    matiere_id INT REFERENCES matieres(id) ON DELETE CASCADE,
+    niveau_id  INT REFERENCES niveaux(id)  ON DELETE CASCADE,
     valeur     NUMERIC(4,2) NOT NULL,                 -- ex : 4.00, 3.00, 1.50
     UNIQUE (matiere_id, niveau_id)
 );
@@ -169,10 +169,10 @@ CREATE TABLE coefficients (
 -- date_publication_notes : avant cette date, les élèves ne voient pas leurs notes
 CREATE TABLE periodes (
     id                     SERIAL PRIMARY KEY,
-    annee_scolaire_id      Long REFERENCES annees_scolaires(id),
+    annee_scolaire_id      INT REFERENCES annees_scolaires(id),
     libelle                VARCHAR(100) NOT NULL,     -- ex : '1er Trimestre', '2ème Semestre'
     type                   VARCHAR(20) DEFAULT 'trimestre',  -- 'trimestre' | 'semestre'
-    ordre                  Long NOT NULL,              -- 1, 2 ou 3
+    ordre                  INT NOT NULL,              -- 1, 2 ou 3
     date_debut             DATE,
     date_fin               DATE,
     date_publication_notes DATE,                      -- date de visibilité des notes pour les élèves
@@ -191,8 +191,8 @@ CREATE TABLE periodes (
 -- La colonne "region" est importante : elle sert aux critères géographiques
 CREATE TABLE profils_etudiants (
     id             SERIAL PRIMARY KEY,
-    user_id        Long UNIQUE REFERENCES users(id) ON DELETE CASCADE,
-    matricule      VARCHAR(100) UNIQUE NOT NULL,      -- identifiant unique Longerne à l'école
+    user_id        INT UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    matricule      VARCHAR(100) UNIQUE NOT NULL,      -- identifiant unique interne à l'école
     nom            VARCHAR(150) NOT NULL,
     prenom         VARCHAR(150) NOT NULL,
     date_naissance DATE,
@@ -214,7 +214,7 @@ CREATE TABLE profils_etudiants (
 -- type_contrat détermine si le prof est permanent ou temporaire
 CREATE TABLE profils_professeurs (
     id                 SERIAL PRIMARY KEY,
-    user_id            Long UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    user_id            INT UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     matricule          VARCHAR(100) UNIQUE NOT NULL,
     nom                VARCHAR(150) NOT NULL,
     prenom             VARCHAR(150) NOT NULL,
@@ -235,7 +235,7 @@ CREATE TABLE profils_professeurs (
 -- Profil directeur
 CREATE TABLE profils_directeurs (
     id         SERIAL PRIMARY KEY,
-    user_id    Long UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    user_id    INT UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     nom        VARCHAR(150) NOT NULL,
     prenom     VARCHAR(150) NOT NULL,
     telephone  VARCHAR(50),
@@ -246,12 +246,12 @@ CREATE TABLE profils_directeurs (
 -- Ajout du directeur sur l'établissement
 -- Différé ici pour éviter la référence circulaire avec profils_directeurs
 ALTER TABLE etablissements
-    ADD COLUMN directeur_id Long REFERENCES profils_directeurs(id) ON DELETE SET NULL;
+    ADD COLUMN directeur_id INT REFERENCES profils_directeurs(id) ON DELETE SET NULL;
 
 -- Profil secrétariat (peut y avoir plusieurs secrétaires dans un établissement)
 CREATE TABLE profils_secretariat (
     id         SERIAL PRIMARY KEY,
-    user_id    Long UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    user_id    INT UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     nom        VARCHAR(150) NOT NULL,
     prenom     VARCHAR(150) NOT NULL,
     telephone  VARCHAR(50),
@@ -261,7 +261,7 @@ CREATE TABLE profils_secretariat (
 -- Profil comptable (peut être la même personne que le secrétariat ou séparé)
 CREATE TABLE profils_comptables (
     id         SERIAL PRIMARY KEY,
-    user_id    Long UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    user_id    INT UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     nom        VARCHAR(150) NOT NULL,
     prenom     VARCHAR(150) NOT NULL,
     telephone  VARCHAR(50),
@@ -272,7 +272,7 @@ CREATE TABLE profils_comptables (
 -- user_id peut être NULL : le parent n'est pas obligé d'avoir un compte
 CREATE TABLE profils_parents (
     id           SERIAL PRIMARY KEY,
-    user_id      Long REFERENCES users(id) ON DELETE SET NULL,
+    user_id      INT REFERENCES users(id) ON DELETE SET NULL,
     nom          VARCHAR(150) NOT NULL,
     prenom       VARCHAR(150) NOT NULL,
     telephone    VARCHAR(50),
@@ -284,8 +284,8 @@ CREATE TABLE profils_parents (
 
 -- Liaison étudiant ↔ parents/tuteurs (un étudiant peut avoir plusieurs tuteurs)
 CREATE TABLE etudiants_parents (
-    etudiant_id           Long REFERENCES profils_etudiants(id) ON DELETE CASCADE,
-    parent_id             Long REFERENCES profils_parents(id)   ON DELETE CASCADE,
+    etudiant_id           INT REFERENCES profils_etudiants(id) ON DELETE CASCADE,
+    parent_id             INT REFERENCES profils_parents(id)   ON DELETE CASCADE,
     est_contact_principal BOOLEAN DEFAULT FALSE,      -- un seul doit être TRUE par étudiant
     PRIMARY KEY (etudiant_id, parent_id)
 );
@@ -301,14 +301,14 @@ CREATE TABLE etudiants_parents (
 -- UNIQUE sur (etudiant_id, annee_scolaire_id) : un dossier par an maximum
 CREATE TABLE inscriptions (
     id                SERIAL PRIMARY KEY,
-    etudiant_id       Long REFERENCES profils_etudiants(id),
-    classe_id         Long REFERENCES classes(id),
-    annee_scolaire_id Long REFERENCES annees_scolaires(id),
+    etudiant_id       INT REFERENCES profils_etudiants(id),
+    classe_id         INT REFERENCES classes(id),
+    annee_scolaire_id INT REFERENCES annees_scolaires(id),
     type_inscription  VARCHAR(50) DEFAULT 'reinscription',  -- 'nouvelle' | 'reinscription'
     date_inscription  DATE        DEFAULT CURRENT_DATE,
     statut            VARCHAR(50) DEFAULT 'active',
     -- 'active', 'transfere', 'exclu', 'diplome', 'abandonne'
-    rang_final        Long,                             -- calculé et stocké en fin d'année
+    rang_final        INT,                             -- calculé et stocké en fin d'année
     est_admis         BOOLEAN,                         -- résultat de passage en classe supérieure
     created_at        TIMESTAMP DEFAULT NOW(),
     updated_at        TIMESTAMP DEFAULT NOW(),
@@ -325,10 +325,10 @@ CREATE TABLE inscriptions (
 
 CREATE TABLE affectations_enseignement (
     id                SERIAL PRIMARY KEY,
-    professeur_id     Long REFERENCES profils_professeurs(id),
-    matiere_id        Long REFERENCES matieres(id),
-    classe_id         Long REFERENCES classes(id),
-    annee_scolaire_id Long REFERENCES annees_scolaires(id),
+    professeur_id     INT REFERENCES profils_professeurs(id),
+    matiere_id        INT REFERENCES matieres(id),
+    classe_id         INT REFERENCES classes(id),
+    annee_scolaire_id INT REFERENCES annees_scolaires(id),
     heures_hebdo      NUMERIC(4,1),                   -- volume horaire hebdomadaire dans cette classe
     created_at        TIMESTAMP DEFAULT NOW(),
     UNIQUE (matiere_id, classe_id, annee_scolaire_id)
@@ -354,9 +354,9 @@ CREATE TABLE affectations_enseignement (
 -- Règles de cours récurrentes hebdomadaires
 CREATE TABLE emploi_du_temps (
     id                  SERIAL PRIMARY KEY,
-    affectation_id      Long REFERENCES affectations_enseignement(id),
-    salle_id            Long REFERENCES salles(id),
-    jour_semaine        Long NOT NULL CHECK (jour_semaine BETWEEN 1 AND 6),
+    affectation_id      INT REFERENCES affectations_enseignement(id),
+    salle_id            INT REFERENCES salles(id),
+    jour_semaine        INT NOT NULL CHECK (jour_semaine BETWEEN 1 AND 6),
     -- 1=Lundi, 2=Mardi, 3=Mercredi, 4=Jeudi, 5=Vendredi, 6=Samedi
     heure_debut         TIME NOT NULL,
     heure_fin           TIME NOT NULL,
@@ -371,7 +371,7 @@ CREATE TABLE emploi_du_temps (
 --                        et en créer une nouvelle à partir de date_concernee
 CREATE TABLE modifications_edt (
     id                   SERIAL PRIMARY KEY,
-    emploi_du_temps_id   Long REFERENCES emploi_du_temps(id),
+    emploi_du_temps_id   INT REFERENCES emploi_du_temps(id),
     date_concernee       DATE NOT NULL,                -- la date exacte du cours impacté
     portee               VARCHAR(20) DEFAULT 'ponctuel',
     -- 'ponctuel'  : exception sur ce seul jour
@@ -382,11 +382,11 @@ CREATE TABLE modifications_edt (
     -- 'changement_salle'   : salle changée
     -- 'remplacement_prof'  : prof remplacé
     motif                VARCHAR(500),
-    nouvelle_salle_id    Long REFERENCES salles(id),    -- rempli si changement de salle
+    nouvelle_salle_id    INT REFERENCES salles(id),    -- rempli si changement de salle
     nouvelle_heure_debut TIME,                         -- rempli si déplacement horaire
     nouvelle_heure_fin   TIME,
-    remplacant_id        Long REFERENCES profils_professeurs(id),  -- rempli si remplacement
-    cree_par             Long REFERENCES users(id),
+    remplacant_id        INT REFERENCES profils_professeurs(id),  -- rempli si remplacement
+    cree_par             INT REFERENCES users(id),
     created_at           TIMESTAMP DEFAULT NOW()
 );
 
@@ -394,7 +394,7 @@ CREATE TABLE modifications_edt (
 -- ============================================================
 -- SECTION 7 — SÉANCES & ABSENCES
 -- Séances : instanciation concrète de chaque créneau EDT pour
--- un jour précis, nécessaire pour attacher un poLongage réel.
+-- un jour précis, nécessaire pour attacher un pointage réel.
 -- Absences : un enregistrement par étudiant absent par séance.
 -- ============================================================
 
@@ -402,7 +402,7 @@ CREATE TABLE modifications_edt (
 -- a_eu_lieu = FALSE si le cours est annulé (prof absent, événement, etc.)
 CREATE TABLE seances (
     id                 SERIAL PRIMARY KEY,
-    emploi_du_temps_id Long REFERENCES emploi_du_temps(id),
+    emploi_du_temps_id INT REFERENCES emploi_du_temps(id),
     date_seance        DATE NOT NULL,
     heure_debut        TIME,
     heure_fin          TIME,
@@ -410,18 +410,18 @@ CREATE TABLE seances (
     created_at         TIMESTAMP DEFAULT NOW()
 );
 
--- PoLongage des absences par étudiant pour chaque séance
+-- Pointage des absences par étudiant pour chaque séance
 -- UNIQUE sur (seance_id, etudiant_id) : un seul enregistrement par élève par cours
 CREATE TABLE absences (
     id               SERIAL PRIMARY KEY,
-    seance_id        Long REFERENCES seances(id),
-    etudiant_id      Long REFERENCES profils_etudiants(id),
+    seance_id        INT REFERENCES seances(id),
+    etudiant_id      INT REFERENCES profils_etudiants(id),
     type             VARCHAR(50) DEFAULT 'non_justifiee',
     -- 'non_justifiee', 'justifiee', 'retard'
     motif            TEXT,                             -- obligatoire si type = 'justifiee'
     justificatif_url VARCHAR(500),                    -- scan du justificatif fourni
-    saisi_par        Long REFERENCES users(id),         -- professeur qui fait le poLongage
-    valide_par       Long REFERENCES users(id),         -- secrétariat qui valide la justification
+    saisi_par        INT REFERENCES users(id),         -- professeur qui fait le pointage
+    valide_par       INT REFERENCES users(id),         -- secrétariat qui valide la justification
     date_validation  TIMESTAMP,
     created_at       TIMESTAMP DEFAULT NOW(),
     updated_at       TIMESTAMP DEFAULT NOW(),
@@ -434,7 +434,7 @@ CREATE TABLE absences (
 -- Équipe Professeur : saisie et correction de notes.
 -- Équipe Étudiant   : lecture, graphiques, trajectoire.
 --
--- Dénormalisation Longentionnelle dans "moyennes" :
+-- Dénormalisation intentionnelle dans "moyennes" :
 --   Stocker les moyennes calculées évite de les recalculer à chaque
 --   affichage. Elles sont invalidées et recalculées après chaque
 --   saisie ou correction de note.
@@ -444,22 +444,22 @@ CREATE TABLE absences (
 -- "sur" permet des notes sur 10 ou sur 100 si l'école le souhaite
 CREATE TABLE notes (
     id              SERIAL PRIMARY KEY,
-    etudiant_id     Long REFERENCES profils_etudiants(id),
-    affectation_id  Long REFERENCES affectations_enseignement(id),
+    etudiant_id     INT REFERENCES profils_etudiants(id),
+    affectation_id  INT REFERENCES affectations_enseignement(id),
     -- affectation_id regroupe : matière + classe + professeur + année
-    periode_id      Long REFERENCES periodes(id),
+    periode_id      INT REFERENCES periodes(id),
     type_evaluation VARCHAR(100),
     -- 'devoir_1', 'devoir_2', 'composition', 'examen_blanc', 'oral', 'tp'
     valeur          NUMERIC(5,2) NOT NULL CHECK (valeur >= 0),
     sur             NUMERIC(5,2) DEFAULT 20.00,        -- note sur X (défaut /20)
     commentaire     TEXT,
     -- Traçabilité de la saisie initiale
-    saisi_par       Long REFERENCES users(id),          -- le professeur
+    saisi_par       INT REFERENCES users(id),          -- le professeur
     date_saisie     TIMESTAMP DEFAULT NOW(),
     est_valide      BOOLEAN DEFAULT TRUE,
     -- Traçabilité des corrections (nécessite validation secrétariat)
     ancienne_valeur NUMERIC(5,2),                     -- valeur avant correction
-    corrige_par     Long REFERENCES users(id),
+    corrige_par     INT REFERENCES users(id),
     date_correction TIMESTAMP,
     motif_correction TEXT,
     created_at      TIMESTAMP DEFAULT NOW(),
@@ -472,13 +472,13 @@ CREATE TABLE notes (
 -- rang + effectif_classe permettent d'afficher "5ème sur 32 élèves"
 CREATE TABLE moyennes (
     id              SERIAL PRIMARY KEY,
-    etudiant_id     Long REFERENCES profils_etudiants(id),
-    inscription_id  Long REFERENCES inscriptions(id),
-    periode_id      Long REFERENCES periodes(id),       -- NULL = moyenne annuelle
-    matiere_id      Long REFERENCES matieres(id),       -- NULL = moyenne générale
+    etudiant_id     INT REFERENCES profils_etudiants(id),
+    inscription_id  INT REFERENCES inscriptions(id),
+    periode_id      INT REFERENCES periodes(id),       -- NULL = moyenne annuelle
+    matiere_id      INT REFERENCES matieres(id),       -- NULL = moyenne générale
     valeur          NUMERIC(5,2),
-    rang            Long,                               -- rang dans la classe, ex : 5
-    effectif_classe Long,                               -- nb élèves dans la classe, ex : 32
+    rang            INT,                               -- rang dans la classe, ex : 5
+    effectif_classe INT,                               -- nb élèves dans la classe, ex : 32
     calculated_at   TIMESTAMP DEFAULT NOW(),
     UNIQUE (etudiant_id, inscription_id, periode_id, matiere_id)
 );
@@ -494,9 +494,9 @@ CREATE TABLE moyennes (
 -- Exemple : Terminale 2024-2025 = 1 000 000 Ar
 CREATE TABLE grilles_tarifaires (
     id                SERIAL PRIMARY KEY,
-    etablissement_id  Long REFERENCES etablissements(id),
-    niveau_id         Long REFERENCES niveaux(id),
-    annee_scolaire_id Long REFERENCES annees_scolaires(id),
+    etablissement_id  INT REFERENCES etablissements(id),
+    niveau_id         INT REFERENCES niveaux(id),
+    annee_scolaire_id INT REFERENCES annees_scolaires(id),
     montant_total     NUMERIC(12,2) NOT NULL,           -- frais annuels bruts
     description       TEXT,
     created_at        TIMESTAMP DEFAULT NOW(),
@@ -507,8 +507,8 @@ CREATE TABLE grilles_tarifaires (
 -- Définit si l'étudiant paye comptant ou en plusieurs tranches
 CREATE TABLE echeanciers (
     id             SERIAL PRIMARY KEY,
-    inscription_id Long REFERENCES inscriptions(id),
-    grille_id      Long REFERENCES grilles_tarifaires(id),
+    inscription_id INT REFERENCES inscriptions(id),
+    grille_id      INT REFERENCES grilles_tarifaires(id),
     type           VARCHAR(50),
     -- 'comptant', 'echelonne_2', 'echelonne_3', 'personnalise'
     montant_total  NUMERIC(12,2),                      -- peut différer de la grille (remise accordée)
@@ -519,8 +519,8 @@ CREATE TABLE echeanciers (
 -- est_soldee = TRUE quand la somme des paiements couvre montant_attendu
 CREATE TABLE echeances (
     id               SERIAL PRIMARY KEY,
-    echeancier_id    Long REFERENCES echeanciers(id) ON DELETE CASCADE,
-    numero_tranche   Long NOT NULL,                     -- 1, 2, 3…
+    echeancier_id    INT REFERENCES echeanciers(id) ON DELETE CASCADE,
+    numero_tranche   INT NOT NULL,                     -- 1, 2, 3…
     montant_attendu  NUMERIC(12,2) NOT NULL,
     date_limite      DATE NOT NULL,
     est_soldee       BOOLEAN DEFAULT FALSE,
@@ -531,14 +531,14 @@ CREATE TABLE echeances (
 -- Plusieurs paiements peuvent couvrir une même échéance (paiement partiel)
 CREATE TABLE paiements (
     id                    SERIAL PRIMARY KEY,
-    echeance_id           Long REFERENCES echeances(id),
-    inscription_id        Long REFERENCES inscriptions(id),
+    echeance_id           INT REFERENCES echeances(id),
+    inscription_id        INT REFERENCES inscriptions(id),
     montant               NUMERIC(12,2) NOT NULL,
     date_paiement         DATE NOT NULL,
     mode_paiement         VARCHAR(100),
     -- 'especes', 'virement', 'mvola', 'orange_money', 'cheque'
     reference_transaction VARCHAR(200),                -- numéro de reçu ou de transaction
-    saisi_par             Long REFERENCES users(id),    -- secrétaire ou comptable
+    saisi_par             INT REFERENCES users(id),    -- secrétaire ou comptable
     notes                 TEXT,
     created_at            TIMESTAMP DEFAULT NOW()
 );
@@ -564,7 +564,7 @@ CREATE TABLE paiements (
 -- Exemples enfants : 'Salaires', 'Charges sociales', 'Loyer', 'Électricité', 'Fournitures'
 CREATE TABLE categories_depenses (
     id          SERIAL PRIMARY KEY,
-    parent_id   Long REFERENCES categories_depenses(id) ON DELETE SET NULL,
+    parent_id   INT REFERENCES categories_depenses(id) ON DELETE SET NULL,
     nom         VARCHAR(150) NOT NULL,
     type_charge VARCHAR(20) DEFAULT 'variable',
     -- 'fixe'     : montant stable revenant régulièrement (loyer, salaire)
@@ -575,7 +575,7 @@ CREATE TABLE categories_depenses (
 -- Fournisseurs, prestataires et créanciers de l'école
 CREATE TABLE fournisseurs (
     id               SERIAL PRIMARY KEY,
-    etablissement_id Long REFERENCES etablissements(id),
+    etablissement_id INT REFERENCES etablissements(id),
     nom              VARCHAR(255) NOT NULL,            -- ex : 'JIRAMA', 'Imprimerie Centrale'
     type             VARCHAR(100),
     -- 'utilite'           : eau, électricité, téléphone
@@ -598,18 +598,18 @@ CREATE TABLE fournisseurs (
 --   'Loyer Bâtiment Principal' — mensuel — 500 000 Ar — le 01 du mois
 --   'Salaire Prof Rakoto'      — mensuel — 800 000 Ar — le 30 du mois
 --   'Abonnement JIRAMA'        — mensuel — 150 000 Ar — le 15 du mois
---   'MaLongenance photocopieur' — trimestriel — 200 000 Ar
+--   'Maintenance photocopieur' — trimestriel — 200 000 Ar
 CREATE TABLE contrats_charges (
     id               SERIAL PRIMARY KEY,
-    etablissement_id Long REFERENCES etablissements(id),
-    fournisseur_id   Long REFERENCES fournisseurs(id) ON DELETE SET NULL,
-    categorie_id     Long REFERENCES categories_depenses(id),
-    Longitule         VARCHAR(255) NOT NULL,
+    etablissement_id INT REFERENCES etablissements(id),
+    fournisseur_id   INT REFERENCES fournisseurs(id) ON DELETE SET NULL,
+    categorie_id     INT REFERENCES categories_depenses(id),
+    intitule         VARCHAR(255) NOT NULL,
     description      TEXT,
     type_recurrence  VARCHAR(50) NOT NULL,
     -- 'mensuel', 'trimestriel', 'semestriel', 'annuel'
     montant_prevu    NUMERIC(12,2) NOT NULL,            -- montant attendu à chaque occurrence
-    jour_echeance    Long,
+    jour_echeance    INT,
     -- Pour 'mensuel' : jour du mois (ex : 30 = fin du mois, 1 = début)
     -- Pour les autres fréquences : ce champ est ignoré, géré dans echeances_contrats
     date_debut       DATE NOT NULL,                    -- date d'entrée en vigueur du contrat
@@ -617,7 +617,7 @@ CREATE TABLE contrats_charges (
     statut           VARCHAR(50) DEFAULT 'actif',      -- 'actif', 'suspendu', 'resilie'
     numero_contrat   VARCHAR(150),                     -- référence du document contractuel
     document_url     VARCHAR(500),                     -- scan ou chemin vers le contrat signé
-    cree_par         Long REFERENCES users(id),
+    cree_par         INT REFERENCES users(id),
     created_at       TIMESTAMP DEFAULT NOW(),
     updated_at       TIMESTAMP DEFAULT NOW()
 );
@@ -627,7 +627,7 @@ CREATE TABLE contrats_charges (
 -- periode_concernee : libellé lisible ex 'Mai 2025', '2ème trimestre 2025'
 CREATE TABLE echeances_contrats (
     id               SERIAL PRIMARY KEY,
-    contrat_id       Long REFERENCES contrats_charges(id) ON DELETE CASCADE,
+    contrat_id       INT REFERENCES contrats_charges(id) ON DELETE CASCADE,
     periode_concernee VARCHAR(50) NOT NULL,
     date_echeance    DATE NOT NULL,
     montant_prevu    NUMERIC(12,2) NOT NULL,            -- copié du contrat, peut être révisé
@@ -646,11 +646,11 @@ CREATE TABLE echeances_contrats (
 --   'Réparation terrain sport'       — variable  — planifiée en Avril
 CREATE TABLE previsions_depenses (
     id               SERIAL PRIMARY KEY,
-    etablissement_id Long REFERENCES etablissements(id),
-    annee_scolaire_id Long REFERENCES annees_scolaires(id),
-    categorie_id     Long REFERENCES categories_depenses(id),
-    fournisseur_id   Long REFERENCES fournisseurs(id) ON DELETE SET NULL,
-    Longitule         VARCHAR(255) NOT NULL,
+    etablissement_id INT REFERENCES etablissements(id),
+    annee_scolaire_id INT REFERENCES annees_scolaires(id),
+    categorie_id     INT REFERENCES categories_depenses(id),
+    fournisseur_id   INT REFERENCES fournisseurs(id) ON DELETE SET NULL,
+    intitule         VARCHAR(255) NOT NULL,
     description      TEXT,
     montant_estime   NUMERIC(12,2) NOT NULL,            -- estimation du coût
     date_prevue      DATE NOT NULL,                    -- quand la dépense est attendue
@@ -662,10 +662,10 @@ CREATE TABLE previsions_depenses (
     -- 'approuvee'  : validée par le directeur, en attente de réalisation
     -- 'realisee'   : dépense effectuée (depense_id renseigné)
     -- 'annulee'    : prévision abandonnée
-    approuve_par     Long REFERENCES users(id),          -- directeur qui approuve
+    approuve_par     INT REFERENCES users(id),          -- directeur qui approuve
     date_approbation TIMESTAMP,
-    depense_id       Long,                              -- FK vers depenses (ajoutée après)
-    cree_par         Long REFERENCES users(id),
+    depense_id       INT,                              -- FK vers depenses (ajoutée après)
+    cree_par         INT REFERENCES users(id),
     created_at       TIMESTAMP DEFAULT NOW(),
     updated_at       TIMESTAMP DEFAULT NOW()
 );
@@ -678,14 +678,14 @@ CREATE TABLE previsions_depenses (
 -- Les dépenses urgentes ou dépassant un seuil passent par un workflow d'approbation.
 CREATE TABLE depenses (
     id                    SERIAL PRIMARY KEY,
-    etablissement_id      Long REFERENCES etablissements(id),
-    annee_scolaire_id     Long REFERENCES annees_scolaires(id),
-    categorie_id          Long REFERENCES categories_depenses(id),
-    fournisseur_id        Long REFERENCES fournisseurs(id) ON DELETE SET NULL,
-    contrat_id            Long REFERENCES contrats_charges(id),          -- NULL si non contractuel
-    echeance_contrat_id   Long REFERENCES echeances_contrats(id),        -- NULL si non contractuel
-    prevision_id          Long REFERENCES previsions_depenses(id),       -- NULL si non planifiée
-    Longitule              VARCHAR(255) NOT NULL,
+    etablissement_id      INT REFERENCES etablissements(id),
+    annee_scolaire_id     INT REFERENCES annees_scolaires(id),
+    categorie_id          INT REFERENCES categories_depenses(id),
+    fournisseur_id        INT REFERENCES fournisseurs(id) ON DELETE SET NULL,
+    contrat_id            INT REFERENCES contrats_charges(id),          -- NULL si non contractuel
+    echeance_contrat_id   INT REFERENCES echeances_contrats(id),        -- NULL si non contractuel
+    prevision_id          INT REFERENCES previsions_depenses(id),       -- NULL si non planifiée
+    intitule              VARCHAR(255) NOT NULL,
     -- ex : 'Salaire Mai 2025 - Prof Rakoto', 'Facture JIRAMA Avril', 'Réparation toiture'
     type_charge           VARCHAR(20) NOT NULL,
     -- 'fixe', 'variable', 'urgente'
@@ -700,9 +700,9 @@ CREATE TABLE depenses (
     necessite_approbation BOOLEAN DEFAULT FALSE,
     statut_approbation    VARCHAR(50) DEFAULT 'approuvee',
     -- 'en_attente', 'approuvee', 'refusee'
-    approuve_par          Long REFERENCES users(id),                     -- directeur
+    approuve_par          INT REFERENCES users(id),                     -- directeur
     date_approbation      TIMESTAMP,
-    saisi_par             Long REFERENCES users(id),                     -- comptable / secrétariat
+    saisi_par             INT REFERENCES users(id),                     -- comptable / secrétariat
     created_at            TIMESTAMP DEFAULT NOW(),
     updated_at            TIMESTAMP DEFAULT NOW()
 );
@@ -710,7 +710,7 @@ CREATE TABLE depenses (
 -- Liaison retour : previsions_depenses.depense_id → depenses.id
 -- Ajoutée ici pour éviter la référence circulaire entre les deux tables
 ALTER TABLE previsions_depenses
-    ADD CONSTRALong fk_prevision_depense
+    ADD CONSTRAINT fk_prevision_depense
     FOREIGN KEY (depense_id) REFERENCES depenses(id) ON DELETE SET NULL;
 
 -- Budgets prévisionnels par catégorie et par année
@@ -718,11 +718,11 @@ ALTER TABLE previsions_depenses
 -- Requête type : SELECT montant_prevu - SUM(depenses.montant) AS solde_restant ...
 CREATE TABLE budgets (
     id                SERIAL PRIMARY KEY,
-    etablissement_id  Long REFERENCES etablissements(id),
-    annee_scolaire_id Long REFERENCES annees_scolaires(id),
-    categorie_id      Long REFERENCES categories_depenses(id),
+    etablissement_id  INT REFERENCES etablissements(id),
+    annee_scolaire_id INT REFERENCES annees_scolaires(id),
+    categorie_id      INT REFERENCES categories_depenses(id),
     montant_prevu     NUMERIC(12,2) NOT NULL,           -- enveloppe allouée pour l'année
-    created_by        Long REFERENCES users(id),
+    created_by        INT REFERENCES users(id),
     created_at        TIMESTAMP DEFAULT NOW(),
     updated_at        TIMESTAMP DEFAULT NOW(),
     UNIQUE (annee_scolaire_id, categorie_id)
@@ -752,7 +752,7 @@ CREATE TABLE budgets (
 -- Pour un récurrent annuel, une instance est générée chaque année scolaire.
 CREATE TABLE evenements (
     id                    SERIAL PRIMARY KEY,
-    etablissement_id      Long REFERENCES etablissements(id),
+    etablissement_id      INT REFERENCES etablissements(id),
     titre                 VARCHAR(255) NOT NULL,
     description           TEXT,
     type                  VARCHAR(100),
@@ -763,19 +763,19 @@ CREATE TABLE evenements (
     type_recurrence       VARCHAR(20),
     -- NULL si est_recurrente = FALSE
     -- 'annuelle' : même jour et mois chaque année
-    jour_recurrence       Long CHECK (jour_recurrence BETWEEN 1 AND 31),
+    jour_recurrence       INT CHECK (jour_recurrence BETWEEN 1 AND 31),
     -- Utilisé si type_recurrence = 'annuelle' : le jour du mois
-    mois_recurrence       Long CHECK (mois_recurrence BETWEEN 1 AND 12),
+    mois_recurrence       INT CHECK (mois_recurrence BETWEEN 1 AND 12),
     -- Utilisé si type_recurrence = 'annuelle' : le mois
     -- Durée et horaires par défaut (surchargeable sur l'instance)
-    duree_jours           Long DEFAULT 1,              -- durée en jours (1 = journée unique)
+    duree_jours           INT DEFAULT 1,              -- durée en jours (1 = journée unique)
     heure_debut_defaut    TIME,                        -- NULL si journée entière
     heure_fin_defaut      TIME,
     -- Impact sur les cours
     annule_cours          BOOLEAN DEFAULT FALSE,       -- TRUE = suspend les cours normaux
     concerne_toute_ecole  BOOLEAN DEFAULT TRUE,        -- FALSE = seulement certaines classes
-    concerne_matiere_id   Long REFERENCES matieres(id), -- NULL = pas lié à une matière
-    cree_par              Long REFERENCES users(id),
+    concerne_matiere_id   INT REFERENCES matieres(id), -- NULL = pas lié à une matière
+    cree_par              INT REFERENCES users(id),
     created_at            TIMESTAMP DEFAULT NOW(),
     updated_at            TIMESTAMP DEFAULT NOW()
 );
@@ -785,14 +785,14 @@ CREATE TABLE evenements (
 -- statut permet de confirmer, annuler ou marquer comme réalisé chaque occurrence
 CREATE TABLE evenements_instances (
     id                SERIAL PRIMARY KEY,
-    evenement_id      Long REFERENCES evenements(id) ON DELETE CASCADE,
-    annee_scolaire_id Long REFERENCES annees_scolaires(id),
-    classe_id         Long REFERENCES classes(id),     -- NULL = toute l'école
+    evenement_id      INT REFERENCES evenements(id) ON DELETE CASCADE,
+    annee_scolaire_id INT REFERENCES annees_scolaires(id),
+    classe_id         INT REFERENCES classes(id),     -- NULL = toute l'école
     date_debut        DATE NOT NULL,
     date_fin          DATE,                           -- NULL si duree_jours = 1
     heure_debut       TIME,                           -- surcharge l'heure du modèle si renseignée
     heure_fin         TIME,
-    salle_id          Long REFERENCES salles(id),      -- NULL si hors établissement ou journée entière
+    salle_id          INT REFERENCES salles(id),      -- NULL si hors établissement ou journée entière
     lieu_externe      VARCHAR(255),                   -- adresse si la sortie est hors école
     statut            VARCHAR(50) DEFAULT 'planifie',
     -- 'planifie'  : prévu mais pas encore confirmé
@@ -800,7 +800,7 @@ CREATE TABLE evenements_instances (
     -- 'annule'    : annulé pour cette occurrence uniquement
     -- 'realise'   : passé, archivé
     notes             TEXT,                           -- précisions spécifiques à cette occurrence
-    cree_par          Long REFERENCES users(id),
+    cree_par          INT REFERENCES users(id),
     created_at        TIMESTAMP DEFAULT NOW(),
     updated_at        TIMESTAMP DEFAULT NOW()
 );
@@ -835,15 +835,15 @@ CREATE TABLE notification_types (
 -- ex : entite_type='note', entite_id=42 → la note id=42 a déclenché cette notif
 CREATE TABLE notifications (
     id           SERIAL PRIMARY KEY,
-    user_id      Long REFERENCES users(id) ON DELETE CASCADE,
-    type_id      Long REFERENCES notification_types(id),
+    user_id      INT REFERENCES users(id) ON DELETE CASCADE,
+    type_id      INT REFERENCES notification_types(id),
     titre        VARCHAR(255) NOT NULL,
     message      TEXT NOT NULL,
     lien_action  VARCHAR(500),                        -- URL vers la page concernée dans l'app
     est_lu       BOOLEAN   DEFAULT FALSE,
     date_lecture TIMESTAMP,
     entite_type  VARCHAR(100),                        -- 'note', 'paiement', 'edt', 'evenement'…
-    entite_id    Long,
+    entite_id    INT,
     created_at   TIMESTAMP DEFAULT NOW()
 );
 
@@ -857,14 +857,14 @@ CREATE TABLE notifications (
 
 CREATE TABLE documents (
     id                SERIAL PRIMARY KEY,
-    etudiant_id       Long REFERENCES profils_etudiants(id),
+    etudiant_id       INT REFERENCES profils_etudiants(id),
     type_document     VARCHAR(100) NOT NULL,
     -- 'certificat_scolarite', 'releve_notes', 'recu_paiement', 'attestation_frequentation'
     titre             VARCHAR(255),
     fichier_url       VARCHAR(500),                    -- chemin vers le fichier PDF généré
-    annee_scolaire_id Long REFERENCES annees_scolaires(id),
-    periode_id        Long REFERENCES periodes(id),     -- NULL si document annuel
-    genere_par        Long REFERENCES users(id),
+    annee_scolaire_id INT REFERENCES annees_scolaires(id),
+    periode_id        INT REFERENCES periodes(id),     -- NULL si document annuel
+    genere_par        INT REFERENCES users(id),
     genere_le         TIMESTAMP DEFAULT NOW(),
     est_valide        BOOLEAN DEFAULT TRUE
 );
@@ -879,14 +879,14 @@ CREATE TABLE documents (
 
 CREATE TABLE demandes_modification_dossier (
     id              SERIAL PRIMARY KEY,
-    etudiant_id     Long REFERENCES profils_etudiants(id),
+    etudiant_id     INT REFERENCES profils_etudiants(id),
     champ_modifie   VARCHAR(150) NOT NULL,             -- nom exact de la colonne : 'adresse', 'telephone'…
     ancienne_valeur TEXT,
     nouvelle_valeur TEXT,
     motif           TEXT,
     statut          VARCHAR(50) DEFAULT 'en_attente',  -- 'en_attente', 'approuvee', 'refusee'
-    soumis_par      Long REFERENCES users(id),          -- l'étudiant ou son parent
-    traite_par      Long REFERENCES users(id),          -- le secrétariat
+    soumis_par      INT REFERENCES users(id),          -- l'étudiant ou son parent
+    traite_par      INT REFERENCES users(id),          -- le secrétariat
     date_traitement TIMESTAMP,
     created_at      TIMESTAMP DEFAULT NOW()
 );
@@ -901,12 +901,12 @@ CREATE TABLE demandes_modification_dossier (
 
 CREATE TABLE audit_log (
     id                SERIAL PRIMARY KEY,
-    user_id           Long REFERENCES users(id) ON DELETE SET NULL,
+    user_id           INT REFERENCES users(id) ON DELETE SET NULL,
     action            VARCHAR(200) NOT NULL,
     -- 'creation', 'modification', 'suppression', 'connexion',
     -- 'correction_note', 'approbation_depense', 'validation_dossier'
     table_concernee   VARCHAR(100),
-    entite_id         Long,
+    entite_id         INT,
     anciennes_valeurs JSONB,                           -- état avant l'action
     nouvelles_valeurs JSONB,                           -- état après l'action
     ip_address        VARCHAR(45),
@@ -989,7 +989,7 @@ CREATE INDEX idx_audit_date                 ON audit_log(created_at);
 -- ============================================================
 
 -- Rôles système
-INSERT LongO roles (nom, description) VALUES
+INSERT INTO roles (nom, description) VALUES
     ('super_admin',  'Accès total, gestion technique du système'),
     ('directeur',    'Pilotage pédagogique et financier, validation'),
     ('secretariat',  'Inscriptions, dossiers, finance opérationnelle'),
@@ -999,8 +999,8 @@ INSERT LongO roles (nom, description) VALUES
     ('parent',       'Consultation dossier enfant, notifications');
 
 -- Types de notifications
-INSERT LongO notification_types (code, libelle, template_message) VALUES
-    ('notes_publiees',        'Notes disponibles',              'Vos notes du {periode} sont maLongenant disponibles.'),
+INSERT INTO notification_types (code, libelle, template_message) VALUES
+    ('notes_publiees',        'Notes disponibles',              'Vos notes du {periode} sont maintenant disponibles.'),
     ('baisse_notes_alerte',   'Alerte baisse de notes',         'Votre moyenne en {matiere} a baissé significativement.'),
     ('absence_frequente',     'Absences fréquentes',            'Votre taux d''absence dépasse {seuil}%. Veuillez régulariser.'),
     ('echeance_approchante',  'Échéance de paiement proche',    'Un paiement de {montant} Ar est attendu avant le {date}.'),
@@ -1011,7 +1011,7 @@ INSERT LongO notification_types (code, libelle, template_message) VALUES
     ('budget_depasse',        'Dépassement budgétaire',         'Le budget "{categorie}" est dépassé de {ecart} Ar.');
 
 -- Catégories de dépenses racines
-INSERT LongO categories_depenses (parent_id, nom, type_charge) VALUES
+INSERT INTO categories_depenses (parent_id, nom, type_charge) VALUES
     (NULL, 'Ressources Humaines', 'fixe'),
     (NULL, 'Infrastructure',      'fixe'),
     (NULL, 'Pédagogie',           'variable'),

@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS types_contrats_employes (
 	id          SERIAL PRIMARY KEY,
 	code        VARCHAR(50) UNIQUE NOT NULL,
 	libelle     VARCHAR(150) NOT NULL,
-	duree_mois  Long,
+	duree_mois  INT,
 	description TEXT,
 	est_actif   BOOLEAN DEFAULT TRUE,
 	created_at  TIMESTAMP DEFAULT NOW()
@@ -19,9 +19,9 @@ CREATE TABLE IF NOT EXISTS types_contrats_employes (
 
 CREATE TABLE IF NOT EXISTS contrats_employes (
 	id                SERIAL PRIMARY KEY,
-	user_id           Long REFERENCES users(id) ON DELETE CASCADE,
+	user_id           INT REFERENCES users(id) ON DELETE CASCADE,
 	fonction          VARCHAR(50) NOT NULL,
-	type_contrat_id   Long REFERENCES types_contrats_employes(id),
+	type_contrat_id   INT REFERENCES types_contrats_employes(id),
 	sexe              CHAR(1) CHECK (sexe IN ('H', 'F')),
 	photo_url         VARCHAR(500),
 	reference_contrat VARCHAR(150) UNIQUE,
@@ -36,19 +36,19 @@ CREATE TABLE IF NOT EXISTS contrats_employes (
 );
 
 ALTER TABLE profils_professeurs
-	ADD COLUMN IF NOT EXISTS id_contrat Long,
-	ADD COLUMN IF NOT EXISTS id_matiere Long;
+	ADD COLUMN IF NOT EXISTS id_contrat INT,
+	ADD COLUMN IF NOT EXISTS id_matiere INT;
 
 ALTER TABLE profils_secretariat
-	ADD COLUMN IF NOT EXISTS id_contrat Long,
+	ADD COLUMN IF NOT EXISTS id_contrat INT,
 	ADD COLUMN IF NOT EXISTS sexe CHAR(1);
 
 ALTER TABLE profils_directeurs
-	ADD COLUMN IF NOT EXISTS id_contrat Long,
+	ADD COLUMN IF NOT EXISTS id_contrat INT,
 	ADD COLUMN IF NOT EXISTS sexe CHAR(1);
 
 ALTER TABLE profils_comptables
-	ADD COLUMN IF NOT EXISTS id_contrat Long,
+	ADD COLUMN IF NOT EXISTS id_contrat INT,
 	ADD COLUMN IF NOT EXISTS sexe CHAR(1);
 
 ALTER TABLE contrats_employes
@@ -57,33 +57,33 @@ ALTER TABLE contrats_employes
 
 DO $$
 BEGIN
-	IF NOT EXISTS (SELECT 1 FROM pg_constraLong WHERE conname = 'fk_profils_professeurs_id_contrat') THEN
+	IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_profils_professeurs_id_contrat') THEN
 		ALTER TABLE profils_professeurs
-			ADD CONSTRALong fk_profils_professeurs_id_contrat
+			ADD CONSTRAINT fk_profils_professeurs_id_contrat
 			FOREIGN KEY (id_contrat) REFERENCES contrats_employes(id) ON DELETE SET NULL;
 	END IF;
 
-	IF NOT EXISTS (SELECT 1 FROM pg_constraLong WHERE conname = 'fk_profils_professeurs_id_matiere') THEN
+	IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_profils_professeurs_id_matiere') THEN
 		ALTER TABLE profils_professeurs
-			ADD CONSTRALong fk_profils_professeurs_id_matiere
+			ADD CONSTRAINT fk_profils_professeurs_id_matiere
 			FOREIGN KEY (id_matiere) REFERENCES matieres(id) ON DELETE SET NULL;
 	END IF;
 
-	IF NOT EXISTS (SELECT 1 FROM pg_constraLong WHERE conname = 'fk_profils_secretariat_id_contrat') THEN
+	IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_profils_secretariat_id_contrat') THEN
 		ALTER TABLE profils_secretariat
-			ADD CONSTRALong fk_profils_secretariat_id_contrat
+			ADD CONSTRAINT fk_profils_secretariat_id_contrat
 			FOREIGN KEY (id_contrat) REFERENCES contrats_employes(id) ON DELETE SET NULL;
 	END IF;
 
-	IF NOT EXISTS (SELECT 1 FROM pg_constraLong WHERE conname = 'fk_profils_directeurs_id_contrat') THEN
+	IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_profils_directeurs_id_contrat') THEN
 		ALTER TABLE profils_directeurs
-			ADD CONSTRALong fk_profils_directeurs_id_contrat
+			ADD CONSTRAINT fk_profils_directeurs_id_contrat
 			FOREIGN KEY (id_contrat) REFERENCES contrats_employes(id) ON DELETE SET NULL;
 	END IF;
 
-	IF NOT EXISTS (SELECT 1 FROM pg_constraLong WHERE conname = 'fk_profils_comptables_id_contrat') THEN
+	IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_profils_comptables_id_contrat') THEN
 		ALTER TABLE profils_comptables
-			ADD CONSTRALong fk_profils_comptables_id_contrat
+			ADD CONSTRAINT fk_profils_comptables_id_contrat
 			FOREIGN KEY (id_contrat) REFERENCES contrats_employes(id) ON DELETE SET NULL;
 	END IF;
 END $$;
@@ -165,16 +165,16 @@ END;
 
 DO $$
 BEGIN
-	IF EXISTS (SELECT 1 FROM pg_constraLong WHERE conname = 'contrats_employes_sexe_check') THEN
-		ALTER TABLE contrats_employes DROP CONSTRALong contrats_employes_sexe_check;
+	IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'contrats_employes_sexe_check') THEN
+		ALTER TABLE contrats_employes DROP CONSTRAINT contrats_employes_sexe_check;
 	END IF;
 
-	IF EXISTS (SELECT 1 FROM pg_constraLong WHERE conname = 'ck_contrats_employes_sexe_hf') THEN
-		ALTER TABLE contrats_employes DROP CONSTRALong ck_contrats_employes_sexe_hf;
+	IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'ck_contrats_employes_sexe_hf') THEN
+		ALTER TABLE contrats_employes DROP CONSTRAINT ck_contrats_employes_sexe_hf;
 	END IF;
 
 	ALTER TABLE contrats_employes
-		ADD CONSTRALong ck_contrats_employes_sexe_hf CHECK (sexe IN ('H', 'F'));
+		ADD CONSTRAINT ck_contrats_employes_sexe_hf CHECK (sexe IN ('H', 'F'));
 END $$;
 
 -- Liaison automatique du contrat le plus récent si id_contrat est vide
@@ -224,14 +224,14 @@ SET id_contrat = (
 	)
 WHERE p.id_contrat IS NULL;
 
-INSERT LongO types_contrats_employes (code, libelle, duree_mois, description)
+INSERT INTO types_contrats_employes (code, libelle, duree_mois, description)
 VALUES
 	('permanent', 'Permanent', NULL, 'Contrat sans échéance fixe'),
 	('vacataire', 'Vacataire', 12, 'Contrat à durée limitée pour heures ponctuelles'),
 	('contractuel', 'Contractuel', 12, 'Contrat à durée déterminée renouvelable')
 ON CONFLICT (code) DO NOTHING;
 
-INSERT LongO roles (nom, description) VALUES
+INSERT INTO roles (nom, description) VALUES
 	('professeur',  'Saisie notes, absences, emploi du temps'),
 	('secretariat', 'Inscriptions, dossiers, finance opérationnelle')
 ON CONFLICT (nom) DO NOTHING;
