@@ -4,6 +4,8 @@ import com.ecole.entity.Inscription;
 import com.ecole.repository.InscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +15,10 @@ public class InscriptionService {
 
     @Autowired
     private InscriptionRepository inscriptionRepository;
+
+    public InscriptionService(InscriptionRepository inscriptionRepository) {
+        this.inscriptionRepository = inscriptionRepository;
+    }
 
     public List<Inscription> findAll() {
         return inscriptionRepository.findAll();
@@ -32,5 +38,9 @@ public class InscriptionService {
 
     public void deleteById(Long id) {
         inscriptionRepository.deleteById(id);
+    }
+
+    public Page<Inscription> findByClasseIdAndStudentName(Long classeId, String search, Pageable pageable) {
+        return inscriptionRepository.findByClasseIdAndStudentName(classeId, search, pageable);
     }
 }

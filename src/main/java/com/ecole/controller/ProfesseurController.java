@@ -302,7 +302,12 @@ public class ProfesseurController {
     }
 
     @GetMapping("/professeur/notes/classe/{classeId}")
-    public String notesClasse(@PathVariable Long classeId, Model model) {
+    public String notesClasse(
+        @PathVariable Long classeId,
+        @RequestParam(defaultValue = "") String search,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size,
+        Model model) {
         
         model.addAttribute("pageTitle", "Notes des Élèves");
         model.addAttribute("currentRole", "professeur");
@@ -311,10 +316,13 @@ public class ProfesseurController {
         Long professeurId = 1L; // Temporary hardcoded value
         List<AffectationEnseignement> affectations = affectationEnseignementService.findByProfesseurId(professeurId);
         
-        // --- ERADICATION DE LA PAGINATION BACKEND ---
-        // On récupère TOUS les élèves de la classe d'un seul coup
-        List<Inscription> inscriptions = inscriptionService.findByClasseId(classeId);
-        // ---------------------------------------------
+        // --- PAGINATION ET RECHERCHE BACKEND ---
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page - 1, size);
+        org.springframework.data.domain.Page<Inscription> inscriptionPage = 
+                inscriptionService.findByClasseIdAndStudentName(classeId, search, pageable);
+        
+        List<Inscription> inscriptions = inscriptionPage.getContent();
+        // ---------------------------------------
         
         // Fetch student profiles and notes
         Map<Long, ProfilEtudiant> etudiantProfiles = new HashMap<>();
@@ -362,9 +370,8 @@ public class ProfesseurController {
             }
         }
         
-        // --- ENVOI DES DONNÉES ÉPURÉES À THYMELEAF ---
         model.addAttribute("affectations", affectations);
-        model.addAttribute("inscriptions", inscriptions); // Contient la liste complète pour le JS
+        model.addAttribute("inscriptions", inscriptions);
         model.addAttribute("etudiantProfiles", etudiantProfiles);
         model.addAttribute("etudiantNotes", etudiantNotes);
         model.addAttribute("etudiantNotesByType", etudiantNotesByType);
@@ -373,6 +380,12 @@ public class ProfesseurController {
         model.addAttribute("classeId", classeId);
         model.addAttribute("matiereNames", matiereNames);
         model.addAttribute("periodes", periodeService.findAll());
+        
+        // --- INFOS DE PAGINATION ET RECHERCHE ENVOYÉES À THYMELEAF ---
+        model.addAttribute("search", search);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", inscriptionPage.getTotalPages());
+        model.addAttribute("totalRows", inscriptionPage.getTotalElements());
         
         return "Professeur/notes";
     }
@@ -547,29 +560,44 @@ public class ProfesseurController {
 
 
     @GetMapping("/professeur/bulletins")
-    public String bulletins(Model model) {
+    public String bulletins(
+        @RequestParam(defaultValue = "") String search,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int size,
+        Model model) {
+        
         model.addAttribute("pageTitle", "Bulletins");
         model.addAttribute("currentRole", "professeur");
         
-        // TODO: Get connected professor ID from authentication
         Long professeurId = 1L; // Temporary hardcoded value
-        
-        // Get current active school year
         AnneeScolaire anneeScolaire = anneeScolaireService.findByEstActive(true).orElse(null);
         Integer anneeScolaireId = (anneeScolaire != null) ? anneeScolaire.getId() : null;
         
-        // Get the professor's titular class for the current year
         TitulaireClasse titulaireClasse = null;
         Classe classe = null;
         List<Inscription> inscriptions = null;
         Map<Long, ProfilEtudiant> etudiantProfiles = new HashMap<>();
+        
+        // Variables de pagination par défaut
+        int totalPages = 0;
+        long totalRows = 0;
         
         if (anneeScolaireId != null) {
             titulaireClasse = titulaireClasseService.findByProfesseurIdAndAnneeScolaireId(professeurId, anneeScolaireId).orElse(null);
             if (titulaireClasse != null) {
                 classe = classeService.findById(titulaireClasse.getClasseId()).orElse(null);
                 if (classe != null) {
-                    inscriptions = inscriptionService.findByClasseId(classe.getId());
+                    
+                    // --- RECHERCHE ET PAGINATION SERVEUR APPLIQUÉES AUX BULLETINS ---
+                    org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page - 1, size);
+                    org.springframework.data.domain.Page<Inscription> inscriptionPage = 
+                            inscriptionService.findByClasseIdAndStudentName(classe.getId(), search, pageable);
+                    
+                    inscriptions = inscriptionPage.getContent();
+                    totalPages = inscriptionPage.getTotalPages();
+                    totalRows = inscriptionPage.getTotalElements();
+                    // -----------------------------------------------------------------
+                    
                     for (Inscription inscription : inscriptions) {
                         ProfilEtudiant etudiant = profilEtudiantService.findById(inscription.getEtudiantId()).orElse(null);
                         if (etudiant != null) {
@@ -585,6 +613,13 @@ public class ProfesseurController {
         model.addAttribute("inscriptions", inscriptions);
         model.addAttribute("etudiantProfiles", etudiantProfiles);
         model.addAttribute("anneeScolaire", anneeScolaire);
+        
+        // Envoi des attributs à Thymeleaf pour le fragment pagination
+        model.addAttribute("search", search);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalRows", totalRows);
+        
         return "Professeur/bulletin";
     }
 
